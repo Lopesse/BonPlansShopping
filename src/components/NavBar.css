@@ -1,0 +1,38 @@
+.navbar {
+    box-shadow: 10px 3px 8px grey;
+    padding: 15px;
+}
+
+.navbar ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    text-align: center;
+
+}
+
+.navbar ul li:focus {
+    border-bottom: 1px solid black;
+}
+
+.navbar > ul li:hover .deroulant{
+    display: block;
+}
+
+.deroulant li{
+    padding: 10px;
+}
+
+.navbar > ul li .deroulant{
+    display: none;
+    position: absolute;
+    width: 336px;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    color: #2d5c48;
+    text-decoration: none;
+}
