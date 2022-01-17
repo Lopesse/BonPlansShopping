@@ -1,7 +1,7 @@
 export const categories = [
     {
         nom: 'Alimentaires & Ménagère',
-        url: '/AlimentairesMenagere',
+        url: '/AlimentairesMenahgere',
     },
     {
         nom: 'Santé & Beauté',
