@@ -16,7 +16,6 @@ ReactDOM.render(
       <Route path="/compte" element={<NavBar />} />
       <Route path="/favories" element={<NavBar />} />
       <Route path="/nouveau" element={<Publier />} />
-
       <Route path="/annonce">
         <Route path="id/:id" element={<NavBar />} />
       </Route>

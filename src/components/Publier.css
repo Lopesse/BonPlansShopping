@@ -1,9 +1,18 @@
 .publication {
-    margin-left: 15%;
-    margin-right: 15%;
-    padding: 10px;
+  margin-left: 15%;
+  margin-right: 15%;
+  padding: 10px;
 }
 
 form {
-    margin-left: 10%;
+  margin-left: 10%;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+label {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-right: 60%;
+  margin-top: 10px;
 }
