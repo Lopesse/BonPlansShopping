@@ -9,10 +9,11 @@ $db = new Database();
 
 $db = $db->connect();
 
-if (!$db) echo json_encode(array("m" => "ko"));
-else echo json_encode(array("m" => "ok"));
-// $postStorage = new PostStorage($db);
 
-// $res = $postStorage->readAll();
+$postStorage = new PostStorage($db);
 
-// echo json_encode($res);
+$postStorage->id = isset($_GET['id']) ? $_GET['id'] : die();
+
+$post = $postStorage->read();
+
+echo json_encode($post);

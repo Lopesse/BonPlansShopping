@@ -17,7 +17,9 @@ $postStorage = new PostStorage($db);
 
 $data = json_decode(file_get_contents('php://input'));
 
-$newId = $postStorage->create($data);
-
-echo json_encode($newId);
-
+if($data){
+    $newId = $postStorage->update($data);
+    echo json_encode($newId);
+}
+else
+    echo json_encode(-1);

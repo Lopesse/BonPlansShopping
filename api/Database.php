@@ -3,10 +3,10 @@
 
 class Database
 {
-    private $host = 'mysql.info.unicaen.fr';
-    private $db_name = '21903735_bd';
-    private $username = '21903735';
-    private $password = 'cah7puJeiPhei5Ou';
+    private $host = '127.0.0.1';
+    private $db_name = 'bons_plans';
+    private $username = 'root';
+    private $password = 'root';
     private $connexion;
 
     public function connect()

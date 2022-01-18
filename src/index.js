@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import NavBar from './components/NavBar';
 import Publier from './components/Publier';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AnnonceDetails from './components/AnnonceDetails';
 
 
 ReactDOM.render(
@@ -16,11 +16,7 @@ ReactDOM.render(
       <Route path="/compte" element={<NavBar />} />
       <Route path="/favories" element={<NavBar />} />
       <Route path="/nouveau" element={<Publier />} />
-
-      <Route path="/annonce">
-        <Route path="id/:id" element={<NavBar />} />
-      </Route>
-
+      <Route path="/id=:id" element={<AnnonceDetails />} />
       <Route path="/categorie/:categorie" element={<NavBar />} />
 
     </Routes>
