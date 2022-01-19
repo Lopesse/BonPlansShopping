@@ -5,4 +5,14 @@
 }
 
 
+.liste_annonces {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-left: 5rem;
+}
 
+.recherche {
+  text-align: center;
+  padding: 2rem;
+  
+}

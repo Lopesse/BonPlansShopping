@@ -21,7 +21,7 @@ class Annonce
 
     public function read()
     {
-        $req = "SELECT a.id, titre, dateCreation, dateExpiration,
+        $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                         sc.nom AS sousCategorie, nomMagasin, adresseMagasin,
                         u.pseudo AS utilisateur, image,
                         c.nom AS categorie
@@ -41,6 +41,7 @@ class Annonce
             $post = array(
                 'id' => $postArray['id'],
                 'titre' => $postArray['titre'],
+                'description' => $postArray['description'],
                 'categorie' => $postArray['categorie'],
                 'sous_categorie' => $postArray['sousCategorie'],
                 'date_expiration' => $postArray['dateExpiration'],
@@ -57,7 +58,7 @@ class Annonce
 
     public function readAll()
     {
-        $req = "SELECT a.id, titre, dateCreation, dateExpiration,
+        $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                         sc.nom AS sousCategorie, nomMagasin, adresseMagasin,
                         u.pseudo AS utilisateur, image,
                         c.nom AS categorie
@@ -73,6 +74,7 @@ class Annonce
             $post = array(
                 'id' => $value['id'],
                 'titre' => $value['titre'],
+                'description' => $value['description'],
                 'categorie' => $value['categorie'],
                 'sous_categorie' => $value['sousCategorie'],
                 'date_expiration' => $value['dateExpiration'],
@@ -82,7 +84,7 @@ class Annonce
                 'utilisateur' => $value['utilisateur'],
                 'image' => $value['image'],
             );
-            $postArray[$value['id']] = $post;
+            $postArray[$key] = $post;
         }
         return $postArray;
     }

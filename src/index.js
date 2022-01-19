@@ -18,6 +18,7 @@ ReactDOM.render(
       <Route path="/nouveau" element={<Publier />} />
       <Route path="/id=:id" element={<AnnonceDetails />} />
       <Route path="/categorie/:categorie" element={<NavBar />} />
+      <Route path="/edit/id=:id" element={<AnnonceDetails />} />
 
     </Routes>
   </BrowserRouter >,

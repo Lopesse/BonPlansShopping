@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, Outlet, useNavigate, useParams } from 'react-router-dom';
 import NavBar from './NavBar';
-import Annonce from './Annonce';
 import { URLS } from '../dataBase/apiURLS';
+import './annonces.css';
 
 
 
@@ -12,19 +12,19 @@ export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     let navigate = useNavigate();
 
-    // useEffect(() => {
-    //     fetch(`${URLS.annonce}?id=${params.id}`)
-    //         .then(res => res.json())
-    //         .then(res => setAnnonce(res));
-    // }, []);
+    useEffect(() => {
+        fetch(`${URLS.annonce}?id=${params.id}`)
+            .then(res => res.json())
+            .then(res => setAnnonce(res));
+    }, []);
 
     if (!annonce) navigate('/');
 
     const deletePost = () => {
         if (annonce) {
             fetch('http://localhost:8000/api/delete_post.php', {
-                method: "DELETE",
-                body: JSON.stringify({ post_id: annonce.post_id }),
+                method: "POST",
+                body: JSON.stringify({ id: annonce.id }),
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -37,14 +37,29 @@ export default function AnnonceDetails() {
     return (
         <>
             <NavBar />
-            <div className='plan'>
+            <div className='annonce'>
                 {
-                    annonce &&
-                    <Annonce
-                        annonce={annonce}
-                    />
+                    annonce ?
+                        <div className='annonce_infos'>
+                            <h1>{annonce.titre}</h1>
+                            {
+                                annonce.image &&
+                                <img src={annonce.image}></img>
+                            }
+                            <div>{annonce.description}</div>
+                            <div>Disponible à {annonce.nom_magasin}</div>
+                            <div>{annonce.adresse_magasin}</div>
+                            <div>Expire le: {annonce.date_expiration}</div>
+                            <div>Créé par: {annonce.utilisateur}</div>
+                            <div className='categories'>
+                                <div className='cat'>{annonce.sous_categorie}</div>
+                                <div className='cat'>{annonce.categorie}</div>
+                            </div>
+                        </div>
+                        :
+                        <div>l'annonce n'a pas été trouvé</div>
                 }
-                <Link to={`/edit/id=${annonce?.post_id}`}>Update</Link>
+                <Link to={`/edit/id=${annonce?.id}`}>Update</Link>
                 <button onClick={deletePost}>supprimer anonce</button>
             </div>
         </>

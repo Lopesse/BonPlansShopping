@@ -1,0 +1,19 @@
+.annonce {
+    padding-top: 5rem;
+    padding-left: 6rem;
+    text-align: center;
+
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+}
+
+.cat {
+    padding: 2px;
+    margin: 4px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    background-color: gray;    
+}
