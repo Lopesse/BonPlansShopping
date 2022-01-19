@@ -31,8 +31,14 @@ class Publier extends Component {
         let date = new Date();
         date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
         this.setState({dateCreation: date});
-        console.log(this.state);
+        console.log(JSON.stringify(this.state));
     }
+
+    // componentDidMount(){
+    //     fetch('http://localhost:8000/read_categorie.php')
+    //     .then(res=>res.json())
+    //     .then(res=>thisUpdate)
+    // }
 
     render() {
         return (<div>
