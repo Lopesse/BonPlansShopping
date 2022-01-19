@@ -10,17 +10,30 @@ import Recherche from './components/Recherche';
 
 export default function App() {
 
-  const [annonces, setAnnonces] = useState([]);
+  const tab = [
+    {
+      titre:"mama",
+      categorie:"Danse",
+    },
+    {
+      titre:"ily",
+      categorie:"Boisson",
+    }
+  ];
+  const [annonces, setAnnonces] = useState(tab);
+  const [recherche, setRecherche] = useState('');
+  
 
-  useEffect(() => {
-    fetch(URLS.annonces)
-      .then(res => res.json())
-      .then(res => {
-        for (let i in res) {
-          setAnnonces(a => [...a, res[i]])
-        }
-      })
-  }, []);
+
+  // useEffect(() => {
+  //   fetch(URLS.annonces)
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       for (let i in res) {
+  //         setAnnonces(a => [...a, res[i]])
+  //       }
+  //     })
+  // }, []);
 
 
   return (
@@ -29,12 +42,23 @@ export default function App() {
         <header className="App-header">
           <NavBar />
         </header>
+        <div className='Recherche'>
+          <input type='text' 
+                value={recherche}
+                name='searchBar' 
+                placeholder='Recherchez ici'
+                onChange={e => setRecherche(e.target.value) }/>
+        </div>
+        <div className='resultats'>
+          <div className='resultat'> {recherche} </div>
+        </div>
         {
-          annonces.map(annonce =>
-            <Annonce annonce={annonce} key={annonce.id} />
+          annonces
+          .filter(annonce => annonce.titre.toLowerCase().includes(recherche.toLowerCase()) ||  annonce.categorie.toLowerCase().includes(recherche.toLowerCase()))
+          .map(elementTab =>
+            <Annonce annonce={elementTab} /> 
           )
         }
-        <Recherche/>
         <Footer />
       </div>
     </div>

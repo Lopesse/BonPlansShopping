@@ -12,11 +12,11 @@ export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     let navigate = useNavigate();
 
-    useEffect(() => {
-        fetch(`${URLS.annonce}?id=${params.id}`)
-            .then(res => res.json())
-            .then(res => setAnnonce(res));
-    }, []);
+    // useEffect(() => {
+    //     fetch(`${URLS.annonce}?id=${params.id}`)
+    //         .then(res => res.json())
+    //         .then(res => setAnnonce(res));
+    // }, []);
 
     if (!annonce) navigate('/');
 
