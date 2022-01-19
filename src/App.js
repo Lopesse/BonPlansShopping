@@ -5,6 +5,7 @@ import Annonce from './components/Annonce';
 
 import { useEffect, useState } from 'react';
 import { URLS } from './dataBase/apiURLS';
+import Recherche from './components/Recherche';
 
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
             <Annonce annonce={annonce} key={annonce.id} />
           )
         }
+        <Recherche/>
         <Footer />
       </div>
     </div>
