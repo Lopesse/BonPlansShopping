@@ -1,9 +1,9 @@
 <?php
     class Database {
-        private $host = 'localhost';
-        private $db_name = 'bon_plans';
+        private $host = '127.0.0.1';
+        private $db_name = 'shopping';
         private $username = 'root';
-        private $password = 'root';
+        private $password = 'Baamaba.61';
         private $connexion;
 
         public function connect(){

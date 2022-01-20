@@ -21,7 +21,7 @@ class PostStorage
 
     public function read()
     {
-        $req = "SELECT * FROM posts NATURAL JOIN category WHERE id = :identifiant";
+        $req = "SELECT * FROM annonce NATURAL JOIN categorie WHERE id = :identifiant";
         $stmt = $this->bd->prepare($req);
         $data = array(":identifiant" => $this->id);
         $stmt->execute($data);
