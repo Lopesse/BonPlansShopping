@@ -17,6 +17,9 @@ $postStorage = new Annonce($db);
 
 $data = json_decode(file_get_contents('php://input'));
 
-$newId = $postStorage->create($data);
+$newId = -1;
+
+if ($data)
+    $newId = $postStorage->create($data);
 
 echo json_encode($newId);

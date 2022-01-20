@@ -92,29 +92,45 @@ class Annonce
 
     public function create($data)
     {
-        $categorie = new Categorie($this->bd);
+        // $categorie = new Categorie($this->bd);
 
-        $categorie_id = $categorie->getByName($data->categorie)['categorie_id'];
+        // $categorie_id = $categorie->getByName($data->categorie)['categorie_id'];
 
-        $req = "INSERT INTO annonce (nom_produit, categorie_id, utilisateur, date_expiration, prix) 
-                    VALUES (:nom, :categorie, :user, :expiration, :prix);";
+        $req = "INSERT INTO annonce 
+                (titre,
+                dateCreation,
+                dateExpiration,
+                sousCategorie,
+                nomMagasin,
+                adresseMagasin,
+                utilisateur,
+                image,
+                categorie,
+                description)
+        VALUES (:titre,
+                :dateCreation,
+                :dateExpiration,
+                :sousCategorie,
+                :nomMagasin,
+                :adresseMagasin,
+                :utilisateur,
+                :image,
+                :categorie,
+                :description);";
 
         $stmt = $this->bd->prepare($req);
 
-
-        $this->nom_produit = htmlspecialchars(strip_tags($data->nom));
-        $this->categorie = intval($categorie_id);
-        $this->user = intval(htmlspecialchars(strip_tags($data->user_id)));
-        $this->date_expiration = htmlspecialchars(strip_tags($data->date_expiration));
-        $this->prix = floatval(htmlspecialchars(strip_tags($data->prix)));
-
-
         $post_data = array(
-            ':nom' => $this->nom_produit,
-            ':categorie' => $this->categorie,
-            ':user' => $this->user,
-            ':expiration' => $this->date_expiration,
-            ':prix' => $this->prix
+            ":titre" => $data->titre,
+            ":dateCreation" => $data->dateCreation,
+            ":dateExpiration" => $data->dateExpiration,
+            ":categorie" => $data->categorie,
+            ":sousCategorie" => $data->sousCategorie,
+            ":nomMagasin" => $data->nomMagasin,
+            ":adresseMagasin" => $data->adresseMagasin,
+            ":utilisateur" => $data->utilisateur,
+            ":image" => $data->image,
+            ":description" => $data->description,
         );
 
         $stmt->execute($post_data);
@@ -124,7 +140,8 @@ class Annonce
         return $this->id;
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $req = "DELETE FROM annonce WHERE id = :identifiant";
         $stmt = $this->bd->prepare($req);
         $data = array(":identifiant" => $id);

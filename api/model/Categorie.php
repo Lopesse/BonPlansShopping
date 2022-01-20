@@ -42,7 +42,26 @@ class Categorie
                 'categorie' => $value['nom'],
                 'id' => $value['id'],
             );
-            $categorieArray[$value['id']] = $categorie;
+            $categorieArray[$key] = $categorie;
+        }
+        return $categorieArray;
+    }
+
+    public function getSousCategories()
+    {
+        $req = "SELECT * FROM souscategories";
+        $stmt = $this->bd->query($req);
+        $queryArray = $stmt->fetchAll();
+
+        $categorieArray = array();
+
+        foreach ($queryArray as $key => $value) {
+            $categorie = array(
+                'nom' => $value['nom'],
+                'id' => $value['id'],
+                'categorieParent' => $value['categorieParent']
+            );
+            $categorieArray[$key] = $categorie;
         }
         return $categorieArray;
     }

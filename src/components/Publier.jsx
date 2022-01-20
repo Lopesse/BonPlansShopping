@@ -3,7 +3,8 @@ import Footer from "./Footer";
 import "./NavBar.css"
 import "./Publier.css"
 import { Component } from "react/cjs/react.production.min";
- 
+import { URLS } from "../dataBase/apiURLS";
+
 class Publier extends Component {
     constructor(props) {
         super(props);
@@ -16,29 +17,90 @@ class Publier extends Component {
             adresse: '',
             categorie: '',
             sous_categorie: '',
-            image: ''
+            image: '',
+            description: '',
+            categories: [],
+            sous_categories: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCatChange = this.handleCatChange.bind(this);
     }
-    
+
     handleChange(event) {
-        this.setState({[event.target.name] : event.target.value});
+        this.setState({ [event.target.name]: event.target.value });
+        if (event.target.name === 'categorie') this.handleCatChange();
     }
 
     handleSubmit(event) {
         event.preventDefault();
         let date = new Date();
-        date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
-        this.setState({dateCreation: date});
-        console.log(JSON.stringify(this.state));
+        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+        const data = JSON.stringify({
+            titre: this.state.titre,
+            dateCreation: date,
+            dateExpiration: this.state.dateExpiration,
+            nomMagasin: this.state.magasin,
+            adresseMagasin: this.state.adresse,
+            categorie: this.state.categorie,
+            sousCategorie: this.state.sous_categorie,
+            image: this.state.image,
+            utilisateur: 1, // à changer une fois que la connexion est mise en place
+            description: this.state.description
+        });
+
+
+        fetch(URLS.creer_annonce, {
+            method: "POST",
+            body: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(json => console.log(json))
+            .catch(e => console.log(e));
     }
 
-    // componentDidMount(){
-    //     fetch('http://localhost:8000/read_categorie.php')
-    //     .then(res=>res.json())
-    //     .then(res=>thisUpdate)
-    // }
+
+    handleCatChange() {
+        fetch(`${URLS.sous_categories}?parent=${this.state.categorie}`)
+            .then(res => res.json())
+            .then(res => {
+                let cats = []
+                for (let i in res) {
+                    cats.push(res[i])
+                }
+                this.setState({ sous_categories: cats })
+            });
+
+    }
+
+
+    componentDidMount() {
+        fetch(URLS.categories)
+            .then(res => res.json())
+            .then(res => {
+                let cats = []
+                for (let i in res) {
+                    cats.push(res[i])
+                }
+                this.setState({ categories: cats })
+                this.setState({ categorie: cats[0].id })
+            });
+
+        fetch(URLS.sous_categories)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                let cats = []
+                for (let i in res) {
+                    cats.push(res[i])
+                }
+                this.setState({ sous_categories: cats })
+            });
+    }
 
     render() {
         return (<div>
@@ -47,64 +109,77 @@ class Publier extends Component {
                 <h3>Publier une nouvelle annonce :</h3>
 
                 <form encType="multipart/form-data" method="POST" onSubmit={this.handleSubmit}>
-                    
-                    <label>Nom de l'annonce :  
-                        <input type='text' name='titre' placeholder='Le titre' onChange={this.handleChange}/>
+
+                    <label>Nom de l'annonce :
+                        <input type='text' name='titre' placeholder='Le titre' onChange={this.handleChange} />
                     </label>
 
-                    <label>Magasin :  
-                        <input type="text" name="magasin" placeholder="Le magasin de l'annonce utilisateur" onChange={this.handleChange}/>
+                    <label>Magasin :
+                        <input type="text" name="magasin" placeholder="Le magasin de l'annonce utilisateur" onChange={this.handleChange} />
                     </label>
 
-                    <label>Adresse de l'annonce :  
-                        <input type='text' name='adresse' placeholder="adresse de l'annonce" onChange={this.handleChange}/>
+                    <label>Adresse de l'annonce :
+                        <input type='text' name='adresse' placeholder="adresse de l'annonce" onChange={this.handleChange} />
                     </label>
 
                     <label>
                         Categorie de l'annonce :
-                        <select name="categorie" id="categorie" onChange={this.handleChange}>
-                            <option value="">Categorie</option>
-                            <option value="sport">Sport</option>
-                            <option value="sante">Santé</option>
-                            <option value="beaute">Beauté</option>
-                            <option value="menagere">Ménagère</option>
-                            <option value="high_tech">High-Tech</option>
-                            <option value="alimentaire">Alimentaire</option>
-                            <option value="divertissement">Divertissement</option>
+                        <select
+                            name="categorie"
+                            id="categorie"
+                            onChange={this.handleChange}
+                            defaultValue={this.state.categories[0]}
+                        >
+                            {
+                                this.state.categories &&
+                                this.state.categories.map(cat =>
+                                    <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                )
+                            }
                         </select>
                     </label>
+                    {
+                        this.state.sous_categories &&
+                        <label>
+                            Sous categorie de l'annonce :
+                            <select
+                                name="sous_categorie"
+                                id="sous_categorie"
+                                onChange={this.handleChange}
+                            >
+                                {
+                                    this.state.sous_categories
+                                        .filter(sous_cat => sous_cat.categorieParent === this.state.categorie)
+                                        .map(sous_cat =>
+                                            <option value={sous_cat.id} key={sous_cat.id}>{sous_cat.nom}</option>
+                                        )
 
-                    <label>
-                        Sous categorie de l'annonce :
-                        <select name="sous_categorie" id="sous_categorie" onChange={this.handleChange}>
-                            <option value="">Sous Categorie</option>
-                            <option value="jsp1">jsp1</option>
-                            <option value="jsp2">jsp2</option>
-                        </select>
+                                }
+                            </select>
+                        </label>
+
+                    }
+                    <label>Description :
+                        <textarea name="description" placeholder="Entrez la description" rows="15" cols="50" onChange={this.handleChange} />
                     </label>
 
-                    <label>Description :  
-                        <textarea name="description" placeholder="Entrez la description" rows="15" cols="50" onChange={this.handleChange}/>
-                    </label>
-
-                    <label>Date d'expiration :  
-                        <input type='date' name='dateExpiration'  onChange={this.handleChange}/>
+                    <label>Date d'expiration :
+                        <input type='date' name='dateExpiration' onChange={this.handleChange} />
                     </label>
 
                     <label>Choisissez le fichier image (JPEG ou PNG) :
                         <input type="file" name="image" accept="image/png, image/jpeg" onChange={this.handleChange} />
                         <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                     </label>
-                    {/* image obligatoire ??? */}
 
                     <label>
                         <input type="submit" value="Envoyer" />
                     </label>
 
                 </form>
-            </div>
+            </div >
             <Footer />
-        </div>)
+        </div >)
     }
 }
 
