@@ -58,7 +58,7 @@ class Inscription extends Component {
                     </label>*/}
 
                     <label>Mot de passe :  
-                        <input type='text' name='MDP' placeholder="Minimum 6 caractères, 1 majuscule, 1 minuscule et 1 chiffre" onChange={this.handleChange}/>
+                        <input type='password' name='MDP' placeholder="Minimum 6 caractères, 1 majuscule, 1 minuscule et 1 chiffre" pattern="[A-Z]+[a-z]+[0-9]+"minlength="8" required onChange={this.handleChange}/>
                     </label>
                     
                     <label>
