@@ -24,12 +24,10 @@ class Publier extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCatChange = this.handleCatChange.bind(this);
     }
 
     handleChange(event) {
         this.setState({ [event.target.name]: event.target.value });
-        if (event.target.name === 'categorie') this.handleCatChange();
     }
 
     handleSubmit(event) {
@@ -37,7 +35,7 @@ class Publier extends Component {
         let date = new Date();
         date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
-        const data = JSON.stringify({
+        const data = {
             titre: this.state.titre,
             dateCreation: date,
             dateExpiration: this.state.dateExpiration,
@@ -48,12 +46,11 @@ class Publier extends Component {
             image: this.state.image,
             utilisateur: 1, // à changer une fois que la connexion est mise en place
             description: this.state.description
-        });
-
+        };
 
         fetch(URLS.creer_annonce, {
             method: "POST",
-            body: data,
+            body: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -62,21 +59,6 @@ class Publier extends Component {
             .then(json => console.log(json))
             .catch(e => console.log(e));
     }
-
-
-    handleCatChange() {
-        fetch(`${URLS.sous_categories}?parent=${this.state.categorie}`)
-            .then(res => res.json())
-            .then(res => {
-                let cats = []
-                for (let i in res) {
-                    cats.push(res[i])
-                }
-                this.setState({ sous_categories: cats })
-            });
-
-    }
-
 
     componentDidMount() {
         fetch(URLS.categories)
@@ -93,12 +75,12 @@ class Publier extends Component {
         fetch(URLS.sous_categories)
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 let cats = []
                 for (let i in res) {
                     cats.push(res[i])
                 }
                 this.setState({ sous_categories: cats })
+                this.setState({ sous_categorie: cats[0].id })
             });
     }
 
@@ -146,6 +128,7 @@ class Publier extends Component {
                                 name="sous_categorie"
                                 id="sous_categorie"
                                 onChange={this.handleChange}
+                                defaultValue={this.state.sous_categorie}
                             >
                                 {
                                     this.state.sous_categories
