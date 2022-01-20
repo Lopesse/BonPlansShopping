@@ -4,6 +4,9 @@
   padding: 0;
 }
 
+.page_principale {
+  height: 100%;
+}
 
 .liste_annonces {
   display: grid;
@@ -14,5 +17,13 @@
 .recherche {
   text-align: center;
   padding: 2rem;
-  
+}
+
+.recherche input{
+  text-align: center;
+  border-radius: 30px;
+  box-shadow: 5px #2d5c48;
+  width: 200px;
+  padding: 12px;
+  font-size: medium;
 }

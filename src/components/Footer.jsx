@@ -7,11 +7,9 @@ class Footer extends Component {
     render() {
         return (
             <footer>
-                <ul>
-                    <li>Question ?</li>
-                    <li>À propos</li>
-                    <li>Mentions Légales</li>
-                </ul>
+                    <div>Question ?</div>
+                    <div>À propos</div>
+                    <div>Mentions Légales</div>
             </footer>
         )
     }

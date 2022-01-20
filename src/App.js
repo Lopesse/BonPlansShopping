@@ -34,34 +34,32 @@ export default function App() {
 
 
   return (
-    <div className='page_principale'>
-      <div className="App">
-        <header className="App-header">
-          <NavBar />
-        </header>
-        <div className='recherche'>
-          <input
-            type='text'
-            value={recherche}
-            name='searchBar'
-            placeholder='Recherchez ici'
-            onChange={e => setRecherche(e.target.value)}
-          />
-        </div>
-        <div className='liste_annonces'>
-          {
-            isLoaded ?
+    <div className='app'>
+        <NavBar />
+        <div className='page_principale'>
+          <div className='recherche'>
+            <input
+              type='text'
+              value={recherche}
+              name='searchBar'
+              placeholder='Recherchez ici'
+              onChange={e => setRecherche(e.target.value)}
+            />
+          </div>
+          <div className='liste_annonces'>
+            {
+              isLoaded ?
               annonces
-                .filter(annonce => filtrer(annonce))
-                .map(elementTab =>
-                  <Annonce annonce={elementTab} key={elementTab.id} />
+              .filter(annonce => filtrer(annonce))
+              .map(elementTab =>
+                <Annonce annonce={elementTab} key={elementTab.id} />
                 )
-              :
-              <img src={'../spinning-loading.gif'}></img>
-          }
+                :
+                <img src={'../spinning-loading.gif'}></img>
+              }
+          </div>
         </div>
         <Footer />
-      </div>
     </div>
   );
 }
