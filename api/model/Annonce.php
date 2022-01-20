@@ -124,12 +124,12 @@ class Annonce
         return $this->id;
     }
 
-    // public function delete($id){
-    //     $req = "DELETE FROM albums WHERE id=:identifiant";
-    //     $stmt = $this->bd->prepare($req);
-    //     $data = array(":identifiant" => $id);
-    //     $stmt->execute($data);
-    // }
+    public function delete($id){
+        $req = "DELETE FROM annonce WHERE id = :identifiant";
+        $stmt = $this->bd->prepare($req);
+        $data = array(":identifiant" => $id);
+        return $stmt->execute($data);
+    }
 
     // public function update($id, $newData){
     //     $req = "UPDATE albums SET name = :nom, artiste = :artiste, annee = :annee, genre = :genre, img_src = :img WHERE id=:identifiant;";

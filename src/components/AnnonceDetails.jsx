@@ -22,7 +22,7 @@ export default function AnnonceDetails() {
 
     const deletePost = () => {
         if (annonce) {
-            fetch('http://localhost:8000/api/delete_post.php', {
+            fetch(URLS.delete_annonce, {
                 method: "POST",
                 body: JSON.stringify({ id: annonce.id }),
                 headers: {
