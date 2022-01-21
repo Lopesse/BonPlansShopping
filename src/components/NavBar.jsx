@@ -11,7 +11,7 @@ class NavBar extends Component {
             <nav className="navbar">
                 <ul>
                     <li><Link to={"/"}>Accueil</Link></li>
-                    <li><Link to={"#"} >Catégorie</Link>
+                    <li><Link to={"#"} >Catégories</Link>
                         <ul className="deroulant">
                             {categories.map((item, index) => {
                                 return (
@@ -24,8 +24,9 @@ class NavBar extends Component {
                     <li><Link to={"#"}>Mon compte</Link>
                         <ul className="deroulant">
                             <li><Link to={"/profil"}>Profil</Link></li>
-                            <li><Link to={"#"}>Favories</Link></li>
-                            <li><Link to={""}>Connexion</Link></li>
+                            <li><Link to={"#"}>Favoris</Link></li>
+                            <li><Link to={"/inscription"}>S'inscrire</Link></li>
+                            <li><Link to={"/connexion"}>Se connecter</Link></li>
                         </ul>
 
                     </li>

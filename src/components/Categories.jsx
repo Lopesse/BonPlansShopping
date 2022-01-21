@@ -1,11 +1,11 @@
 export const categories = [
     {
         nom: 'Alimentaires & Ménagère',
-        url: '/AlimentairesMenahgere',
+        url: '/AlimentairesMenagere',
     },
     {
         nom: 'Santé & Beauté',
-        url: '/AlimentairesMénagère',
+        url: '/SanteBeaute',
     },
     {
         nom: 'Divertissements',
