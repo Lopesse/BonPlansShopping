@@ -1,7 +1,5 @@
 <?php
 
-include_once('Categorie.php');
-
 class Annonce
 {
     private $bd;
@@ -92,9 +90,6 @@ class Annonce
 
     public function create($data)
     {
-        // $categorie = new Categorie($this->bd);
-
-        // $categorie_id = $categorie->getByName($data->categorie)['categorie_id'];
 
         $req = "INSERT INTO annonce 
                 (titre,
