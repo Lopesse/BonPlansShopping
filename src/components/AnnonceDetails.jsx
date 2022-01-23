@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, Navigate, Outlet, useNavigate, useParams } from 'react-router-dom';
 import NavBar from './NavBar';
 import { URLS } from '../dataBase/apiURLS';
 import './annonces.css';
+import UserProvider, { UserContext } from './UserContext';
 
 
 
@@ -10,6 +11,9 @@ export default function AnnonceDetails() {
     const params = useParams();
 
     const [annonce, setAnnonce] = useState();
+
+    const { user } = useContext(UserContext);
+
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +25,7 @@ export default function AnnonceDetails() {
     if (!annonce) navigate('/');
 
     const deletePost = () => {
+        let isMounted = true;
         if (annonce) {
             fetch(URLS.delete_annonce, {
                 method: "POST",
@@ -29,7 +34,7 @@ export default function AnnonceDetails() {
                     "Content-Type": "application/json"
                 }
             })
-            setAnnonce(undefined);
+            if (isMounted) setAnnonce(undefined);
         }
     }
 
@@ -59,8 +64,14 @@ export default function AnnonceDetails() {
                         :
                         <div>l'annonce n'a pas été trouvé</div>
                 }
-                <Link to={`/edit/id=${annonce?.id}`}>Update</Link>
-                <button onClick={deletePost}>supprimer anonce</button>
+                {
+                    user && annonce && user.pseudo === annonce.utilisateur &&
+                    <Link to={`/edit/id=${annonce?.id}`}>Update</Link>
+                }
+                {
+                    user && annonce && user.pseudo === annonce.utilisateur &&
+                    < button onClick={deletePost}>supprimer anonce</button>
+                }
             </div>
         </>
     );

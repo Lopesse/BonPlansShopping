@@ -18,9 +18,8 @@ $utilisateurStorage = new UtilisateurStorage($db);
 $data = json_decode(file_get_contents('php://input'));
 
 
-if($data){
+if ($data) {
     $newId = $utilisateurStorage->create($data);
     echo json_encode($newId);
-}
-else
+} else
     echo json_encode(-1);

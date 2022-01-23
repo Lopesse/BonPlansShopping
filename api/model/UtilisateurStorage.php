@@ -20,18 +20,20 @@ class UtilisateurStorage
     {
         $req = "SELECT * FROM utilisateur WHERE ID = :id";
         $stmt = $this->bd->prepare($req);
-        $data = array(":id" => $this->id);
+        $data = array(":id" => $id);
         $stmt->execute($data);
         $utilisateurArray = $stmt->fetch();
         $utilisateur = array();
         if ($utilisateurArray) {
             $utilisateur = array(
-                'ID' => $utilisateurArray['ID'],
-                'Pseudo' => $utilisateurArray['Pseudo'],
-                'Email' => $utilisateurArray['Email'],
-                //'Photo' => $utilisateurArray['Photo'],
-                //'CategoriesFav' => $utilisateurArray['CategoriesFav'],
-                'MDP' => $utilisateurArray['MDP'],
+                'id' => $utilisateurArray['id'],
+                'pseudo' => $utilisateurArray['pseudo'],
+                'nom' => $utilisateurArray['nom'],
+                'prenom' => $utilisateurArray['prenom'],
+                'email' => $utilisateurArray['email'],
+                'photo' => $utilisateurArray['photo'],
+                'categoriesFav' => $utilisateurArray['categoriesFav'],
+                'mdp' => $utilisateurArray['mdp'],
             );
         }
         return $utilisateur;
@@ -62,39 +64,45 @@ class UtilisateurStorage
 
     public function getIdByName($pseudo)
     {
-        $req = "SELECT * FROM utilisateur WHERE Pseudo = :pseudo";
+        $req = "SELECT * FROM utilisateur WHERE pseudo = :pseudo";
         $stmt = $this->bd->prepare($req);
         $data = array(":pseudo" => $pseudo);
         $stmt->execute($data);
         $queryUtilisateur = $stmt->fetch();
         $utilisateurId = null;
         if ($queryUtilisateur) {
-            $utilisateurId = $queryUtilisateur['ID'];
-            // $queryCategorie = array(
-            //     'categorie' => $queryCategorie['categorie'],
-            //     'categorie_id' => $queryCategorie['categorie_id'],
-            // );
+            $utilisateurId = $queryUtilisateur['id'];
         }
         return $utilisateurId;
     }
+
+
     public function create($data)
     {
-        $req = "INSERT INTO utilisateur (pseudo, email, mdp) 
-                            VALUES (:pseudo, :email, :MDP);";
 
-        $stmt = $this->bd->prepare($req);
+        $userID = $this->getIdByName($data->pseudo);
+        if ($userID) return -1;
 
-        $utilisateur_data = array(
-            ':pseudo' => $data->pseudo,
-            ':email' => $data->email,
-            ':MDP' => password_hash($data->mdp, PASSWORD_BCRYPT)
-        );
+        else {
+            $req = "INSERT INTO utilisateur (pseudo, email, nom, prenom,  mdp) 
+                            VALUES (:pseudo, :email, :nom, :prenom, :MDP);";
 
-        $stmt->execute($utilisateur_data);
+            $stmt = $this->bd->prepare($req);
 
-        $this->ID = $this->bd->lastInsertId();
+            $utilisateur_data = array(
+                ':pseudo' => $data->pseudo,
+                ':email' => $data->email,
+                ':nom' => $data->nom,
+                ':prenom' => $data->prenom,
+                ':MDP' => password_hash($data->mdp, PASSWORD_BCRYPT)
+            );
 
-        return $this->ID;
+            $stmt->execute($utilisateur_data);
+
+            $id = $this->bd->lastInsertId();
+
+            return $this->read($id);
+        }
     }
 
 
@@ -103,10 +111,10 @@ class UtilisateurStorage
     {
         $req = "SELECT * FROM utilisateur WHERE email= :identifiant OR pseudo = :identifiant";
 
-        $stmt = $this->db->prepare($req);
+        $stmt = $this->bd->prepare($req);
 
-        $data = array(":identifiant" => $data['identifiant']);
-        $stmt->execute($data);
+        $queryData = array(":identifiant" => $data['identifiant']);
+        $stmt->execute($queryData);
         $queryUtilisateur = $stmt->fetchAll();
 
         foreach ($queryUtilisateur as $key => $value) {

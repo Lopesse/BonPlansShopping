@@ -14,14 +14,16 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [recherche, setRecherche] = useState('');
 
+
   useEffect(() => {
-    fetch(URLS.annonces)
+    let isMounted = true;
+    fetch(URLS.annonces, { cache: 'reload' })
       .then(res => res.json())
       .then(res => {
         for (let i in res) {
-          setAnnonces(a => [...a, res[i]])
+          if (isMounted) setAnnonces(a => [...a, res[i]])
         }
-        setIsLoaded(true);
+        if (isMounted) setIsLoaded(true);
       })
   }, []);
 
@@ -35,31 +37,31 @@ export default function App() {
 
   return (
     <div className='app'>
-        <NavBar />
-        <div className='page_principale'>
-          <div className='recherche'>
-            <input
-              type='text'
-              value={recherche}
-              name='searchBar'
-              placeholder='Recherchez ici'
-              onChange={e => setRecherche(e.target.value)}
-            />
-          </div>
-          <div className='liste_annonces'>
-            {
-              isLoaded ?
-              annonces
-              .filter(annonce => filtrer(annonce))
-              .map(elementTab =>
-                <Annonce annonce={elementTab} key={elementTab.id} />
-                )
-                :
-                <img src={'../spinning-loading.gif'}></img>
-              }
-          </div>
+      <NavBar />
+      <div className='page_principale'>
+        <div className='recherche'>
+          <input
+            type='text'
+            value={recherche}
+            name='searchBar'
+            placeholder='Recherchez ici'
+            onChange={e => setRecherche(e.target.value)}
+          />
         </div>
-        <Footer />
+        <div className='liste_annonces'>
+          {
+            isLoaded ?
+              annonces
+                .filter(annonce => filtrer(annonce))
+                .map(elementTab =>
+                  <Annonce annonce={elementTab} key={elementTab.id} />
+                )
+              :
+              <div>Loading...</div>
+          }
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
