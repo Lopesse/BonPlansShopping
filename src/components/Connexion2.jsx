@@ -10,13 +10,9 @@ import { useNavigate } from "react-router-dom";
 export default function Connexion2() {
 
     const [identifiants, setIdentifiants] = useState({ login: '', mdp: '' });
-
     const [loading, setLoading] = useState(false);
-
     const [message, setMessage] = useState('');
-
     const { user, setUser } = useContext(UserContext);
-
 
     let navigate = useNavigate();
 
@@ -27,7 +23,6 @@ export default function Connexion2() {
                 value: userObject.id,
                 expiry: new Date().getTime() + 600000,
             }
-
             localStorage.setItem('user', JSON.stringify(item))
             setUser(userObject)
             setLoading(false)
@@ -41,9 +36,7 @@ export default function Connexion2() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         setLoading(true);
-
         fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
             .then(res => res.json())
             .then(json => login(json))

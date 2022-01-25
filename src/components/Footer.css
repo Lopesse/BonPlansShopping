@@ -1,4 +1,12 @@
 footer {
-    background-color: #2d5c48;
-    color: white;
+  background-color: #2d5c48;
+  color: white;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  display: flex;
+}
+
+div {
+  margin: auto;
 }

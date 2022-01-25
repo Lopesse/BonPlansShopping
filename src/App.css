@@ -19,11 +19,15 @@
   padding: 2rem;
 }
 
-.recherche input{
+.recherche input {
   text-align: center;
   border-radius: 30px;
   box-shadow: 5px #2d5c48;
   width: 200px;
   padding: 12px;
   font-size: medium;
+}
+
+.app {
+  margin-bottom: 50px;
 }

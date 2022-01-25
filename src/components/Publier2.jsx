@@ -87,11 +87,10 @@ export default function Publier2() {
 
 
     return (
-        <div>
+        <div className="app">
             <NavBar />
             {
-                user ?
-
+                // user ?
 
                     <div className="publication">
                         <h3>Publier une nouvelle annonce :</h3>
@@ -143,11 +142,9 @@ export default function Publier2() {
                                                 .map(sous_cat =>
                                                     <option value={sous_cat.id} key={sous_cat.id}>{sous_cat.nom}</option>
                                                 )
-
                                         }
                                     </select>
                                 </label>
-
                             }
                             <label>Description :
                                 <textarea name="description" placeholder="Entrez la description" rows="15" cols="50" onChange={handleChange} />
@@ -168,13 +165,12 @@ export default function Publier2() {
 
                         </form>
                     </div >
-                    :
-                    <div>
-                        Vous devez vous connecter pour poublier un annonce!
-                        <Link to={'/incription'}>S'inscrire</Link>
-                        <Link to={'/connexion'}>Se connecter</Link>
-                    </div>
-
+                    // :
+                    // <div>
+                    //     Vous devez vous connecter pour poublier un annonce!
+                    //     <Link to={'/inscription'}>S'inscrire</Link>
+                    //     <Link to={'/connexion'}>Se connecter</Link>
+                    // </div>
             }
             <Footer />
         </div >
