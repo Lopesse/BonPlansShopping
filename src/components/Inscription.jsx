@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-export default function Inscription2() {
+export default function Inscription() {
     const [newUtilisateur, setNewUtilisateur] = useState({
         pseudo: '',
         email: '',
