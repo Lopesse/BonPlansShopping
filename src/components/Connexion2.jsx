@@ -1,7 +1,5 @@
-import NavBar from "./NavBar";
-import Footer from "./Footer";
 import "./NavBar.css"
-import "./Connexion.css"
+import "./formulaire.css"
 import { URLS } from "../dataBase/apiURLS";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
@@ -17,18 +15,18 @@ export default function Connexion2() {
     let navigate = useNavigate();
 
     const login = (userObject) => {
-        if (userObject == -1) setMessage('Identifiants erronnés');
-        else {
-            const item = {
-                value: userObject.id,
-                expiry: new Date().getTime() + 600000,
-            }
-            localStorage.setItem('user', JSON.stringify(item))
-            setUser(userObject)
-            setLoading(false)
-            navigate('/')
+
+        const item = {
+            value: userObject.id,
+            expiry: new Date().getTime() + 600000
         }
+
+        localStorage.setItem('user', JSON.stringify(item))
+        setUser(userObject)
+        setLoading(false)
+        navigate('/')
     }
+
 
     const handleChange = (event) => {
         setIdentifiants({ ...identifiants, [event.target.name]: event.target.value });
@@ -38,19 +36,24 @@ export default function Connexion2() {
         event.preventDefault();
         setLoading(true);
         fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    setMessage('Identifiants erronés');
+                    setLoading(false);
+                    throw Error('Identifiants erronés');
+                }
+                return res.json();
+            })
             .then(json => login(json))
             .catch(e => console.log(e));
     }
 
     return (
         <div>
-            <NavBar />
-            <div className="connexion">
+            <div className="formulaire">
                 <h3>Se connecter :</h3>
                 {
-                    message &&
-                    <div>{message}</div>
+                    message && <div>{message}</div>
                 }
                 <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
 
@@ -68,7 +71,6 @@ export default function Connexion2() {
 
                 </form>
             </div>
-            <Footer />
         </div>
     )
 }

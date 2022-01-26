@@ -22,8 +22,6 @@ export default function AnnonceDetails() {
             .then(res => setAnnonce(res));
     }, []);
 
-    if (!annonce) navigate('/');
-
     const deletePost = () => {
         let isMounted = true;
         if (annonce) {
@@ -34,14 +32,15 @@ export default function AnnonceDetails() {
                     "Content-Type": "application/json"
                 }
             })
-            if (isMounted) setAnnonce(undefined);
+            if (isMounted) setAnnonce(null);
+            navigate('/');
         }
     }
 
 
     return (
         <>
-            <NavBar />
+            {/* <NavBar /> */}
             <div className='annonce'>
                 {
                     annonce ?
@@ -66,7 +65,7 @@ export default function AnnonceDetails() {
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
-                    <Link to={`/edit/id=${annonce?.id}`}>Update</Link>
+                    <Link to={`/annonces/edit/${annonce?.id}`}>Update</Link>
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&

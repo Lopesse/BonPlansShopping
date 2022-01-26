@@ -1,10 +1,7 @@
-import NavBar from "./NavBar";
-import Footer from "./Footer";
 import "./NavBar.css"
-import "./Inscription.css"
-import { Component } from "react/cjs/react.production.min";
+import "./formulaire.css"
 import { URLS } from "../dataBase/apiURLS";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -19,28 +16,26 @@ export default function Inscription2() {
     });
 
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
     let navigate = useNavigate();
 
     const { user, setUser } = useContext(UserContext);
 
 
     const login = (userObject) => {
-        if (userObject != -1) {
-            const item = {
-                value: userObject.id,
-                expiry: new Date().getTime() + 600000,
-            }
-
-            localStorage.setItem('user', JSON.stringify(item))
-            setUser(userObject)
-            setLoading(false)
-            navigate('/')
+        const item = {
+            value: userObject.id,
+            expiry: new Date().getTime() + 600000,
         }
+
+        localStorage.setItem('user', JSON.stringify(item))
+        setUser(userObject)
+        setLoading(false)
+        navigate('/')
     }
 
     const handleChange = (event) => {
         setNewUtilisateur({ ...newUtilisateur, [event.target.name]: event.target.value });
-        console.log(newUtilisateur)
     }
 
     const handleSubmit = (event) => {
@@ -48,7 +43,6 @@ export default function Inscription2() {
 
         setLoading(true);
 
-        console.log(newUtilisateur)
         fetch(URLS.inscription, {
             method: "POST",
             body: JSON.stringify(newUtilisateur),
@@ -56,7 +50,14 @@ export default function Inscription2() {
                 "Content-Type": "application/json"
             }
         })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    setMessage('Un utilisateur avec cet adresse mail existe déjà')
+                    setLoading(false)
+                    throw Error('Un utilisateur avec cet adresse mail existe déjà');
+                }
+                else return res.json();
+            })
             .then(json => login(json))
             .catch(e => console.log(e));
 
@@ -65,9 +66,9 @@ export default function Inscription2() {
 
     return (
         <div>
-            <NavBar />
-            <div className="inscription">
+            <div className="formulaire">
                 <h3>S'inscrire :</h3>
+                {message && <div>{message}</div>}
                 <form encType="multipart/form-data" method="POST" onSubmit={(e) => handleSubmit(e)}>
                     <label>Pseudo :
                         <input type='text' name='pseudo' placeholder='Votre pseudo' onChange={handleChange} />
@@ -116,13 +117,12 @@ export default function Inscription2() {
                         <input
                             type="submit"
                             value="S'inscrire"
-                            disabled={!newUtilisateur.pseudo || !newUtilisateur.email || newUtilisateur.mdp !== newUtilisateur.confirmMDP || newUtilisateur.loading}
+                            disabled={!newUtilisateur.pseudo || !newUtilisateur.email || newUtilisateur.mdp !== newUtilisateur.confirmMDP || loading}
                         />
                     </label>
 
                 </form>
             </div>
-            <Footer />
         </div>
     )
 

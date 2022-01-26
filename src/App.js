@@ -1,6 +1,4 @@
 import './App.css';
-import NavBar from './components/NavBar';
-import Footer from "./components/Footer";
 import Annonce from './components/Annonce';
 
 import { useEffect, useState } from 'react';
@@ -37,7 +35,6 @@ export default function App() {
 
   return (
     <div className='app'>
-      <NavBar />
       <div className='page_principale'>
         <div className='recherche'>
           <input
@@ -61,7 +58,6 @@ export default function App() {
           }
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

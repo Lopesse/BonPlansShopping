@@ -62,7 +62,7 @@ class UtilisateurStorage
         return $utilisateurArray;
     }
 
-    public function getIdByName($pseudo)
+    public function getIdByPseudo($pseudo)
     {
         $req = "SELECT * FROM utilisateur WHERE pseudo = :pseudo";
         $stmt = $this->bd->prepare($req);
@@ -80,29 +80,27 @@ class UtilisateurStorage
     public function create($data)
     {
 
-        $userID = $this->getIdByName($data->pseudo);
-        if ($userID) return -1;
-
-        else {
-            $req = "INSERT INTO utilisateur (pseudo, email, nom, prenom,  mdp) 
+        $req = "INSERT INTO utilisateur (pseudo, email, nom, prenom,  mdp) 
                             VALUES (:pseudo, :email, :nom, :prenom, :MDP);";
 
-            $stmt = $this->bd->prepare($req);
+        $stmt = $this->bd->prepare($req);
 
-            $utilisateur_data = array(
-                ':pseudo' => $data->pseudo,
-                ':email' => $data->email,
-                ':nom' => $data->nom,
-                ':prenom' => $data->prenom,
-                ':MDP' => password_hash($data->mdp, PASSWORD_BCRYPT)
-            );
-
+        $utilisateur_data = array(
+            ':pseudo' => $data->pseudo,
+            ':email' => $data->email,
+            ':nom' => $data->nom,
+            ':prenom' => $data->prenom,
+            ':MDP' => password_hash($data->mdp, PASSWORD_BCRYPT)
+        );
+        try {
             $stmt->execute($utilisateur_data);
-
-            $id = $this->bd->lastInsertId();
-
-            return $this->read($id);
+        } catch (PDOException $e) {
+            return $e;
         }
+
+        $id = $this->bd->lastInsertId();
+
+        return $this->read($id);
     }
 
 
@@ -133,47 +131,4 @@ class UtilisateurStorage
         }
         return null;
     }
-
-    /*public function delete($id)
-            {
-                $req = "DELETE FROM posts WHERE post_id=:identifiant";
-                $stmt = $this->bd->prepare($req);
-                $data = array(":identifiant" => $id);
-                if ($stmt->execute($data))
-                    return true;
-                else
-                    return false;
-            }
-        
-            public function update($data)
-            {
-                $req = "UPDATE posts 
-                            SET nom_produit = :nom, categorie_id = :categorie, user_id = :user, prix = :prix, date_expiration = :expiration 
-                            WHERE post_id=:identifiant;";
-        
-                $stmt = $this->bd->prepare($req);
-        
-                $categorie = new Categorie($this->bd);
-                $categorie_id = $categorie->getIdByName($data->categorie);
-        
-        
-                $this->nom_produit = htmlspecialchars(strip_tags($data->nom));
-                $this->categorie = $categorie_id;
-                $this->user = intval(htmlspecialchars(strip_tags($data->user_id)));
-                $this->date_expiration = htmlspecialchars(strip_tags($data->date_expiration));
-                $this->prix = floatval(htmlspecialchars(strip_tags($data->prix)));
-        
-                $new_data = array(
-                    ':nom' => $this->nom_produit,
-                    ':categorie' => $this->categorie,
-                    ':user' => $this->user,
-                    ':expiration' => $this->date_expiration,
-                    ':prix' => $this->prix,
-                    ':identifiant' => $data->post_id
-                );
-        
-                $stmt->execute($new_data);
-        
-                return $data->post_id;
-            }*/
 }

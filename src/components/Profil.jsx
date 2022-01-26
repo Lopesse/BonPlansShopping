@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import NavBar from "./NavBar";
 import UserProvider, { UserContext } from "./UserContext";
 
 export default function Profil() {
@@ -7,7 +6,6 @@ export default function Profil() {
 
     return (
         <>
-            <NavBar />
             {
                 user &&
                 <div>{user.pseudo}</div>

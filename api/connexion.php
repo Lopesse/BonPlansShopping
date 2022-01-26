@@ -19,6 +19,6 @@ $data['mdp'] = isset($_GET['mdp']) ? $_GET['mdp'] : die();
 
 if ($data) {
     $connexionUser = $utilisateurStorage->connexion($data);
-    if ($connexionUser) echo json_encode($connexionUser);
-    else echo json_encode(-1); // envoyer code d'erreur htttp
-} else echo json_encode(array('message' => 'data non fournie'));
+    $connexionUser ? header('HTTP/1.1 200 OK') : header('HTTP/1.1 501 Internal Server Error');
+}
+echo json_encode($connexionUser);

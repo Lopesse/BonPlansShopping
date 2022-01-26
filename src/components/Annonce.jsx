@@ -27,7 +27,7 @@ export default function Annonce(props) {
                 <div>Expire le: {annonce.date_expiration}</div>
                 <div>Créé par: {annonce.utilisateur}</div>
                 <div>Categorie: {annonce.categorie}</div>
-                <Link to={`/id=${annonce.id}`}>Savoir plus</Link>
+                <Link to={`annonces/${annonce.id}`}>Savoir plus</Link>
             </div>
         </>
     );
