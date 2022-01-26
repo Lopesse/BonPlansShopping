@@ -48,7 +48,7 @@ export default function AnnonceDetails() {
                             <h1>{annonce.titre}</h1>
                             {
                                 annonce.image &&
-                                <img src={annonce.image}></img>
+                                <img src={`./api/upload/${annonce.image}`}></img>
                             }
                             <div>{annonce.description}</div>
                             <div>Disponible à {annonce.nom_magasin}</div>

@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Publier2() {
+export default function Publier() {
     const { user, setUser } = useContext(UserContext);
     const [newAnnonce, setNewAnnonce] = useState({
         titre: '',
@@ -46,7 +46,7 @@ export default function Publier2() {
             categorie: newAnnonce.categorie,
             sousCategorie: newAnnonce.sous_categorie,
             image: newAnnonce.image,
-            utilisateur: user.id,
+            utilisateur: user ? user.id : 1,
             description: newAnnonce.description
         };
 
@@ -67,7 +67,7 @@ export default function Publier2() {
                 }
                 else return res.json();
             })
-            .then(json => { setLoading(false); navigate(`/annonces/${json}`) })
+            .then(json => { setLoading(false); console.log(json)})
             .catch(e => console.log(e));
     }
 
@@ -134,53 +134,53 @@ export default function Publier2() {
                                     )
                                 }
                             </select>
-                        </label>
-                        {
-                            sousCategories &&
-                            <label>
-                                Sous categorie de l'annonce :
-                                <select
-                                    name="sous_categorie"
-                                    id="sous_categorie"
-                                    onChange={handleChange}
-                                    defaultValue={newAnnonce.sous_categorie}
-                                >
-                                    {
-                                        sousCategories &&
-                                        sousCategories
-                                            .filter(sous_cat => sous_cat.categorieParent === newAnnonce.categorie)
-                                            .map(sous_cat =>
-                                                <option value={sous_cat.id} key={sous_cat.id}>{sous_cat.nom}</option>
-                                            )
-                                    }
-                                </select>
+                        </label>     
+                            {
+                                sousCategories &&
+                                <label>
+                                    Sous categorie de l'annonce :
+                                    <select
+                                        name="sous_categorie"
+                                        id="sous_categorie"
+                                        onChange={handleChange}
+                                        defaultValue={newAnnonce.sous_categorie}
+                                    >
+                                        {
+                                            sousCategories &&
+                                            sousCategories
+                                                .filter(sous_cat => sous_cat.categorieParent === newAnnonce.categorie)
+                                                .map(sous_cat =>
+                                                    <option value={sous_cat.id} key={sous_cat.id}>{sous_cat.nom}</option>
+                                                )
+                                        }
+                                    </select>
+                                </label>
+                            }
+                            <label>Description :
+                                <textarea name="description" placeholder="Entrez la description" rows="13" cols="10" onChange={handleChange} />
                             </label>
-                        }
-                        <label>Description :
-                            <textarea name="description" placeholder="Entrez la description" rows="15" cols="50" onChange={handleChange} />
-                        </label>
 
-                        <label>Date d'expiration :
-                            <input type='date' name='dateExpiration' onChange={handleChange} />
-                        </label>
+                            <label>Date d'expiration :
+                                <input type='date' name='dateExpiration' onChange={handleChange} />
+                            </label>
 
-                        <label>Choisissez le fichier image (JPEG ou PNG) :
-                            <input type="file" name="image" accept="image/png, image/jpeg" onChange={handleChange} />
-                            <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
-                        </label>
+                            <label>Choisissez le fichier image (JPEG ou PNG) :
+                                <input type="file" name="image" accept="image/png, image/jpeg" onChange={handleChange} />
+                                <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
+                            </label>
 
-                        <label>
-                            <input type="submit" value="Envoyer" disabled={loading} />
-                        </label>
+                            <label>
+                                <input id="submit" type="submit" value="Envoyer" disabled={loading}/>
+                            </label>
 
-                    </form>
-                </div >
-                // :
-                // <div>
-                //     Vous devez vous connecter pour poublier un annonce!
-                //     <Link to={'/inscription'}>S'inscrire</Link>
-                //     <Link to={'/connexion'}>Se connecter</Link>
-                // </div>
+                        </form>
+                    </div >
+                    // :
+                    // <div>
+                    //     Vous devez vous connecter pour poublier un annonce!
+                    //     <Link to={'/inscription'}>S'inscrire</Link>
+                    //     <Link to={'/connexion'}>Se connecter</Link>
+                    // </div>
             }
         </div >
     )

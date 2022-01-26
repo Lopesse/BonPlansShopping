@@ -129,9 +129,7 @@ class Annonce
         );
 
         $stmt->execute($post_data);
-
         $this->id = $this->bd->lastInsertId();
-
         return $this->id;
     }
 

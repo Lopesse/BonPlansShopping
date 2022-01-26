@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-export default function Connexion2() {
+export default function Connexion() {
 
     const [identifiants, setIdentifiants] = useState({ login: '', mdp: '' });
     const [loading, setLoading] = useState(false);
