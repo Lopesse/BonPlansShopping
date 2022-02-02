@@ -14,8 +14,8 @@ export default function UserProvider({ children }) {
     useEffect(() => {
         let isMounted = true;
         let userID;
-        const utilisateur = localStorage.getItem('user') ;
-        if(utilisateur){
+        const utilisateur = localStorage.getItem('user');
+        if (utilisateur) {
             userID = JSON.parse(utilisateur).value;
         }
 

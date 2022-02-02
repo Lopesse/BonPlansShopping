@@ -40,7 +40,6 @@ export default function AnnonceDetails() {
 
     return (
         <>
-            {/* <NavBar /> */}
             <div className='annonce'>
                 {
                     annonce ?

@@ -1,11 +1,17 @@
+
+const API_ADRESS = 'http://localhost';
+
+const PORT = '8000';
+
 export const URLS = {
-    annonces: 'http://localhost:8000/liste_annonce.php',
-    categories: 'http://localhost:8000/liste_categorie.php',
-    creer_annonce: 'http://localhost:8000/creer_annonce.php',
-    annonce: 'http://localhost:8000/annonce.php',
-    sous_categories: 'http://localhost:8000/liste_sous_categorie.php',
-    delete_annonce: 'http://localhost:8000/delete_annonce.php',
-    inscription: 'http://localhost:8000/create_utilisateur.php',
-    connexion: 'http://localhost:8000/connexion.php',
-    get_utilisateur: 'http://localhost:8000/get_utilisateur.php'
+    annonces: `${API_ADRESS}:${PORT}/liste_annonce.php`,
+    categories: `${API_ADRESS}:${PORT}/liste_categorie.php`,
+    creer_annonce: `${API_ADRESS}:${PORT}/creer_annonce.php`,
+    update_annonce: `${API_ADRESS}:${PORT}/update_annonce.php`,
+    annonce: `${API_ADRESS}:${PORT}/annonce.php`,
+    sous_categories: `${API_ADRESS}:${PORT}/liste_sous_categorie.php`,
+    delete_annonce: `${API_ADRESS}:${PORT}/delete_annonce.php`,
+    inscription: `${API_ADRESS}:${PORT}/create_utilisateur.php`,
+    connexion: `${API_ADRESS}:${PORT}/connexion.php`,
+    get_utilisateur: `${API_ADRESS}:${PORT}/get_utilisateur.php`
 }

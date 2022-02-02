@@ -141,21 +141,34 @@ class Annonce
         return $stmt->execute($data);
     }
 
-    // public function update($id, $newData){
-    //     $req = "UPDATE albums SET name = :nom, artiste = :artiste, annee = :annee, genre = :genre, img_src = :img WHERE id=:identifiant;";
-    //     $stmt = $this->bd->prepare($req);
-    //     $data = array(":nom" => $newData["nom"], ":artiste" => $newData["artiste"], ":annee" => $newData["annee"], ":genre" => $newData["genre"],":img" => $newData["image"], ":identifiant" => $id);
-    //     $stmt->execute($data);
-    //     return $id;
-    // }
+    public function update($data)
+    {
+        $req = "UPDATE annonce
+                SET  titre = :titre,
+                    dateExpiration = :dateExpiration,
+                    sousCategorie = :sousCategorie,
+                    nomMagasin = :nomMagasin,
+                    adresseMagasin = :adresseMagasin,
+                    image = :image,
+                    categorie = :categorie,
+                    description = :description
+                WHERE id = :id;";
 
-    // public function rechercheBase($terme){
-    //     $req = "SELECT id, name FROM albums WHERE name LIKE :terme ;";
-    //     $stmt = $this->bd->prepare($req);
-    //     $stmt->execute(array("terme" => "%".$terme."%"));
-    //     $trouves = $stmt->fetchAll();
-    //     return $trouves;
-    // }
+        $stmt = $this->bd->prepare($req);
 
+        $post_data = array(
+            ":titre" => $data->titre,
+            ":dateExpiration" => $data->dateExpiration,
+            ":categorie" => $data->categorie,
+            ":sousCategorie" => $data->sousCategorie,
+            ":nomMagasin" => $data->nomMagasin,
+            ":adresseMagasin" => $data->adresseMagasin,
+            ":image" => $data->image,
+            ":description" => $data->description,
+            ":id" => $data->id
+        );
 
+        $stmt->execute($post_data);
+        return $data->id;
+    }
 }

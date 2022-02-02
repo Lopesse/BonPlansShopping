@@ -3,22 +3,22 @@ import "./formulaire.css"
 import { URLS } from "../dataBase/apiURLS";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Publier() {
     const { user, setUser } = useContext(UserContext);
-    const [newAnnonce, setNewAnnonce] = useState({
+    const [annonce, setAnnonce] = useState({
         titre: '',
         dateCreation: '',
-        dateExpiration: '',
-        magasin: '',
-        adresse: '',
+        date_expiration: '',
+        nom_magasin: '',
+        adresse_magasin: '',
         categorie: '',
         sous_categorie: '',
         image: '',
         description: '',
-        categories: [],
-        sous_categories: []
+        // categories: [],
+        // sous_categories: []
     });
 
     const [categories, setCategories] = useState([]);
@@ -27,9 +27,14 @@ export default function Publier() {
     const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
+    let params = useParams();
 
     const handleChange = (event) => {
-        setNewAnnonce({ ...newAnnonce, [event.target.name]: event.target.value });
+        console.log(`${event.target.name} = ${event.target.value}`);
+        setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
+        if (event.target.name === 'categorie') {
+            setAnnonce(a => ({ ...a, sous_categorie: sousCategories.find(cat => cat.categorieParent === event.target.value).id }));
+        }
     }
 
     const handleSubmit = (event) => {
@@ -38,21 +43,24 @@ export default function Publier() {
         let date = new Date();
         date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
         const data = {
-            titre: newAnnonce.titre,
+            titre: annonce.titre,
             dateCreation: date,
-            dateExpiration: newAnnonce.dateExpiration,
-            nomMagasin: newAnnonce.magasin,
-            adresseMagasin: newAnnonce.adresse,
-            categorie: newAnnonce.categorie,
-            sousCategorie: newAnnonce.sous_categorie,
-            image: newAnnonce.image,
+            dateExpiration: annonce.date_expiration,
+            nomMagasin: annonce.nom_magasin,
+            adresseMagasin: annonce.adresse_magasin,
+            categorie: annonce.categorie,
+            sousCategorie: annonce.sous_categorie,
+            image: annonce.image,
             utilisateur: user ? user.id : 1,
-            description: newAnnonce.description
+            description: annonce.description,
+            id: params.id
         };
 
         console.log(data);
 
-        fetch(URLS.creer_annonce, {
+        let action = params.id ? URLS.update_annonce : URLS.creer_annonce;
+
+        fetch(action, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -67,12 +75,26 @@ export default function Publier() {
                 }
                 else return res.json();
             })
-            .then(json => { setLoading(false); console.log(json)})
+            .then(json => { setLoading(false); navigate(`/annonces/${JSON.parse(json)}`) })
             .catch(e => console.log(e));
+
+
+
     }
 
     useEffect(() => {
         let isMounted = true
+        if (params.id)
+            fetch(`${URLS.annonce}?id=${params.id}`)
+                .then(res => res.json())
+                .then(res => {
+                    let bon_plan = {}
+                    for (let i in res) {
+                        bon_plan = { ...bon_plan, [i]: res[i] ? res[i] : '' }  // eviter les propriétés avec une valeur nulle
+                    }
+                    setAnnonce(bon_plan);
+                });
+
         fetch(URLS.categories)
             .then(res => res.json())
             .then(res => {
@@ -80,8 +102,16 @@ export default function Publier() {
                 for (let i in res) {
                     cats.push(res[i])
                 }
-                if (isMounted) setCategories(cats)
-                if (isMounted) setNewAnnonce({ categorie: cats[0].id })
+                if (isMounted) {
+                    setCategories(cats)
+
+                    if (!params.id) {
+                        setAnnonce(a => ({ ...a, categorie: cats[0].id }));
+                    }
+                    else {
+                        setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
+                    }
+                }
             });
 
         fetch(URLS.sous_categories)
@@ -92,49 +122,50 @@ export default function Publier() {
                     cats.push(res[i])
                 }
                 if (isMounted) setSousCategories(cats)
-                if (isMounted) setNewAnnonce({ sous_categorie: cats[0].id })
+                if (isMounted)
+                    !params.id ?
+                        setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.categorieParent === a.categorie).id })) :
+                        setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }))
             });
-    }, [])
-
+    }, [params.id])
 
     return (
         <div className="app">
             {
-                // user ?
+                user ?
+                    <div className="formulaire">
+                        <h3>Publier une nouvelle annonce :</h3>
+                        {message && <div>{message}</div>}
+                        <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
 
-                <div className="formulaire">
-                    <h3>Publier une nouvelle annonce :</h3>
-                    {message && <div>{message}</div>}
-                    <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
+                            <label>Titre de l'annonce :
+                                <input type='text' name='titre' placeholder='Le titre' onChange={handleChange} value={annonce.titre} />
+                            </label>
 
-                        <label>Titre de l'annonce :
-                            <input type='text' name='titre' placeholder='Le titre' onChange={handleChange} />
-                        </label>
+                            <label>Magasin :
+                                <input type="text" name="nom_magasin" placeholder="Le magasin de l'annonce utilisateur" onChange={handleChange} value={annonce.nom_magasin} />
+                            </label>
 
-                        <label>Magasin :
-                            <input type="text" name="magasin" placeholder="Le magasin de l'annonce utilisateur" onChange={handleChange} />
-                        </label>
+                            <label>Adresse de l'annonce :
+                                <input type='text' name='adresse_magasin' placeholder="adresse de l'annonce" onChange={handleChange} value={annonce.adresse_magasin} />
+                            </label>
 
-                        <label>Adresse de l'annonce :
-                            <input type='text' name='adresse' placeholder="adresse de l'annonce" onChange={handleChange} />
-                        </label>
-
-                        <label>
-                            Categorie de l'annonce :
-                            <select
-                                name="categorie"
-                                id="categorie"
-                                onChange={handleChange}
-                                defaultValue={categories && categories[0]}
-                            >
-                                {
-                                    categories &&
-                                    categories.map(cat =>
-                                        <option value={cat.id} key={cat.id}>{cat.categorie}</option>
-                                    )
-                                }
-                            </select>
-                        </label>     
+                            <label>
+                                Categorie de l'annonce :
+                                <select
+                                    name="categorie"
+                                    id="categorie"
+                                    onChange={handleChange}
+                                    defaultValue={annonce.categorie}
+                                >
+                                    {
+                                        categories &&
+                                        categories.map(cat =>
+                                            <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                        )
+                                    }
+                                </select>
+                            </label>
                             {
                                 sousCategories &&
                                 <label>
@@ -143,12 +174,12 @@ export default function Publier() {
                                         name="sous_categorie"
                                         id="sous_categorie"
                                         onChange={handleChange}
-                                        defaultValue={newAnnonce.sous_categorie}
+                                        defaultValue={annonce.sous_categorie}
                                     >
                                         {
                                             sousCategories &&
                                             sousCategories
-                                                .filter(sous_cat => sous_cat.categorieParent === newAnnonce.categorie)
+                                                .filter(sous_cat => sous_cat.categorieParent === annonce.categorie)
                                                 .map(sous_cat =>
                                                     <option value={sous_cat.id} key={sous_cat.id}>{sous_cat.nom}</option>
                                                 )
@@ -157,30 +188,31 @@ export default function Publier() {
                                 </label>
                             }
                             <label>Description :
-                                <textarea name="description" placeholder="Entrez la description" rows="13" cols="10" onChange={handleChange} />
+                                <textarea name="description" placeholder="Entrez la description" rows="13" cols="10" onChange={handleChange} value={annonce.description} />
                             </label>
 
                             <label>Date d'expiration :
-                                <input type='date' name='dateExpiration' onChange={handleChange} />
+                                <input type='date' name='date_expiration' onChange={handleChange} value={annonce.date_expiration} />
                             </label>
 
                             <label>Choisissez le fichier image (JPEG ou PNG) :
-                                <input type="file" name="image" accept="image/png, image/jpeg" onChange={handleChange} />
+                                <input type="file" name="image" accept="image/png, image/jpeg" onChange={handleChange} value={annonce.image} />
                                 <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                             </label>
 
                             <label>
-                                <input id="submit" type="submit" value="Envoyer" disabled={loading}/>
+                                <input id="submit" type="submit" value={params.id ? "Enregistrer" : "Créer"} disabled={loading} />
                             </label>
 
                         </form>
                     </div >
-                    // :
-                    // <div>
-                    //     Vous devez vous connecter pour poublier un annonce!
-                    //     <Link to={'/inscription'}>S'inscrire</Link>
-                    //     <Link to={'/connexion'}>Se connecter</Link>
-                    // </div>
+
+                    :
+                    <div style={{ display: 'grid' }}>
+                        Vous devez vous connecter pour pouvoir poublier un annonce!
+                        <Link to={'/inscription'}>S'inscrire</Link>
+                        <Link to={'/connexion'}>Se connecter</Link>
+                    </div>
             }
         </div >
     )
