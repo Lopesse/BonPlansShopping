@@ -23,7 +23,7 @@ export default function UserProvider({ children }) {
             fetch(`${URLS.get_utilisateur}?id=${userID}`)
                 .then(res => res.json())
                 .then(json => {
-                    if (json != -1)
+                    if (json !== -1)
                         if (isMounted) setUser(json)
                 })
                 .catch(e => console.log(e))

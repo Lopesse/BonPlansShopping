@@ -11,6 +11,7 @@ import UserProvider from './components/UserContext';
 import Profil from './components/Profil';
 import Publier from './components/Publier';
 import Footer from './components/Footer';
+import Categorie from './components/Categorie';
 
 
 ReactDOM.render(
@@ -30,7 +31,7 @@ ReactDOM.render(
         </Route>
         <Route path="inscription" element={<Inscription />} />
         <Route path="connexion" element={<Connexion />} />
-        <Route path="categorie/:categorie" element={<App />} />
+        <Route path="categorie/:categorie" element={<Categorie />} />
       </Routes>
       <Footer />
     </UserProvider>

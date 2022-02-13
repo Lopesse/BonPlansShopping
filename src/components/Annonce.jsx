@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom"
 import { UserContext } from "./UserContext";
+import './css/annonces.css';
+
 
 /*
 interface Annonce {
@@ -21,13 +23,19 @@ export default function Annonce(props) {
     const annonce = props.annonce;
     return (
         <>
-            <div className=''>
-                <div>{annonce.titre}</div>
-                <div>Disponible à {annonce.nom_magasin}</div>
-                <div>Expire le: {annonce.date_expiration}</div>
-                <div>Créé par: {annonce.utilisateur}</div>
-                <div>Categorie: {annonce.categorie}</div>
-                <Link to={`annonces/${annonce.id}`}>Savoir plus</Link>
+            <div className='annonce'>
+                <img src={annonce.image} alt="image" />
+                {/* <div>{annonce.image}</div> */}
+                <div>
+                    <h3>{annonce.titre}</h3>
+                    <div>Disponible à {annonce.nom_magasin}</div>
+                    <div>Publiée le : {annonce.date_creation}</div>
+                    <div>Expire le : {annonce.date_expiration}</div>
+                    <div>Créé par : {annonce.utilisateur}</div>
+                    <div>Categorie : {annonce.categorie}</div>
+                    <div>Description : {annonce.description}</div>
+                    <Link to={`annonces/${annonce.id}`}>Savoir plus</Link>
+                </div>
             </div>
         </>
     );

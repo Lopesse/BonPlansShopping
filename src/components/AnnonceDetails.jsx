@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, Navigate, Outlet, useNavigate, useParams } from 'react-router-dom';
 import NavBar from './NavBar';
 import { URLS } from '../dataBase/apiURLS';
-import './annonces.css';
+import './css/annonces.css';
 import UserProvider, { UserContext } from './UserContext';
 
 
@@ -41,10 +41,10 @@ export default function AnnonceDetails() {
     return (
         <>
             {/* <NavBar /> */}
-            <div className='annonce'>
+            <div className='publierAnnonce'>
                 {
                     annonce ?
-                        <div className='annonce_infos'>
+                        <div className='InfosAnnonce'>
                             <h1>{annonce.titre}</h1>
                             {
                                 annonce.image &&

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { categories } from "./Categories"
-import "./NavBar.css"
+// import { categories } from "./Categories"
+import "./css/NavBar.css"
 import { UserContext } from "./UserContext"
 import { URLS } from "../dataBase/apiURLS"
 
@@ -88,13 +88,13 @@ export default function NavBar() {
 //             <nav className="menuHaut">
 //                 <ul>
 //                     <li><Link to={"/"}>Accueil</Link></li>
-//                     <li><Link to={"#"}>Profil</a></li>
-//                     <li><Link to={"#"}>Compte</a></li>
+//                     <li><Link to={"#"}>Profil</Link></li>
+//                     <li><Link to={"#"}>Compte</Link></li>
 //                 </ul>
 //             </nav>
 //             <nav className="menuBas">
 //                 <ul>
-//                     <li><Link to={"#"} >Catégorie</a>
+//                     <li><Link to={"#"} >Catégorie</Link>
 //                         <ul className="deroulant">
 //                             {
 //                                 categories &&
@@ -104,7 +104,7 @@ export default function NavBar() {
 //                             }
 //                         </ul>
 //                     </li>
-//                     <li><Link to={"#"}>Favories</a></li>
+//                     <li><Link to={"#"}>Favories</Link></li>
 //                     <li><Link to={"/nouveau"}>Publier une annonce</Link></li>
 //                 </ul>
 //             </nav>

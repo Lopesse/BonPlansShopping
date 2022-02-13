@@ -1,5 +1,5 @@
-import "./NavBar.css"
-import "./formulaire.css"
+import "./css/NavBar.css"
+import "./css/formulaire.css"
 import { URLS } from "../dataBase/apiURLS";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
