@@ -3,7 +3,7 @@ import "./css/formulaire.css"
 import { URLS } from "../dataBase/apiURLS";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
-import { Link, useNavigate } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 
 export default function Publier() {
     const { user, setUser } = useContext(UserContext);
@@ -17,8 +17,8 @@ export default function Publier() {
         sous_categorie: '',
         image: '',
         description: '',
-        categories: [],
-        sous_categories: []
+        //categories: [],
+        //sous_categories: []
     });
 
     const [categories, setCategories] = useState([]);
@@ -26,14 +26,14 @@ export default function Publier() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    let navigate = useNavigate();
+    // let navigate = useNavigate();
 
     const handleChange = (event) => {
         setNewAnnonce({ ...newAnnonce, [event.target.name]: event.target.value });
     }
-
-    const handleSubmit = (event) => {
+    const handleSubmit = event => {
         event.preventDefault();
+        // console.log(event.target.files[0]);
         setLoading(true);
         let date = new Date();
         date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
@@ -49,8 +49,9 @@ export default function Publier() {
             utilisateur: user ? user.id : 1,
             description: newAnnonce.description
         };
-
+        console.log('annonce');
         console.log(data);
+        console.log(newAnnonce);
 
         fetch(URLS.creer_annonce, {
             method: "POST",
@@ -61,6 +62,9 @@ export default function Publier() {
         })
             .then(res => {
                 if (!res.ok) {
+                    console.log('resOK');
+                    console.log(res.ok);
+                    console.log(res);
                     setMessage("Une erreur s'est produite. L'annonce n'a pas été crée. Veuillez essayer plus tard.")
                     setLoading(false)
                     throw Error('Annonce non crée');
@@ -70,6 +74,8 @@ export default function Publier() {
             .then(json => { setLoading(false); console.log(json)})
             .catch(e => console.log(e));
     }
+
+
 
     useEffect(() => {
         let isMounted = true
@@ -83,7 +89,7 @@ export default function Publier() {
                 if (isMounted) setCategories(cats)
                 if (isMounted) setNewAnnonce({ categorie: cats[0].id })
             });
-
+            
         fetch(URLS.sous_categories)
             .then(res => res.json())
             .then(res => {
@@ -94,8 +100,22 @@ export default function Publier() {
                 if (isMounted) setSousCategories(cats)
                 if (isMounted) setNewAnnonce({ sous_categorie: cats[0].id })
             });
+           
     }, [])
 
+    const [images, setImages] = useState([]);
+    const [imagesURLs, setImagesURLs] = useState([]);
+
+    useEffect(() => {
+        if(images.length < 1) return;
+        const newImageUrls = [];
+        images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
+        setImagesURLs(newImageUrls);
+    }, [images]);
+
+    function onImageChange(event) {
+        setImages([...event.target.files]);
+    }
 
     return (
         <div className="app">
@@ -165,7 +185,10 @@ export default function Publier() {
                             </label>
 
                             <label>Choisissez le fichier image (JPEG ou PNG) :
-                                <input type="file" name="image" accept="image/png, image/jpeg" onChange={handleChange} />
+                                {/* <input type="file" name="image" multiple accept="image/*" onChange={handleChange} /> */}
+                                <input type="file" name="image" multiple accept="image/*" onChange={onImageChange} />
+                                {/* A enlever */}
+                                { imagesURLs.map(imageSrc => <img src={imageSrc} />) }
                                 <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                             </label>
 
@@ -186,4 +209,3 @@ export default function Publier() {
     )
 
 }
-
