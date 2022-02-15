@@ -1,4 +1,5 @@
 import './App.css';
+
 import Annonce from './components/Annonce';
 
 import { useEffect, useState } from 'react';
@@ -11,7 +12,6 @@ export default function App() {
   const [annonces, setAnnonces] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [recherche, setRecherche] = useState('');
-
 
   useEffect(() => {
     let isMounted = true;
@@ -32,6 +32,17 @@ export default function App() {
       element.nom_magasin.toLowerCase().includes(recherche.toLowerCase());
   }
 
+  let urlData = new URLSearchParams(window.location.search);
+  let cat = urlData.get('categorie');
+
+  const categorieAnnonce = [];
+  if(cat){
+    annonces.forEach(element =>{
+      if(element.categorie == cat){
+        categorieAnnonce.push(element);
+      }
+    });
+  }
 
   return (
     <div className='app'>
@@ -47,6 +58,27 @@ export default function App() {
         </div>
         <div className='liste_annonces'>
           {
+            cat ?
+              categorieAnnonce ?
+                  categorieAnnonce
+                    .filter(annonce => filtrer(annonce))
+                    .map(elementTab =>
+                      <Annonce annonce={elementTab} key={elementTab.id} />
+                    )
+              :
+              // cette partie ne s'affiche pas
+                <div>
+                  Aucune annonce ne correspond à cette catégorie 
+                </div>
+
+            :
+              annonces
+                .filter(annonce => filtrer(annonce))
+                .map(elementTab =>
+                <Annonce annonce={elementTab} key={elementTab.id} />
+                )
+          }
+          {/* {
             isLoaded ?
               annonces
                 .filter(annonce => filtrer(annonce))
@@ -55,7 +87,7 @@ export default function App() {
                 )
               :
               <div>Loading...</div>
-          }
+          } */}
         </div>
       </div>
     </div>

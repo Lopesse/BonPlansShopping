@@ -21,11 +21,35 @@ interface Annonce {
 
 export default function Annonce(props) {
     const annonce = props.annonce;
+    // let urlData = new URLSearchParams(window.location.search);
+    // let cat = urlData.get('categorie');
+    // console.log(cat);
+    
     return (
         <>
             <div className='annonce'>
+                {/* { cat ? 
+                    annonce.categorie == cat ? 
+                    <div>
+                        <img src={annonce.image} alt="image" />
+                        <div>
+                            <h3>{annonce.titre}</h3>
+                            <div>Disponible à {annonce.nom_magasin}</div>
+                            <div>Publiée le : {annonce.date_creation}</div>
+                            <div>Expire le : {annonce.date_expiration}</div>
+                            <div>Créé par : {annonce.utilisateur}</div>
+                            <div>Categorie : {annonce.categorie}</div>
+                            <div>Description : {annonce.description}</div>
+                            <Link to={`annonces/${annonce.id}`}>Savoir plus</Link>
+                        </div>
+                    </div>
+                    :
+                    <div>
+                        Aucune annonce ne correspond à cette catégorie 
+                    </div>
+
+                : */}
                 <img src={annonce.image} alt="image" />
-                {/* <div>{annonce.image}</div> */}
                 <div>
                     <h3>{annonce.titre}</h3>
                     <div>Disponible à {annonce.nom_magasin}</div>
@@ -36,6 +60,8 @@ export default function Annonce(props) {
                     <div>Description : {annonce.description}</div>
                     <Link to={`annonces/${annonce.id}`}>Savoir plus</Link>
                 </div>
+
+                {/* } */}
             </div>
         </>
     );

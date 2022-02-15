@@ -7,5 +7,5 @@ export const URLS = {
     delete_annonce: 'http://localhost:8000/delete_annonce.php',
     inscription: 'http://localhost:8000/create_utilisateur.php',
     connexion: 'http://localhost:8000/connexion.php',
-    get_utilisateur: 'http://localhost:8000/get_utilisateur.php'
+    get_utilisateur: 'http://localhost:8000/get_utilisateur.php',
 }
