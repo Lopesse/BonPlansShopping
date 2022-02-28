@@ -32,7 +32,9 @@ export default function Publier() {
     const handleChange = (event) => {
         setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
         if (event.target.name === 'categorie') {
-            setAnnonce(a => ({ ...a, sous_categorie: sousCategories.find(cat => cat.categorieParent === event.target.value).id }));
+            console.log(sousCategories);
+            const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
+            setAnnonce(a => ({ ...a, sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id}));
         }
     }
 
@@ -76,9 +78,6 @@ export default function Publier() {
             })
             .then(json => { setLoading(false); navigate(`/annonces/${JSON.parse(json)}`) })
             .catch(e => console.log(e));
-
-
-
     }
 
     useEffect(() => {
@@ -104,12 +103,10 @@ export default function Publier() {
                 if (isMounted) {
                     setCategories(cats)
 
-                    if (!params.id) {
-                        setAnnonce(a => ({ ...a, categorie: cats[0].id }));
+                    if (params.id) {
+                        annonce && setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
                     }
-                    else {
-                        setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
-                    }
+                    else setAnnonce(a => ({ ...a, categorie: cats[0].id }));
                 }
             });
 
@@ -121,11 +118,11 @@ export default function Publier() {
                     cats.push(res[i])
                 }
                 if (isMounted) setSousCategories(cats)
-                console.log(annonce)
-                if (isMounted && sousCategories)
-                    !params.id ?
-                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.categorieParent === a.categorie).id })) :
-                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }))
+                if (isMounted && sousCategories){
+                    if(params.id)
+                    annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
+                    else setAnnonce(a => ({ ...a, sous_categorie: cats[0].id }));
+                }
             });
     }, [params.id]);
 
@@ -140,13 +137,18 @@ export default function Publier() {
     }, [images]);
 
     function onImageChange(event) {
+        setAnnonce(a=>({...a, image: event.target.files[0].name}));
         setImages([...event.target.files]);
+        console.log(event.target.files[0].name);
     }
 
-    return (
+    console.log(images);
+    console.log(imagesURLs);
+
+    return (    
         <div className="app">
             {
-                user ?
+                // user ?
                 <div className="formulaire">
                     <h3>Publier une nouvelle annonce :</h3>
                     {message && <div className="erreur">{message}</div>}
@@ -213,7 +215,7 @@ export default function Publier() {
                             {/* <input type="file" name="image" multiple accept="image/*" onChange={handleChange} /> */}
                             <input type="file" name="image" multiple accept="image/*" onChange={onImageChange} />
                             {/* A enlever */}
-                            { imagesURLs.map(imageSrc => <img src={imageSrc} />) }
+                            { imagesURLs.map(imageSrc => <img key={imageSrc} src={imageSrc} />) }
                             <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                         </label>
 
@@ -224,12 +226,12 @@ export default function Publier() {
                     </form>
                 </div >
 
-                :
-                <div style={{ display: 'grid' }}>
-                    Vous devez vous connecter pour pouvoir publier un annonce!
-                    <Link to={'/inscription'}>S'inscrire</Link>
-                    <Link to={'/connexion'}>Se connecter</Link>
-                </div>
+                // :
+                // <div style={{ display: 'grid' }}>
+                //     Vous devez vous connecter pour pouvoir publier un annonce!
+                //     <Link to={'/inscription'}>S'inscrire</Link>
+                //     <Link to={'/connexion'}>Se connecter</Link>
+                // </div>
             }
         </div >
     )
