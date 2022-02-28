@@ -34,7 +34,7 @@ export default function NavBar() {
                         {
                             categories &&
                             categories.map((item, index) =>
-                                <li key={item.id}><Link to={`/categorie/${item.categorie}`}>{item.categorie}</Link></li>
+                                <li key={item.id}><Link to={`/`}>{item.categorie}</Link></li>
                             )
                         }
                     </ul>

@@ -68,7 +68,7 @@ export default function Inscription() {
         <div>
             <div className="formulaire">
                 <h3>S'inscrire :</h3>
-                {message && <div>{message}</div>}
+                {message && <div className="erreur">{message}</div>}
                 <form encType="multipart/form-data" method="POST" onSubmit={(e) => handleSubmit(e)}>
                     <label>Pseudo :
                         <input type='text' name='pseudo' placeholder='Votre pseudo' onChange={handleChange} />
@@ -90,9 +90,8 @@ export default function Inscription() {
                         <input
                             type='password'
                             name='mdp'
-                            placeholder="Minimum 8 caractères, 1 majuscule, 1 minuscule et 1 chiffre"
-                            // pattern="[A-Z]+[a-z]+[0-9]+"
-                            minLength="8"
+                            placeholder="Minimum 4 caractères, 1 majuscule, 1 minuscule et 1 chiffre"
+                            minLength="4"
                             onChange={handleChange}
                             required
                         />
@@ -102,9 +101,8 @@ export default function Inscription() {
                         <input
                             type='password'
                             name='confirmMDP'
-                            placeholder="Minimum 8 caractères, 1 majuscule, 1 minuscule et 1 chiffre"
-                            // pattern="[A-Z]+[a-z]+[0-9]+"
-                            minLength="8"
+                            placeholder="Minimum 4 caractères, 1 majuscule, 1 minuscule et 1 chiffre"
+                            minLength="4"
                             onChange={handleChange}
                             required
                         />

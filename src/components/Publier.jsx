@@ -30,7 +30,6 @@ export default function Publier() {
     let params = useParams();
 
     const handleChange = (event) => {
-        console.log(`${event.target.name} = ${event.target.value}`);
         setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
         if (event.target.name === 'categorie') {
             setAnnonce(a => ({ ...a, sous_categorie: sousCategories.find(cat => cat.categorieParent === event.target.value).id }));
@@ -124,8 +123,8 @@ export default function Publier() {
                 if (isMounted) setSousCategories(cats)
                 if (isMounted)
                     !params.id ?
-                        setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.categorieParent === a.categorie).id })) :
-                        setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }))
+                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.categorieParent === a.categorie).id })) :
+                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }))
             });
     }, [params.id])
 
@@ -135,7 +134,7 @@ export default function Publier() {
                 user ?
                     <div className="formulaire">
                         <h3>Publier une nouvelle annonce :</h3>
-                        {message && <div>{message}</div>}
+                        {message && <div className="erreur">{message}</div>}
                         <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
 
                             <label>Titre de l'annonce :
@@ -209,7 +208,7 @@ export default function Publier() {
 
                     :
                     <div style={{ display: 'grid' }}>
-                        Vous devez vous connecter pour pouvoir poublier un annonce!
+                        Vous devez vous connecter pour pouvoir publier un annonce!
                         <Link to={'/inscription'}>S'inscrire</Link>
                         <Link to={'/connexion'}>Se connecter</Link>
                     </div>

@@ -53,7 +53,7 @@ export default function Connexion() {
             <div className="formulaire">
                 <h3>Se connecter :</h3>
                 {
-                    message && <div>{message}</div>
+                    message && <div className="erreur">{message}</div>
                 }
                 <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
 

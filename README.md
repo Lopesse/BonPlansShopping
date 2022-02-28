@@ -10,3 +10,4 @@
 # Démarrer l'API depuis le repertoire shopping2 (nécessaire pour l'obtention des données)
 ### `cd api`
 ### `php -S localhost:8000`
+
