@@ -28,3 +28,8 @@
 .app {
   margin-bottom: 50px;
 }
+
+.erreur {
+  color: red;
+}
+

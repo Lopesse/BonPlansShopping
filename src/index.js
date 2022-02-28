@@ -22,7 +22,7 @@ ReactDOM.render(
         <Route path="/" element={<App />} />
         <Route path="annonces">
           <Route path=":id" element={<AnnonceDetails />} />
-          <Route path="edit/:id" element={<AnnonceDetails />} />
+          <Route path="edit/:id" element={<Publier />} />
           <Route path="nouveau" element={<Publier />} />
         </Route>
         <Route path="compte">

@@ -9,15 +9,15 @@ include_once('model/Annonce.php');
 include_once('model/Categorie.php');
 
 $db = new Database();
-
 $db = $db->connect();
 
-
 $postStorage = new Annonce($db);
-
 $data = json_decode(file_get_contents('php://input'));
 
-$deleted = $postStorage->delete($data->id);
+$annonce_id = -1;
+if ($data) {
+    $annonce_id = $postStorage->update($data);
+    $annonce_id !== -1 ? header('HTTP/1.1 201 Created') : header('HTTP/1.1 501 Internal Server Error');
+}
 
-if ($deleted) echo json_encode("ok");
-else echo json_encode("ko");
+echo json_encode($annonce_id);
