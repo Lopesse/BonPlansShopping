@@ -4,14 +4,18 @@ import Annonce from './components/Annonce';
 
 import { useEffect, useState } from 'react';
 import { URLS } from './dataBase/apiURLS';
+import { useParams } from 'react-router-dom';
 
 
 export default function App() {
 
+  let urlData = useParams();
+  let cat = urlData.categorie;
 
   const [annonces, setAnnonces] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [recherche, setRecherche] = useState('');
+  const [categorie, setCategorie] = useState(cat);
 
   useEffect(() => {
     let isMounted = true;
@@ -32,13 +36,10 @@ export default function App() {
       element.nom_magasin.toLowerCase().includes(recherche.toLowerCase());
   }
 
-  let urlData = new URLSearchParams(window.location.search);
-  let cat = urlData.get('categorie');
-
-  const categorieAnnonce = [];
+  let categorieAnnonce = [];
   if(cat){
     annonces.forEach(element =>{
-      if(element.categorie == cat){
+      if(element.categorie === cat){
         categorieAnnonce.push(element);
       }
     });

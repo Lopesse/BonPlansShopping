@@ -62,9 +62,6 @@ export default function Publier() {
         })
             .then(res => {
                 if (!res.ok) {
-                    console.log('resOK');
-                    console.log(res.ok);
-                    console.log(res);
                     setMessage("Une erreur s'est produite. L'annonce n'a pas été crée. Veuillez essayer plus tard.")
                     setLoading(false)
                     throw Error('Annonce non crée');
