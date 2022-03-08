@@ -5,7 +5,6 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 include_once('model/Database.php');
-include_once('model/UtilisateurStorage.php');
 include_once('model/Utilisateur.php');
 
 $db = new Database();

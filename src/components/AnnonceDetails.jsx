@@ -9,11 +9,8 @@ import UserProvider, { UserContext } from './UserContext';
 
 export default function AnnonceDetails() {
     const params = useParams();
-
     const [annonce, setAnnonce] = useState();
-
     const { user } = useContext(UserContext);
-
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -40,7 +37,6 @@ export default function AnnonceDetails() {
 
     return (
         <>
-            {/* <NavBar /> */}
             <div className='publierAnnonce'>
                 {
                     annonce ?

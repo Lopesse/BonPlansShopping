@@ -19,7 +19,10 @@
 
 .deroulant li {
   padding: 10px;
-  background-color: white;
+}
+
+.deroulant li:hover {
+  background-color: #324949;
 }
 
 .navbar > ul li .deroulant {
@@ -30,6 +33,7 @@
 
 ul {
   list-style: none;
+  background-color: white;
 }
 
 a {

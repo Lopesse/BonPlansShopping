@@ -1,0 +1,39 @@
+.compte {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+li {
+  text-align: center;
+  margin: 10px;
+}
+
+.profil {
+  text-align: center;
+  border-right-style: groove;
+}
+
+.profilImg {
+  height: 150px;
+  width: 150px;
+}
+
+.option {
+  background-color: orange;
+  border-radius: 10% 30% 50% 70%;
+  margin-left: 50px;
+  margin-right: 50px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.corps {
+  margin: 20px;
+}

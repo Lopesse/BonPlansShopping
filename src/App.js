@@ -79,16 +79,6 @@ export default function App() {
                 <Annonce annonce={elementTab} key={elementTab.id} />
                 )
           }
-          {/* {
-            isLoaded ?
-              annonces
-                .filter(annonce => filtrer(annonce))
-                .map(elementTab =>
-                  <Annonce annonce={elementTab} key={elementTab.id} />
-                )
-              :
-              <div>Loading...</div>
-          } */}
         </div>
       </div>
     </div>

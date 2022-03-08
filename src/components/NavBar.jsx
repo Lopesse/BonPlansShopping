@@ -46,7 +46,7 @@ export default function NavBar() {
                             <ul className="deroulant">
                                 <li><Link to={"/compte/profil"}>Profil</Link></li>
                                 <li><Link to={"/compte/favories"}>Favoris</Link></li>
-                                <li onClick={() => { setUser(null); localStorage.removeItem('user'); }} style={{ cursor: "pointer", backgroundColor: "red" }}>Se deconnecter</li>
+                                <li onClick={() => { setUser(null); localStorage.removeItem('user'); }}><Link to={"/"}>Se deconnecter</Link></li>
                             </ul>
                             :
                             <ul className="deroulant">
