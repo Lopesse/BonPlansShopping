@@ -13,5 +13,6 @@ export const URLS = {
     delete_annonce: `${API_ADRESS}:${PORT}/delete_annonce.php`,
     inscription: `${API_ADRESS}:${PORT}/create_utilisateur.php`,
     connexion: `${API_ADRESS}:${PORT}/connexion.php`,
-    get_utilisateur: `${API_ADRESS}:${PORT}/get_utilisateur.php`
+    get_utilisateur: `${API_ADRESS}:${PORT}/get_utilisateur.php`,
+    delete_utilisateur: `${API_ADRESS}:${PORT}/delete_utilisateur.php`
 }

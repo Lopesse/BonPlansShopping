@@ -5,18 +5,20 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 include_once('model/Database.php');
-include_once('model/UtilisateurStorage.php');
 include_once('model/Utilisateur.php');
 
 $db = new Database();
+
 $db = $db->connect();
 
+$userStorage = new Utilisateur($db);
 
-$utilisateurStorage = new Utilisateur($db);
 $data = json_decode(file_get_contents('php://input'));
-$newUser = 0;
-if ($data) {
-    $newUser = $utilisateurStorage->create($data);
-    $newUser instanceof PDOException ? header('HTTP/1.1 501 Internal Server Error') : header('HTTP/1.1 201 Created');
-}
-echo json_encode($newUser);
+echo json_encode($data);
+exit(0);
+$res = $userStorage->deleteUser($data);
+
+if ($res)
+    echo json_encode($res);
+else
+    echo json_encode(-1);

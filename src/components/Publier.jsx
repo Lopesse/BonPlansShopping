@@ -32,7 +32,6 @@ export default function Publier() {
     const handleChange = (event) => {
         setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
         if (event.target.name === 'categorie') {
-            console.log(sousCategories);
             const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
             setAnnonce(a => ({ ...a, sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id}));
         }
@@ -56,8 +55,6 @@ export default function Publier() {
             description: annonce.description,
             id: params.id
         };
-
-        console.log(data);
 
         let action = params.id ? URLS.update_annonce : URLS.creer_annonce;
 

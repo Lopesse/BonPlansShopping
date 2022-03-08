@@ -3,7 +3,6 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once('model/Database.php');
-include_once('model/UtilisateurStorage.php');
 include_once('model/Utilisateur.php');
 
 $db = new Database();
@@ -11,7 +10,7 @@ $db = new Database();
 $db = $db->connect();
 
 
-$utilisateurStorage = new UtilisateurStorage($db);
+$utilisateurStorage = new Utilisateur($db);
 
 $data = array();
 $data['identifiant'] = isset($_GET['identifiant']) ? $_GET['identifiant'] : die();
