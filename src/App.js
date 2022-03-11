@@ -32,14 +32,14 @@ export default function App() {
 
   const filtrer = (element) => {
     return element.titre.toLowerCase().includes(recherche.toLowerCase()) ||
-      element.categorie.toLowerCase().includes(recherche.toLowerCase()) ||
+      element.categorie.nom.toLowerCase().includes(recherche.toLowerCase()) ||
       element.nom_magasin.toLowerCase().includes(recherche.toLowerCase());
   }
 
   let categorieAnnonce = [];
-  if(cat){
-    annonces.forEach(element =>{
-      if(element.categorie === cat){
+  if (cat) {
+    annonces.forEach(element => {
+      if (element.categorie.nom === cat) {
         categorieAnnonce.push(element);
       }
     });
@@ -61,22 +61,21 @@ export default function App() {
           {
             cat ?
               categorieAnnonce ?
-                  categorieAnnonce
-                    .filter(annonce => filtrer(annonce))
-                    .map(elementTab =>
-                      <Annonce annonce={elementTab} key={elementTab.id} />
-                    )
-              :
-              // cette partie ne s'affiche pas
+                categorieAnnonce
+                  .filter(annonce => filtrer(annonce))
+                  .map(elementTab =>
+                    <Annonce annonce={elementTab} key={elementTab.id} />
+                  )
+                :
                 <div>
-                  Aucune annonce ne correspond à cette catégorie 
+                  Aucune annonce ne correspond à cette catégorie
                 </div>
 
-            :
+              :
               annonces
                 .filter(annonce => filtrer(annonce))
                 .map(elementTab =>
-                <Annonce annonce={elementTab} key={elementTab.id} />
+                  <Annonce annonce={elementTab} key={elementTab.id} />
                 )
           }
         </div>

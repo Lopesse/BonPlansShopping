@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import { URLS } from '../dataBase/apiURLS';
 import './css/annonces.css';
 import UserProvider, { UserContext } from './UserContext';
+import CategorieTag from './CategorieTag';
 
 
 
@@ -16,7 +17,7 @@ export default function AnnonceDetails() {
     useEffect(() => {
         fetch(`${URLS.annonce}?id=${params.id}`)
             .then(res => res.json())
-            .then(res => setAnnonce(res));
+            .then(res => { console.log(res); setAnnonce(res) });
     }, []);
 
     const deletePost = () => {
@@ -34,6 +35,8 @@ export default function AnnonceDetails() {
         }
     }
 
+    const suivreCategorie = () => {
+    }
 
     return (
         <>
@@ -52,8 +55,8 @@ export default function AnnonceDetails() {
                             <div>Expire le: {annonce.date_expiration}</div>
                             <div>Créé par: {annonce.utilisateur}</div>
                             <div className='categories'>
-                                <div className='cat'>{annonce.sous_categorie}</div>
-                                <div className='cat'>{annonce.categorie}</div>
+                                <CategorieTag categorie={annonce.categorie} />
+                                <CategorieTag categorie={annonce.sous_categorie} />
                             </div>
                         </div>
                         :

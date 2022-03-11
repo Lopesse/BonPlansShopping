@@ -20,9 +20,10 @@ class Annonce
     public function read()
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
-                        sc.nom AS sousCategorie, nomMagasin, adresseMagasin,
+                        sc.nom AS sousCategorie, sc.id AS sousCategorie_id, 
+                        nomMagasin, adresseMagasin,
                         u.pseudo AS utilisateur, image,
-                        c.nom AS categorie
+                        c.nom AS categorie, c.id AS categorie_id
                 FROM annonce a, categorie c, souscategories sc, utilisateur u 
                 WHERE a.categorie = c.id
                 AND a.souscategorie = sc.id
@@ -40,8 +41,8 @@ class Annonce
                 'id' => $postArray['id'],
                 'titre' => $postArray['titre'],
                 'description' => $postArray['description'],
-                'categorie' => $postArray['categorie'],
-                'sous_categorie' => $postArray['sousCategorie'],
+                'categorie' => array('nom' => $postArray['categorie'], 'id' => $postArray['categorie_id']),
+                'sous_categorie' => array('nom' => $postArray['sousCategorie'], 'id' => $postArray['sousCategorie_id']),
                 'date_expiration' => $postArray['dateExpiration'],
                 'date_creation' => $postArray['dateCreation'],
                 'nom_magasin' => $postArray['nomMagasin'],
@@ -57,9 +58,10 @@ class Annonce
     public function readAll()
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
-                        sc.nom AS sousCategorie, nomMagasin, adresseMagasin,
+                        nomMagasin, adresseMagasin,
+                        sc.nom AS sousCategorie, sc.id AS sousCategorie_id,
                         u.pseudo AS utilisateur, image,
-                        c.nom AS categorie
+                        c.nom AS categorie, c.id AS categorie_id
         FROM annonce a, categorie c, souscategories sc, utilisateur u 
         WHERE a.categorie = c.id
         AND a.souscategorie = sc.id
@@ -73,8 +75,8 @@ class Annonce
                 'id' => $value['id'],
                 'titre' => $value['titre'],
                 'description' => $value['description'],
-                'categorie' => $value['categorie'],
-                'sous_categorie' => $value['sousCategorie'],
+                'categorie' => array('nom' => $value['categorie'], 'id' => $value['categorie_id']),
+                'sous_categorie' => array('nom' => $value['sousCategorie'], 'id' => $value['sousCategorie_id']),
                 'date_expiration' => $value['dateExpiration'],
                 'date_creation' => $value['dateCreation'],
                 'nom_magasin' => $value['nomMagasin'],

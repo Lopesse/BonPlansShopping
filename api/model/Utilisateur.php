@@ -141,12 +141,14 @@ class Utilisateur
 
     public function suivreCategorie($data)
     {
-        $req = "INSERT INTO categories_favories VALUES (utilisateur: :uid, categorie: :cid)";
+        $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:utid, :cid)";
         $stmt = $this->bd->prepare($req);
+
         $queryData = array(
-            ":uid" => $data['uid'],
-            ":cid" => $data['cid']
+            ":utid" => $data->user_id,
+            ":cid" => $data->categorie_id
         );
+
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
 

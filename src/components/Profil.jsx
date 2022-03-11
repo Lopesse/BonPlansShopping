@@ -73,6 +73,7 @@ export default function Profil() {
                         }
                         {
                             option === 'listeFav' &&
+                            user.categoriesFav &&
                             user.categoriesFav.map(cat =>
                                 <div className="corps" key={cat.id}>
                                     {cat.nom}

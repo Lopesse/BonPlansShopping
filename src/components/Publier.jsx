@@ -33,7 +33,7 @@ export default function Publier() {
         setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
         if (event.target.name === 'categorie') {
             const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
-            setAnnonce(a => ({ ...a, sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id}));
+            setAnnonce(a => ({ ...a, sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id }));
         }
     }
 
@@ -115,9 +115,9 @@ export default function Publier() {
                     cats.push(res[i])
                 }
                 if (isMounted) setSousCategories(cats)
-                if (isMounted && sousCategories){
-                    if(params.id)
-                    annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
+                if (isMounted && sousCategories) {
+                    if (params.id)
+                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
                     else setAnnonce(a => ({ ...a, sous_categorie: cats[0].id }));
                 }
             });
@@ -127,14 +127,14 @@ export default function Publier() {
     const [imagesURLs, setImagesURLs] = useState([]);
 
     useEffect(() => {
-        if(images.length < 1) return;
+        if (images.length < 1) return;
         const newImageUrls = [];
         images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
         setImagesURLs(newImageUrls);
     }, [images]);
 
     function onImageChange(event) {
-        setAnnonce(a=>({...a, image: event.target.files[0].name}));
+        setAnnonce(a => ({ ...a, image: event.target.files[0].name }));
         setImages([...event.target.files]);
         console.log(event.target.files[0].name);
     }
@@ -142,7 +142,7 @@ export default function Publier() {
     console.log(images);
     console.log(imagesURLs);
 
-    return (    
+    return (
         <div className="app">
             {
                 // user ?
@@ -212,7 +212,7 @@ export default function Publier() {
                             {/* <input type="file" name="image" multiple accept="image/*" onChange={handleChange} /> */}
                             <input type="file" name="image" multiple accept="image/*" onChange={onImageChange} />
                             {/* A enlever */}
-                            { imagesURLs.map(imageSrc => <img key={imageSrc} src={imageSrc} />) }
+                            {imagesURLs.map(imageSrc => <img key={imageSrc} src={imageSrc} />)}
                             <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                         </label>
 
