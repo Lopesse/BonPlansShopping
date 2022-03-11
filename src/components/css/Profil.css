@@ -18,6 +18,7 @@ li {
 .profil {
   text-align: center;
   border-right-style: groove;
+  padding: 10px;
 }
 
 .profilImg {
@@ -36,4 +37,8 @@ li {
 
 .corps {
   margin: 20px;
+}
+
+.bouton {
+  display: flex;
 }

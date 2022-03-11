@@ -54,7 +54,7 @@ class Annonce
     }
 
 
-    public function readAll()
+    public function readAll($idUser)
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                         sc.nom AS sousCategorie, nomMagasin, adresseMagasin,
@@ -64,8 +64,15 @@ class Annonce
         WHERE a.categorie = c.id
         AND a.souscategorie = sc.id
         AND utilisateur = u.id";
-        $stmt = $this->bd->query($req);
-        $queryArray = $stmt->fetchAll();
+        if ($idUser !== '') {
+            $req .= ' AND a.utilisateur = :idUser;';
+            $stmt = $this->bd->prepare($req);
+            $stmt->execute(array(":idUser" => $idUser));
+            $queryArray = $stmt->fetchAll();
+        } else {
+            $queryArray = $this->bd->query($req)->fetchAll();
+        }
+
         $postArray = array();
 
         foreach ($queryArray as $key => $value) {
@@ -152,6 +159,29 @@ class Annonce
                     image = :image,
                     categorie = :categorie,
                     description = :description
+                WHERE id = :id;";
+
+        $stmt = $this->bd->prepare($req);
+
+        $post_data = array(
+            ":titre" => $data->titre,
+            ":dateExpiration" => $data->dateExpiration,
+            ":categorie" => $data->categorie,
+            ":sousCategorie" => $data->sousCategorie,
+            ":nomMagasin" => $data->nomMagasin,
+            ":adresseMagasin" => $data->adresseMagasin,
+            ":image" => $data->image,
+            ":description" => $data->description,
+            ":id" => $data->id
+        );
+
+        $stmt->execute($post_data);
+        return $data->id;
+    }
+
+    public function getAnnonceUser($data)
+    {
+        $req = "SELECT * FROM annonce WHERE 
                 WHERE id = :id;";
 
         $stmt = $this->bd->prepare($req);

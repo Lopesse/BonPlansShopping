@@ -15,8 +15,13 @@
   border: 1px solid gray;
   border-radius: 3px;
   background-color: gray;
+  max-width: 200px;
 }
 
+.catFav {
+  text-align: center;
+  margin-left: 5%;
+}
 .annonce {
   display: grid;
   grid-template-columns: 1fr 5fr;
