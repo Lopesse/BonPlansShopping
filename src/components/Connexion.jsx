@@ -15,7 +15,6 @@ export default function Connexion() {
     let navigate = useNavigate();
 
     const login = (userObject) => {
-
         const item = {
             value: userObject.id,
             expiry: new Date().getTime() + 600000

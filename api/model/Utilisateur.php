@@ -108,7 +108,7 @@ class Utilisateur
     {
         $req = "SELECT * FROM utilisateur WHERE email= :identifiant OR pseudo = :identifiant";
         $stmt = $this->bd->prepare($req);
-        $queryData = array(":identifiant" => $data['identifiant']);
+        $queryData = array(':identifiant' => $data['identifiant']);
         $stmt->execute($queryData);
         $queryUtilisateur = $stmt->fetchAll();
 
@@ -121,7 +121,7 @@ class Utilisateur
                     'photo' => $value['photo'],
                     'nom' => $value['nom'],
                     'prenom' => $value['prenom'],
-                    'CategoriesFav' => $value['categoriesFav'],
+                    'categoriesFav' => $this->getCategoriesFavories($value['id'])
                 );
                 return $utilisateur;
             }
@@ -137,5 +137,37 @@ class Utilisateur
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
         return $resultat;
+    }
+
+    public function suivreCategorie($data)
+    {
+        $req = "INSERT INTO categories_favories VALUES (utilisateur: :uid, categorie: :cid)";
+        $stmt = $this->bd->prepare($req);
+        $queryData = array(
+            ":uid" => $data['uid'],
+            ":cid" => $data['cid']
+        );
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetch();
+
+        return $resultat;
+    }
+
+    public function getCategoriesFavories($id)
+    {
+        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c, utilisateur u WHERE u.id = :uid AND c.id = cf.categorie;";
+        $stmt = $this->bd->prepare($req);
+        $queryData = array(":uid" => $id);
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetchAll();
+        $categorieArray = array();
+        foreach ($resultat as $key => $value) {
+            $categorie = array(
+                'nom' => $value['nom'],
+                'id' => $value['id'],
+            );
+            $categorieArray[$key] = $categorie;
+        }
+        return $categorieArray;
     }
 }
