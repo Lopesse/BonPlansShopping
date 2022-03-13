@@ -141,11 +141,13 @@ class Utilisateur
 
     public function suivreCategorie($data)
     {
-        $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:utid, :cid)";
+        $data->suivre ?
+            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);" :
+            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;";
         $stmt = $this->bd->prepare($req);
 
         $queryData = array(
-            ":utid" => $data->user_id,
+            ":uid" => $data->user_id,
             ":cid" => $data->categorie_id
         );
 

@@ -4,13 +4,13 @@ import { UserContext } from "./UserContext";
 
 export default function CategorieTag(props) {
     const { user, setUser } = useContext(UserContext);
+    console.log(user)
 
-
-
-    const setFavorie = () => {
+    const setFavorie = (suivre) => {
         const data = {
             user_id: user.id,
-            categorie_id: props.categorie.id
+            categorie_id: props.categorie.id,
+            suivre: suivre
         }
         console.log(data)
         fetch(URLS.suivre_categorie, {
@@ -21,15 +21,28 @@ export default function CategorieTag(props) {
             }
         })
             .then(res => res.json())
-            .then(json => console.log(json))
-            .catch(err => console.log(err))
+            .then(json =>
+                fetch(`${URLS.get_utilisateur}?id=${user.id}`)
+                    .then(res => res.json())
+                    .then(json => {
+                        if (json !== -1)
+                            setUser(json)
+                    })
+                    .catch(e => console.log(e))
+            )
+            .catch(err => console.log(err));
+
     }
+
 
     return (
         <div className='cat'>
             {props.categorie.nom}
-            <img src={'./images/plus.png'} onClick={setFavorie}></img>
-        </div>
+            <img
+                src={'./images/plus.png'}
+                onClick={user.categoriesFav && user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? setFavorie(false) : setFavorie(true)}
+            />
+        </div >
     );
 
 }

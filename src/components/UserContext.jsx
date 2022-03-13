@@ -12,21 +12,23 @@ export default function UserProvider({ children }) {
 
 
     useEffect(() => {
-        let isMounted = true;
-        let userID;
-        const utilisateur = localStorage.getItem('user');
-        if (utilisateur) {
-            userID = JSON.parse(utilisateur).value;
-        }
+        if (!user) {
+            let isMounted = true;
+            let userID;
+            const utilisateur = localStorage.getItem('user');
+            if (utilisateur) {
+                userID = JSON.parse(utilisateur).value;
+            }
 
-        if (userID) {
-            fetch(`${URLS.get_utilisateur}?id=${userID}`)
-                .then(res => res.json())
-                .then(json => {
-                    if (json !== -1)
-                        if (isMounted) setUser(json)
-                })
-                .catch(e => console.log(e))
+            if (userID) {
+                fetch(`${URLS.get_utilisateur}?id=${userID}`)
+                    .then(res => res.json())
+                    .then(json => {
+                        if (json !== -1)
+                            if (isMounted) setUser(json)
+                    })
+                    .catch(e => console.log(e))
+            }
         }
     }, []);
 
