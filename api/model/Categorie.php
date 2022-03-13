@@ -21,7 +21,7 @@ class Categorie
 
         if ($categorieArray) {
             $categorie = array(
-                'categorie' => $categorieArray['nom'],
+                'nom' => $categorieArray['nom'],
                 'id' => $categorieArray['id'],
             );
         }
@@ -39,7 +39,7 @@ class Categorie
 
         foreach ($queryArray as $key => $value) {
             $categorie = array(
-                'categorie' => $value['nom'],
+                'nom' => $value['nom'],
                 'id' => $value['id'],
             );
             $categorieArray[$key] = $categorie;
@@ -77,7 +77,7 @@ class Categorie
         $queryCategorie = array();
         if ($categorieArray) {
             $queryCategorie = array(
-                'categorie' => $categorieArray['nom'],
+                'nom' => $categorieArray['nom'],
                 'id' => $categorieArray['id'],
             );
         }

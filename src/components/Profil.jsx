@@ -96,75 +96,35 @@ export default function Profil() {
                         {
                             option === 'listeFav' &&
                             (
-                                user.categoriesFav ?
-                                    user.categoriesFav.map(cat =>
-                                        <div>
-                                            Voici la liste de vos favories :
-                                            <div className="cat" key={cat.id}>
-                                                {cat.nom}
-                                            </div>
-                                            <select
-                                                name="categorie"
-                                                id="categorie"
-                                            // onChange={handleChange}
-                                            // defaultValue={annonce.categorie}
-                                            >
+                                <div>
+                                    {
+
+                                        user.categoriesFav ?
+                                            <div>
+                                                Voici la liste de vos favories :
                                                 {
-                                                    categories &&
-                                                    categories.map(cat =>
-                                                        <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                                    user.categoriesFav.map(cat =>
+                                                        <CategorieTag categorie={cat} key={cat.id} />
                                                     )
                                                 }
-                                            </select>
-                                            <div className="bouton">
-                                                <button>
-                                                    S'abonner
-                                                </button>
-                                                <button>
-                                                    Se désabonner
-                                                </button>
                                             </div>
-                                        </div>
-                                    )
-                                    :
-                                    <div>
-                                        <div className="corps">
-                                            Désolé, vous n'avez pas de favorie pour le moment.
-                                            Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
-                                            Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
-                                        </div>
-                                        <div className="catFav">
-                                            {
-                                                user.categoriesFav &&
-                                                user.categoriesFav.map(cat =>
-                                                    <div key={cat.id + 32 * 15}>
-                                                        <CategorieTag categorie={cat} key={cat.id} />
-                                                        <select
-                                                            name="categorie"
-                                                            id="categorie"
-                                                        >
-                                                            {
-                                                                categories &&
-                                                                categories.map(cat =>
-                                                                    <option value={cat.id} key={cat.id}>{cat.categorie}</option>
-                                                                )
-                                                            }
-                                                        </select>
-                                                        <div className="bouton">
-                                                            <button>
-                                                                S'abonner
-                                                            </button>
-                                                            <button>
-                                                                Se désabonner
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
+                                            :
+                                            <div className="corps">
+                                                Désolé, vous n'avez pas de favorie pour le moment.
+                                                Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
+                                                Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
+                                            </div>
+                                    }
+                                    {
+                                        categories &&
+                                        categories.map(cat =>
+                                            <CategorieTag categorie={cat} />
+                                        )
+                                    }
+                                </div>
                             )
                         }
+
                         {
                             option === 'modifCompte' &&
                             <div className="corps">
@@ -202,8 +162,8 @@ export default function Profil() {
                                 </button>
                             </div>
                         }
-                    </div>
-                </div>
+                    </div >
+                </div >
             }
         </>
     );
