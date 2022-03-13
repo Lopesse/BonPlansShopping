@@ -39,7 +39,7 @@ class Categorie
 
         foreach ($queryArray as $key => $value) {
             $categorie = array(
-                'categorie' => $value['nom'],
+                'nom' => $value['nom'],
                 'id' => $value['id'],
             );
             $categorieArray[$key] = $categorie;
