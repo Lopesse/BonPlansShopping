@@ -97,7 +97,7 @@ export default function Profil() {
                             (
                                 user.categoriesFav ?
                                     user.categoriesFav.map(cat =>
-                                        <div>
+                                        <div className="catFav">
                                             Voici la liste de vos favories : 
                                             <div className="cat" key={cat.id}>
                                                 {cat.nom}
