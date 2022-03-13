@@ -6,6 +6,7 @@ import Annonce from './Annonce';
 import "./css/Profil.css";
 import profil from "./images/profil.jpg";
 import { log } from "util";
+import CategorieTag from "./CategorieTag";
 
 export default function Profil() {
     let action = URLS.delete_utilisateur;
@@ -18,17 +19,16 @@ export default function Profil() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-      let isMounted = true;
-      fetch(URLS.annonces, { cache: 'reload' })
-        .then(res => res.json())
-        .then(res => {
-          for (let i in res) {
-            if (isMounted) setAnnonces(a => [...a, res[i]])
-          }
-          if (isMounted) setIsLoaded(true);
-        })
+        let isMounted = true;
+        fetch(URLS.annonces, { cache: 'reload' })
+            .then(res => res.json())
+            .then(res => {
+                for (let i in res) {
+                    if (isMounted) setAnnonces(a => [...a, res[i]])
+                }
+                if (isMounted) setIsLoaded(true);
+            })
         fetch(URLS.categories, { cache: "force-cache" })
-            //lecture de ce que le fetch a trouvé
             .then(res => res.json())
             .then(res => {
                 let cats = [];
@@ -39,7 +39,6 @@ export default function Profil() {
             })
     }, []);
 
-    console.log(user.categoriesFav);
 
     const deleteCompte = () => {
         fetch(action, {
@@ -55,13 +54,12 @@ export default function Profil() {
                 }
                 else return res.json();
             })
-            .then(json => { navigate(`/`) })
+            .then(json => {
+                setUser(null);
+                localStorage.removeItem('user');
+                navigate(`/`);
+            })
             .catch(e => console.log(e));
-
-        if (user) {
-            setUser(null);
-            localStorage.removeItem('user');
-        }
     }
 
     return (
@@ -85,64 +83,66 @@ export default function Profil() {
                             option === 'annonces' &&
                             <div className="corps">
                                 {
+                                    annonces &&
                                     annonces.map(elementTab =>
                                         <Annonce annonce={elementTab} key={elementTab.id} />
                                     )
-                                }               
-                                
+                                }
+
                             </div>
                         }
                         {
-                            option === 'listeFav' && 
+                            option === 'listeFav' &&
                             (
                                 user.categoriesFav ?
-                                    user.categoriesFav.map(cat =>
-                                        <div className="catFav">
-                                            Voici la liste de vos favories : 
-                                            <div className="cat" key={cat.id}>
-                                                {cat.nom}
-                                            </div>
-                                            <select
-                                                name="categorie"
-                                                id="categorie"
-                                                // onChange={handleChange}
-                                                // defaultValue={annonce.categorie}
-                                            >
-                                                {
-                                                    categories &&
-                                                    categories.map(cat =>
-                                                        <option value={cat.id} key={cat.id}>{cat.categorie}</option>
-                                                    )
-                                                }
-                                            </select>
-                                            <div className="bouton">
-                                                <button>
-                                                    S'abonner
-                                                </button>
-                                                <button>
-                                                    Se désabonner
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )
-                                :
-                                <div>
-                                    <div className="corps">
-                                        Désolé, vous n'avez pas de favorie pour le moment. 
-                                        Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
-                                        Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
-                                    </div>
-                                    <div className="catFav">
+                                    <div>
+                                        Voici la liste de vos favories :
                                         {
 
-                                            categories &&
-                                            categories.map((item, index) =>
-                                                
-                                                <div className='cat' key={item.id}>{item.categorie}</div>
+                                            user.categoriesFav.map(cat =>
+                                                <div key={cat.id + 32 * 15}>
+                                                    <CategorieTag categorie={cat} key={cat.id} />
+                                                    <select
+                                                        name="categorie"
+                                                        id="categorie"
+                                                    // onChange={handleChange}
+                                                    // defaultValue={annonce.categorie}
+                                                    >
+                                                        {
+                                                            categories &&
+                                                            categories.map(cat =>
+                                                                <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                                            )
+                                                        }
+                                                    </select>
+                                                    <div className="bouton">
+                                                        <button>
+                                                            S'abonner
+                                                        </button>
+                                                        <button>
+                                                            Se désabonner
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             )
                                         }
                                     </div>
-                                </div>
+                                    :
+                                    <div>
+                                        <div className="corps">
+                                            Désolé, vous n'avez pas de favorie pour le moment.
+                                            Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
+                                            Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
+                                        </div>
+                                        <div className="catFav">
+                                            {
+                                                categories &&
+                                                categories.map((item, index) =>
+                                                    <CategorieTag categorie={item} key={index} />
+                                                )
+                                            }
+                                        </div>
+                                    </div>
                             )
                         }
                         {
@@ -170,7 +170,6 @@ export default function Profil() {
                                         <input
                                             type="submit"
                                             value="Modifier mon compte"
-                                        // disabled={!newUtilisateur.pseudo || !newUtilisateur.email || newUtilisateur.mdp !== newUtilisateur.confirmMDP || loading}
                                         />
                                     </label>
                                 </form>
