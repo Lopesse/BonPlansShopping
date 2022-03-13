@@ -20,8 +20,18 @@ export default function CategorieTag(props) {
             }
         })
             .then(res => res.json())
-            .then(json => console.log(json))
-            .catch(err => console.log(err))
+            .then(json =>
+                fetch(`${URLS.get_utilisateur}?id=${user.id}`)
+                    .then(res => res.json())
+                    .then(json => {
+                        if (json !== -1)
+                            setUser(json)
+                    })
+                    .catch(e => console.log(e))
+            )
+            .catch(err => console.log(err));
+
+
     }
 
     return (

@@ -84,6 +84,7 @@ export default function Profil() {
                             option === 'annonces' &&
                             <div className="corps">
                                 {
+                                    annonces &&
                                     annonces.map(elementTab =>
                                         <Annonce annonce={elementTab} key={elementTab.id} />
                                     )
@@ -95,35 +96,38 @@ export default function Profil() {
                             option === 'listeFav' &&
                             (
                                 user.categoriesFav ?
-                                    user.categoriesFav.map(cat =>
-                                        <div key={cat.id}>
-                                            Voici la liste de vos favories :
-                                            <div className="cat" key={cat.id}>
-                                                {cat.nom}
-                                            </div>
-                                            <select
-                                                name="categorie"
-                                                id="categorie"
-                                            // onChange={handleChange}
-                                            // defaultValue={annonce.categorie}
-                                            >
-                                                {
-                                                    categories &&
-                                                    categories.map(cat =>
-                                                        <option value={cat.id} key={cat.id}>{cat.categorie}</option>
-                                                    )
-                                                }
-                                            </select>
-                                            <div className="bouton">
-                                                <button>
-                                                    S'abonner
-                                                </button>
-                                                <button>
-                                                    Se désabonner
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )
+                                    <div>
+                                        Voici la liste de vos favories :
+                                        {
+
+                                            user.categoriesFav.map(cat =>
+                                                <div key={cat.id + 32 * 15}>
+                                                    <CategorieTag categorie={cat} key={cat.id} />
+                                                    <select
+                                                        name="categorie"
+                                                        id="categorie"
+                                                    // onChange={handleChange}
+                                                    // defaultValue={annonce.categorie}
+                                                    >
+                                                        {
+                                                            categories &&
+                                                            categories.map(cat =>
+                                                                <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                                            )
+                                                        }
+                                                    </select>
+                                                    <div className="bouton">
+                                                        <button>
+                                                            S'abonner
+                                                        </button>
+                                                        <button>
+                                                            Se désabonner
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
                                     :
                                     <div>
                                         <div className="corps">
@@ -133,10 +137,9 @@ export default function Profil() {
                                         </div>
                                         <div className="catFav">
                                             {
-
                                                 categories &&
                                                 categories.map((item, index) =>
-                                                    <CategorieTag categorie={item} />
+                                                    <CategorieTag categorie={item} key={index} />
                                                 )
                                             }
                                         </div>
