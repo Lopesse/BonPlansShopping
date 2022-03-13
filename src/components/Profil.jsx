@@ -29,7 +29,6 @@ export default function Profil() {
                 if (isMounted) setIsLoaded(true);
             })
         fetch(URLS.categories, { cache: "force-cache" })
-            //lecture de ce que le fetch a trouvé
             .then(res => res.json())
             .then(res => {
                 let cats = [];
