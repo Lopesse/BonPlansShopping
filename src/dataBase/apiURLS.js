@@ -16,4 +16,5 @@ export const URLS = {
     get_utilisateur: `${API_ADRESS}:${PORT}/get_utilisateur.php`,
     delete_utilisateur: `${API_ADRESS}:${PORT}/delete_utilisateur.php`,
     suivre_categorie: `${API_ADRESS}:${PORT}/suivre_categorie.php`,
+    suivre_categorie: `${API_ADRESS}:${PORT}/suivre_categorie.php`,
 }

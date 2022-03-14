@@ -23,23 +23,22 @@ export default function CategorieTag(props) {
             .then(res => res.json())
             .then(json => console.log(json))
 
-        //         fetch(`${URLS.get_utilisateur}?id=${user.id}`)
-        //             .then(res => res.json())
-        //             .then(json => {
-        //                 if (json !== -1)
-        //                     setUser(json)
-        //             })
-        //             .catch(e => console.log(e))
-        //     )
-        //     .catch(err => console.log(err));
+                fetch(`${URLS.get_utilisateur}?id=${user.id}`)
+                    .then(res => res.json())
+                    .then(json => {
+                        if (json !== -1)
+                            setUser(json)
+                    })
+                    .catch(e => console.log(e))
+            .catch(err => console.log(err));
 
     }
 
 
     return (
-        <div className='cat'>
+        <div className='cat' > 
             {props.categorie.nom}
-            <button>
+            <button onClick={()=>{setFavorie(user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom))}}>
                 {user.categoriesFav && user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? '-' : '+'}
             </button>
         </div >

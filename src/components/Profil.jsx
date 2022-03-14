@@ -20,7 +20,7 @@ export default function Profil() {
 
     useEffect(() => {
         let isMounted = true;
-        fetch(URLS.annonces, { cache: 'reload' })
+        fetch(`${URLS.annonces}?idUser=${user.id}`)
             .then(res => res.json())
             .then(res => {
                 for (let i in res) {
@@ -39,8 +39,6 @@ export default function Profil() {
                 if (isMounted) setCategories(cats);
             })
     }, []);
-
-    console.log(user.categoriesFav);
 
     const deleteCompte = () => {
         fetch(action, {
@@ -64,6 +62,8 @@ export default function Profil() {
             localStorage.removeItem('user');
         }
     }
+
+    console.log(user);
 
     return (
         <>

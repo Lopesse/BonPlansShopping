@@ -32,7 +32,7 @@ class Utilisateur
                 'prenom' => $utilisateurArray['prenom'],
                 'email' => $utilisateurArray['email'],
                 'photo' => $utilisateurArray['photo'],
-                'categoriesFav' => $utilisateurArray['categoriesFav'],
+                'categoriesFav' => $this->getCategoriesFavories($utilisateurArray['id']),
                 'mdp' => $utilisateurArray['mdp'],
             );
         }
@@ -56,7 +56,8 @@ class Utilisateur
                 'photo' => $value['photo'],
                 'nom' => $value['nom'],
                 'prenom' => $value['prenom'],
-                'CategoriesFav' => $value['categoriesFav'],
+                'categoriesFav' => $this->getCategoriesFavories($value['id'])
+
             );
             $utilisateurArray[$value[$key]] = $utilisateur;
         }
@@ -159,7 +160,7 @@ class Utilisateur
 
     public function getCategoriesFavories($id)
     {
-        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c, utilisateur u WHERE u.id = :uid AND c.id = cf.categorie;";
+        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c WHERE cf.utilisateur = :uid AND c.id = cf.categorie;";
         $stmt = $this->bd->prepare($req);
         $queryData = array(":uid" => $id);
         $stmt->execute($queryData);

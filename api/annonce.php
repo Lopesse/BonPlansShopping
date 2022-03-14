@@ -14,6 +14,6 @@ $postStorage = new Annonce($db);
 
 $postStorage->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$post = $postStorage->read();
+$post = $postStorage->read($id);
 
 echo json_encode($post);
