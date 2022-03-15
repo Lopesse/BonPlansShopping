@@ -97,3 +97,104 @@ export function get_sous_categories() {
             throw err
         });
 }
+
+
+
+export function get_utilisateur(idUser) {
+    return fetch(`${URLS.get_utilisateur}?id=${idUser}`)
+        .then(res => res.json())
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+export function delete_utilisateur(idUser) {
+    return fetch(URLS.delete_utilisateur, {
+        method: "POST",
+        body: JSON.stringify({ id: idUser }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+export function update_utilisateur(data) {
+    return fetch(URLS.update_utilisateur, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+export function create_utilisateur(data) {
+    return fetch(URLS.inscription, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Utilisateur non crée');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+
+export function connexion(identifiants) {
+    return fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur de connexion');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+export function suivre_categorie(data) {
+    return fetch(URLS.suivre_categorie, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}

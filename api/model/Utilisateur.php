@@ -136,22 +136,25 @@ class Utilisateur
         $queryData = array(":id" => $data['id']);
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
-        return $resultat;
+
+        return $resultat ? true : false;
     }
 
     public function updateUser($data)
     {
         $req = "UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id";
-        $requete = $this->db->prepare($req);
-        return $requete->execute(
+        $requete = $this->bd->prepare($req);
+        $requete->execute(
             array(
-                ":nom" => $data['nom'],
-                ":prenom" => $data['prenom'],
-                ":pseudo" => $data['pseudo'],
-                ":email" => $data['email'],
-                "id" => $data['id']
+                ":nom" => $data->nom,
+                ":prenom" => $data->prenom,
+                ":pseudo" => $data->pseudo,
+                ":email" => $data->email,
+                "id" => $data->id
             )
         );
+
+        return !$requete->fetch();
     }
 
     public function suivreCategorie($data)
@@ -169,7 +172,7 @@ class Utilisateur
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
 
-        return $resultat;
+        return !$resultat;
     }
 
     public function getCategoriesFavories($id)

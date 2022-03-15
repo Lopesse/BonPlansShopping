@@ -6,9 +6,9 @@ import Annonce from './Annonce';
 import "./css/Profil.css";
 import profil from "./images/profil.jpg";
 import CategorieTag from "./CategorieTag";
+import { delete_utilisateur, get_annonces, get_categories, get_utilisateur, update_utilisateur } from "../dataBase/apiCalls";
 
 export default function Profil() {
-    let action = URLS.delete_utilisateur;
     let navigate = useNavigate();
     const { user, setUser } = useContext(UserContext);
     const params = useParams();
@@ -23,50 +23,41 @@ export default function Profil() {
         email: user.email,
         nom: user.nom,
         prenom: user.prenom,
+        id: user.id
     });
 
-    useEffect(() => {
-        let isMounted = true;
-        fetch(`${URLS.annonces}?idUser=${user.id}`)
-            .then(res => res.json())
-            .then(res => {
-                for (let i in res) {
-                    if (isMounted) setAnnonces(a => [...a, res[i]])
-                }
-                if (isMounted) setIsLoaded(true);
-            })
-        fetch(URLS.categories, { cache: "force-cache" })
-            //lecture de ce que le fetch a trouvé
-            .then(res => res.json())
-            .then(res => {
-                let cats = [];
-                for (let cat in res) {
-                    cats.push(res[cat])
-                }
-                if (isMounted) setCategories(cats);
-            })
+    useEffect(async () => {
+        let mesAnnonces;
+        try {
+            mesAnnonces = await get_annonces(user.id);
+            setAnnonces(mesAnnonces);
+        } catch (err) {
+            throw err;
+        }
+
+        let cats;
+        try {
+            cats = await get_categories();
+            setCategories(cats);
+        } catch (err) {
+            throw err;
+        }
+
     }, []);
 
-    const deleteCompte = () => {
-        fetch(action, {
-            method: "POST",
-            body: JSON.stringify(user),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw Error('Erreur de suppression');
-                }
-                else return res.json();
-            })
-            .then(json => { navigate(`/`) })
-            .catch(e => console.log(e));
+    const deleteCompte = async () => {
 
-        if (user) {
-            setUser(null);
-            localStorage.removeItem('user');
+        let deleted;
+
+        try {
+            deleted = await delete_utilisateur(user.id);
+            if (deleted) {
+                navigate(`/`);
+                setUser(null);
+                localStorage.removeItem('user');
+            }
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -75,26 +66,28 @@ export default function Profil() {
         setUpdateUtilisateur({ ...updateUtilisateur, [event.target.name]: event.target.value });
     }
 
-    const handleSubmit = (event) => {
+    const updateUser = async (event) => {
         event.preventDefault();
         setLoading(true);
-        fetch(URLS.update_utilisateur, {
-            method: "POST",
-            body: JSON.stringify(updateUtilisateur),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                console.log(res);
-                if (!res.ok) {
-                    //setMessage("Une erreur s'est produite lors de la mise à jour !")
-                    setLoading(false)
-                    throw Error("La mise à jour n'à pas été faite");
+
+
+        let newUser;
+        let updatedUser;
+        try {
+            updatedUser = await update_utilisateur(updateUtilisateur);
+            if (updatedUser) {
+                try {
+                    newUser = await get_utilisateur(user.id);
+                    setUser(newUser);
+                } catch (err) {
+                    throw err;
                 }
-                else return res.json();
-            })
-            .catch(e => console.log(e));
+            }
+            setLoading(false);
+        } catch (err) {
+            throw err;
+        }
+
     }
 
 
@@ -184,7 +177,7 @@ export default function Profil() {
                             option === 'modifCompte' &&
                             <div className="corps">
                                 <h3>S'inscrire :</h3>
-                                <form encType="multipart/form-data" method="POST" onSubmit={(e) => handleSubmit(e)}>
+                                <form encType="multipart/form-data" method="POST" onSubmit={(e) => updateUser(e)}>
                                     <label>Pseudo :
                                         <input type='text' name='pseudo' defaultValue={updateUtilisateur.pseudo} onChange={handleChange} />
                                     </label>
@@ -212,7 +205,7 @@ export default function Profil() {
                                 <div>Changer mon mot de passe </div>
 
                                 <div>Cliquez sur ce bouton pour supprimer votre compte. La suppression du compte sera définitive. </div>
-                                <button onClick={deleteCompte}>
+                                <button onClick={() => deleteCompte()}>
                                     Supprimer mon compte
                                 </button>
                             </div>

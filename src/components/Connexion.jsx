@@ -4,6 +4,7 @@ import { URLS } from "../dataBase/apiURLS";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
+import { connexion } from "../dataBase/apiCalls";
 
 export default function Connexion() {
 
@@ -31,20 +32,30 @@ export default function Connexion() {
         setIdentifiants({ ...identifiants, [event.target.name]: event.target.value });
     }
 
-    const handleSubmit = (event) => {
+    const connecter = async (event) => {
         event.preventDefault();
         setLoading(true);
-        fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
-            .then(res => {
-                if (!res.ok) {
-                    setMessage('Identifiants erronés');
-                    setLoading(false);
-                    throw Error('Identifiants erronés');
-                }
-                return res.json();
-            })
-            .then(json => login(json))
-            .catch(e => console.log(e));
+
+        let connectedUser;
+        try {
+            connectedUser = await connexion(identifiants);
+            if (connectedUser) login(connectedUser);
+            setLoading(false);
+        } catch (err) {
+            setMessage('Identifiants erronés');
+            throw Error('Identifiants erronés');
+        }
+
+
+        // fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
+        //     .then(res => {
+        //         if (!res.ok) {
+
+        //         }
+        //         return res.json();
+        //     })
+        //     .then(json => login(json))
+        //     .catch(e => console.log(e));
     }
 
     return (
@@ -54,7 +65,7 @@ export default function Connexion() {
                 {
                     message && <div className="erreur">{message}</div>
                 }
-                <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
+                <form encType="multipart/form-data" method="POST" onSubmit={connecter}>
 
                     <label>Pseudo ou email:
                         <input type='text' name='login' placeholder='Votre pseudo ou votre email' onChange={handleChange} />

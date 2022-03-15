@@ -25,48 +25,11 @@ export default function Publier() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const [images, setImages] = useState([]);
+    const [imagesURLs, setImagesURLs] = useState([]);
+
     let navigate = useNavigate();
     let params = useParams();
-
-    const handleChange = (event) => {
-        setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
-        if (event.target.name === 'categorie') {
-            const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
-            setAnnonce(a => ({
-                ...a,
-                sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id
-            }));
-        }
-    }
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-        let date = new Date();
-        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-        const data = {
-            titre: annonce.titre,
-            dateCreation: date,
-            dateExpiration: annonce.date_expiration,
-            nomMagasin: annonce.nom_magasin,
-            adresseMagasin: annonce.adresse_magasin,
-            categorie: annonce.categorie,
-            sousCategorie: annonce.sous_categorie,
-            image: annonce.image,
-            utilisateur: user ? user.id : 1,
-            description: annonce.description,
-            id: params.id
-        };
-
-        let newAnnonce;
-        try {
-            newAnnonce = params.id ? await update_annonce(data) : await create_annonce(data);
-            navigate(`/annonces/${newAnnonce}`)
-        }
-        catch (err) {
-            setMessage(err);
-        }
-    }
 
 
     useEffect(async () => {
@@ -80,15 +43,6 @@ export default function Publier() {
                 throw err;
             }
         }
-        // fetch(`${URLS.annonce}?id=${params.id}`)
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         let bon_plan = {}
-        //         for (let i in res) {
-        //             bon_plan = { ...bon_plan, [i]: res[i] ? res[i] : '' }  // eviter les propriétés avec une valeur nulle
-        //         }
-        //         setAnnonce(bon_plan);
-        //     });
 
         let cats;
         try {
@@ -98,7 +52,6 @@ export default function Publier() {
             throw err;
         }
 
-
         let sous_cats;
         try {
             sous_cats = await get_sous_categories();
@@ -107,48 +60,58 @@ export default function Publier() {
             throw err;
         }
 
-        // fetch(URLS.categories)
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         let cats = []
-        //         for (let i in res) {
-        //             cats.push(res[i])
-        //         }
-        //         if (isMounted) {
-        //             setCategories(cats)
 
-        //             if (params.id) {
-        //                 annonce && setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
-        //             }
-        //             else setAnnonce(a => ({ ...a, categorie: cats[0].id }));
-        //         }
-        //     });
-
-        // fetch(URLS.sous_categories)
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         let cats = []
-        //         for (let i in res) {
-        //             cats.push(res[i])
-        //         }
-        //         if (isMounted) setSousCategories(cats)
-        //         if (isMounted && sousCategories) {
-        //             if (params.id)
-        //                 annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
-        //             else setAnnonce(a => ({ ...a, sous_categorie: cats[0].id }));
-        //         }
-        //     });
-    }, [params.id]);
-
-    const [images, setImages] = useState([]);
-    const [imagesURLs, setImagesURLs] = useState([]);
-
-    useEffect(() => {
         if (images.length < 1) return;
         const newImageUrls = [];
         images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
         setImagesURLs(newImageUrls);
-    }, [images]);
+
+    }, [params.id, images]);
+
+
+    const handleChange = (event) => {
+        setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
+        if (event.target.name === 'categorie') {
+            const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
+            setAnnonce(a => ({
+                ...a,
+                sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id
+            }));
+        }
+    }
+
+    const createOrUpdate = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        let date = new Date();
+        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        const data = {
+            titre: annonce.titre,
+            dateCreation: date,
+            dateExpiration: annonce.date_expiration,
+            nomMagasin: annonce.nom_magasin,
+            adresseMagasin: annonce.adresse_magasin,
+            categorie: annonce.categorie.id,
+            sousCategorie: annonce.sous_categorie.id,
+            image: annonce.image,
+            utilisateur: user ? user.id : 1,
+            description: annonce.description,
+            id: params.id
+        };
+
+        let newAnnonceId;
+        try {
+            newAnnonceId = params.id ? await update_annonce(data) : await create_annonce(data);
+            navigate(`/annonces/${newAnnonceId}`)
+        }
+        catch (err) {
+            setMessage(err);
+        }
+    }
+
+
+
+
 
     function onImageChange(event) {
         setAnnonce(a => ({ ...a, image: event.target.files[0].name }));
@@ -163,7 +126,7 @@ export default function Publier() {
                 <div className="formulaire">
                     <h3>Publier une nouvelle annonce :</h3>
                     {message && <div className="erreur">{message}</div>}
-                    <form encType="multipart/form-data" method="POST" onSubmit={handleSubmit}>
+                    <form encType="multipart/form-data" method="POST" onSubmit={createOrUpdate}>
 
                         <label>Titre de l'annonce :
                             <input type='text' name='titre' placeholder='Le titre' onChange={handleChange} value={annonce.titre} />
