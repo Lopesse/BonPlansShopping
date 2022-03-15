@@ -40,7 +40,6 @@ export default function Profil() {
             })
     }, []);
 
-    console.log(user.categoriesFav);
 
     const deleteCompte = () => {
         fetch(action, {

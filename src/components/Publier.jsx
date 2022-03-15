@@ -174,7 +174,7 @@ export default function Publier() {
                                 {
                                     categories &&
                                     categories.map(cat =>
-                                        <option value={cat.id} key={cat.id}>{cat.categorie}</option>
+                                        <option value={cat.id} key={cat.id}>{cat.nom}</option>
                                     )
                                 }
                             </select>

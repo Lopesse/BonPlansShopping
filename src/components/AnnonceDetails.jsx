@@ -11,13 +11,23 @@ import CategorieTag from './CategorieTag';
 export default function AnnonceDetails() {
     const params = useParams();
     const [annonce, setAnnonce] = useState();
+    const [tempsRestant, setTempsRestant] = useState(0);
     const { user } = useContext(UserContext);
+
+
     let navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${URLS.annonce}?id=${params.id}`)
             .then(res => res.json())
-            .then(res => { console.log(res); setAnnonce(res) });
+            .then(res => {
+                setAnnonce(res);
+                let now = Date.now();
+                let dateExp = new Date(res.date_expiration).getTime();
+                setTempsRestant(new Date(dateExp - now).getHours());
+            });
+
+
     }, []);
 
     const deletePost = () => {
@@ -35,9 +45,6 @@ export default function AnnonceDetails() {
         }
     }
 
-    const suivreCategorie = () => {
-    }
-
     return (
         <>
             <div className='publierAnnonce'>
@@ -53,10 +60,14 @@ export default function AnnonceDetails() {
                             <div>Disponible à {annonce.nom_magasin}</div>
                             <div>{annonce.adresse_magasin}</div>
                             <div>Expire le: {annonce.date_expiration}</div>
+                            {
+                                tempsRestant < 24 &&
+                                <div style={{ color: 'red' }}>Expire dans {tempsRestant} heures</div>
+                            }
                             <div>Créé par: {annonce.utilisateur}</div>
                             <div className='categories'>
                                 <CategorieTag categorie={annonce.categorie} />
-                                <CategorieTag categorie={annonce.sous_categorie} />
+                                <div>{annonce.sous_categorie.nom} </div>
                             </div>
                         </div>
                         :

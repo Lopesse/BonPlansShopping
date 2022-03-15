@@ -32,7 +32,7 @@ class Utilisateur
                 'prenom' => $utilisateurArray['prenom'],
                 'email' => $utilisateurArray['email'],
                 'photo' => $utilisateurArray['photo'],
-                'categoriesFav' => $utilisateurArray['categoriesFav'],
+                'categoriesFav' => $this->getCategoriesFavories($utilisateurArray['id']),
                 'mdp' => $utilisateurArray['mdp'],
             );
         }
@@ -56,7 +56,7 @@ class Utilisateur
                 'photo' => $value['photo'],
                 'nom' => $value['nom'],
                 'prenom' => $value['prenom'],
-                'CategoriesFav' => $value['categoriesFav'],
+                'categoriesFav' => $this->getCategoriesFavories($value['id'])
             );
             $utilisateurArray[$value[$key]] = $utilisateur;
         }
