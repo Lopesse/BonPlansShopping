@@ -4,6 +4,7 @@ import Annonce from './components/Annonce';
 import { useEffect, useState } from 'react';
 import { URLS } from './dataBase/apiURLS';
 import { useParams } from 'react-router-dom';
+import { get_annonces } from './dataBase/apiCalls';
 
 
 export default function App() {
@@ -16,17 +17,19 @@ export default function App() {
   const [recherche, setRecherche] = useState('');
   const [categorie, setCategorie] = useState(cat);
 
-  useEffect(() => {
-    let isMounted = true;
-    fetch(URLS.annonces, { cache: 'reload' })
-      .then(res => res.json())
-      .then(res => {
-        for (let i in res) {
-          if (isMounted) setAnnonces(a => [...a, res[i]])
-        }
-        if (isMounted) setIsLoaded(false);
-      })
+  useEffect(async () => {
+    let listeAnnonces;
+    try {
+      setIsLoaded(false);
+      listeAnnonces = await get_annonces(null);
+      setAnnonces(listeAnnonces);
+      setIsLoaded(true);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }, []);
+
 
 
   const filtrer = (element) => {
@@ -58,26 +61,27 @@ export default function App() {
         </div>
         <div className='liste_annonces'>
           {
-            isLoaded ?
-            <div>Chargement en cours…</div>
-            :
-            cat ?
-            (categorieAnnonce.length === 0) ?
-                <div>
-                  Nous n'avons aucune dans la catégorie selectionné !
-                </div>
+            !isLoaded ?
+              <div>Chargement en cours…</div>
+              :
+              cat ?
+                (categorieAnnonce.length === 0) ?
+                  <div>
+                    Nous n'avons aucune dans la catégorie selectionné !
+                  </div>
+                  :
+                  categorieAnnonce
+                    .filter(annonce => filtrer(annonce))
+                    .map(elementTab =>
+                      <Annonce annonce={elementTab} key={elementTab.id} />
+                    )
                 :
-                categorieAnnonce
+                annonces &&
+                annonces
                   .filter(annonce => filtrer(annonce))
                   .map(elementTab =>
                     <Annonce annonce={elementTab} key={elementTab.id} />
                   )
-              :
-              annonces
-                .filter(annonce => filtrer(annonce))
-                .map(elementTab =>
-                  <Annonce annonce={elementTab} key={elementTab.id} />
-                )
           }
         </div>
       </div>

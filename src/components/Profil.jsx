@@ -70,7 +70,6 @@ export default function Profil() {
         }
     }
 
-    // console.log(user);
 
     const handleChange = (event) => {
         setUpdateUtilisateur({ ...updateUtilisateur, [event.target.name]: event.target.value });
@@ -98,7 +97,6 @@ export default function Profil() {
             .catch(e => console.log(e));
     }
 
-    console.log(annonces.length === 0);
 
     return (
         <>
@@ -168,7 +166,7 @@ export default function Profil() {
                                                         <CategorieTag categorie={cat} key={cat.id} />
                                                     )
                                                 }
-                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégories)</div>
+                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et cliquez sur le "-" pour supprimer un catégories)</div>
                                             </div>
                                     }
                                     {/* {

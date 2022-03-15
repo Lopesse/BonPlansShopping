@@ -4,7 +4,6 @@ import { UserContext } from "./UserContext";
 
 export default function CategorieTag(props) {
     const { user, setUser } = useContext(UserContext);
-    console.log(user.categoriesFav)
 
     const setFavorie = (suivre) => {
 
@@ -30,10 +29,6 @@ export default function CategorieTag(props) {
             })
             .catch(err => console.log(err));
     }
-
-    user.categoriesFav.map(elementTab =>
-        console.log(elementTab['nom'])
-    );
 
     return (
         <div className='cat'>

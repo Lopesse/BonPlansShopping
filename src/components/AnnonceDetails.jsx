@@ -4,42 +4,49 @@ import { URLS } from '../dataBase/apiURLS';
 import './css/annonces.css';
 import UserProvider, { UserContext } from './UserContext';
 import CategorieTag from './CategorieTag';
+import { delete_annonce, get_annonce } from '../dataBase/apiCalls';
 
 
 
 export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     const [tempsRestant, setTempsRestant] = useState(0);
+    const [isLoaded, setIsLoaded] = useState();
     const { user } = useContext(UserContext);
 
 
     let navigate = useNavigate();
+    let params = useParams();
 
-    useEffect(() => {
-        fetch(`${URLS.annonce}?id=${params.id}`)
-            .then(res => res.json())
-            .then(res => {
-                setAnnonce(res);
-                let now = Date.now();
-                let dateExp = new Date(res.date_expiration).getTime();
-                setTempsRestant(new Date(dateExp - now).getHours());
-            });
+    useEffect(async () => {
+        let fetched_annonce;
+        try {
+            setIsLoaded(false);
+            fetched_annonce = await get_annonce(params.id);
+            setAnnonce(fetched_annonce);
+            setTempsRestant(new Date(new Date(fetched_annonce.date_expiration) - Date.now()).getTime() / 3600000);
+            setIsLoaded(true);
+        }
+        catch (err) {
+            console.log(err);
+        }
 
 
     }, []);
 
-    const deletePost = () => {
-        let isMounted = true;
-        if (annonce) {
-            fetch(URLS.delete_annonce, {
-                method: "POST",
-                body: JSON.stringify({ id: annonce.id }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            if (isMounted) setAnnonce(null);
-            navigate('/');
+    const deletePost = async () => {
+        let deleted;
+        try {
+            setIsLoaded(false);
+            deleted = await delete_annonce(annonce.id);
+
+            if (deleted) {
+                setAnnonce(null);
+                navigate('/');
+            }
+        }
+        catch (err) {
+            console.log(err);
         }
     }
 
@@ -47,7 +54,7 @@ export default function AnnonceDetails() {
         <>
             <div className='publierAnnonce'>
                 {
-                    isLoaded ?
+                    !isLoaded ?
                         <div>Chargement en cours…</div>
                         :
                         annonce ?
@@ -63,12 +70,14 @@ export default function AnnonceDetails() {
                                         <div>Disponible à {annonce.nom_magasin}</div>
                                         <div>Adrdesse ou Lien du magasin : {annonce.adresse_magasin}</div>
                                         <div>Expire le : {annonce.date_expiration}</div>
+                                        {
+                                            tempsRestant < 24 &&
+                                            <div style={{ color: 'red' }}>Expire dans {tempsRestant} heures !</div>
+                                        }
                                         <div>{annonce.description}</div>
                                         <div style={{ marginTop: 20 }}>
                                             <CategorieTag categorie={annonce.categorie} />
                                             <div className='cat'>{annonce.sous_categorie['nom']}</div>
-                                            {/* On ne peut pas s'abonner à une sous catégorie pour l'instant donc on va plutôt le mettre sans le + - */}
-                                            {/* <CategorieTag categorie={annonce.sous_categorie} /> */}
                                         </div>
                                     </div>
                                 </div>

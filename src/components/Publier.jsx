@@ -4,6 +4,7 @@ import { URLS } from "../dataBase/apiURLS";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { create_annonce, delete_annonce, get_annonce, get_categories, get_sous_categories, update_annonce } from "../dataBase/apiCalls";
 
 export default function Publier() {
     const { user, setUser } = useContext(UserContext);
@@ -16,9 +17,7 @@ export default function Publier() {
         categorie: '',
         sous_categorie: '',
         image: '',
-        description: '',
-        // categories: [],
-        // sous_categories: []
+        description: ''
     });
 
     const [categories, setCategories] = useState([]);
@@ -33,11 +32,14 @@ export default function Publier() {
         setAnnonce(a => ({ ...a, [event.target.name]: event.target.value }));
         if (event.target.name === 'categorie') {
             const newSousCategorie = sousCategories.find(cat => cat.categorieParent === event.target.value);
-            setAnnonce(a => ({ ...a, sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id }));
+            setAnnonce(a => ({
+                ...a,
+                sous_categorie: newSousCategorie ? newSousCategorie.id : sousCategories[0].id
+            }));
         }
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         let date = new Date();
@@ -56,71 +58,86 @@ export default function Publier() {
             id: params.id
         };
 
-        let action = params.id ? URLS.update_annonce : URLS.creer_annonce;
-
-        fetch(action, {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    setMessage("Une erreur s'est produite. L'annonce n'a pas été crée. Veuillez essayer plus tard.")
-                    setLoading(false)
-                    throw Error('Annonce non crée');
-                }
-                else return res.json();
-            })
-            .then(json => { setLoading(false); navigate(`/annonces/${JSON.parse(json)}`) })
-            .catch(e => console.log(e));
+        let newAnnonce;
+        try {
+            newAnnonce = params.id ? await update_annonce(data) : await create_annonce(data);
+            navigate(`/annonces/${newAnnonce}`)
+        }
+        catch (err) {
+            setMessage(err);
+        }
     }
 
-    useEffect(() => {
-        let isMounted = true
-        if (params.id)
-            fetch(`${URLS.annonce}?id=${params.id}`)
-                .then(res => res.json())
-                .then(res => {
-                    let bon_plan = {}
-                    for (let i in res) {
-                        bon_plan = { ...bon_plan, [i]: res[i] ? res[i] : '' }  // eviter les propriétés avec une valeur nulle
-                    }
-                    setAnnonce(bon_plan);
-                });
 
-        fetch(URLS.categories)
-            .then(res => res.json())
-            .then(res => {
-                let cats = []
-                for (let i in res) {
-                    cats.push(res[i])
-                }
-                if (isMounted) {
-                    setCategories(cats)
+    useEffect(async () => {
+        if (params.id) {
+            let fetched_annonce;
+            try {
+                fetched_annonce = await get_annonce(params.id);
+                if (fetched_annonce) setAnnonce(fetched_annonce);
+            }
+            catch (err) {
+                throw err;
+            }
+        }
+        // fetch(`${URLS.annonce}?id=${params.id}`)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         let bon_plan = {}
+        //         for (let i in res) {
+        //             bon_plan = { ...bon_plan, [i]: res[i] ? res[i] : '' }  // eviter les propriétés avec une valeur nulle
+        //         }
+        //         setAnnonce(bon_plan);
+        //     });
 
-                    if (params.id) {
-                        annonce && setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
-                    }
-                    else setAnnonce(a => ({ ...a, categorie: cats[0].id }));
-                }
-            });
+        let cats;
+        try {
+            cats = await get_categories();
+            setCategories(cats)
+        } catch (err) {
+            throw err;
+        }
 
-        fetch(URLS.sous_categories)
-            .then(res => res.json())
-            .then(res => {
-                let cats = []
-                for (let i in res) {
-                    cats.push(res[i])
-                }
-                if (isMounted) setSousCategories(cats)
-                if (isMounted && sousCategories) {
-                    if (params.id)
-                        annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
-                    else setAnnonce(a => ({ ...a, sous_categorie: cats[0].id }));
-                }
-            });
+
+        let sous_cats;
+        try {
+            sous_cats = await get_sous_categories();
+            setSousCategories(sous_cats);
+        } catch (err) {
+            throw err;
+        }
+
+        // fetch(URLS.categories)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         let cats = []
+        //         for (let i in res) {
+        //             cats.push(res[i])
+        //         }
+        //         if (isMounted) {
+        //             setCategories(cats)
+
+        //             if (params.id) {
+        //                 annonce && setAnnonce(a => ({ ...a, categorie: cats.find(cat => cat.categorie === a.categorie).id }));
+        //             }
+        //             else setAnnonce(a => ({ ...a, categorie: cats[0].id }));
+        //         }
+        //     });
+
+        // fetch(URLS.sous_categories)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         let cats = []
+        //         for (let i in res) {
+        //             cats.push(res[i])
+        //         }
+        //         if (isMounted) setSousCategories(cats)
+        //         if (isMounted && sousCategories) {
+        //             if (params.id)
+        //                 annonce && setAnnonce(a => ({ ...a, sous_categorie: cats.find(cat => cat.nom === a.sous_categorie).id }));
+        //             else setAnnonce(a => ({ ...a, sous_categorie: cats[0].id }));
+        //         }
+        //     });
     }, [params.id]);
 
     const [images, setImages] = useState([]);
@@ -136,11 +153,8 @@ export default function Publier() {
     function onImageChange(event) {
         setAnnonce(a => ({ ...a, image: event.target.files[0].name }));
         setImages([...event.target.files]);
-        console.log(event.target.files[0].name);
     }
 
-    console.log(images);
-    console.log(imagesURLs);
 
     return (
         <div className="app">
@@ -169,7 +183,7 @@ export default function Publier() {
                                 name="categorie"
                                 id="categorie"
                                 onChange={handleChange}
-                                defaultValue={annonce.categorie}
+                                defaultValue={annonce.categorie.nom}
                             >
                                 {
                                     categories &&
@@ -187,7 +201,7 @@ export default function Publier() {
                                     name="sous_categorie"
                                     id="sous_categorie"
                                     onChange={handleChange}
-                                    defaultValue={annonce.sous_categorie}
+                                    defaultValue={annonce.sous_categorie.nom}
                                 >
                                     {
                                         sousCategories &&
