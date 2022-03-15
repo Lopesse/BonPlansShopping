@@ -136,7 +136,8 @@ class Utilisateur
         $queryData = array(":id" => $data['id']);
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
-        return $resultat;
+
+        return $resultat ? true : false;
     }
 
     public function updateUser($data)
@@ -159,7 +160,7 @@ class Utilisateur
 
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
-        return $resultat;
+        return !$resultat;
     }
 
     public function getCategoriesFavories($id)

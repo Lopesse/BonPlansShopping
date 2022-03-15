@@ -4,9 +4,9 @@
 class Database
 {
     private $host = '127.0.0.1';
-    private $db_name = 'bonsplansshopping';
+    private $db_name = 'bons_plans';
     private $username = 'root';
-    private $password = 'Chamora.25';
+    private $password = 'root';
     private $connexion;
 
     public function connect()

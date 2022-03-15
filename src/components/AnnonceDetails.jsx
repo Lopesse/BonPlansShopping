@@ -11,7 +11,6 @@ export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     const [tempsRestant, setTempsRestant] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
-
     const { user } = useContext(UserContext);
     const params = useParams();
 
