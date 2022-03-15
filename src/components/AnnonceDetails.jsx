@@ -29,7 +29,7 @@ export default function AnnonceDetails() {
 
 
     }, []);
-
+console.log(annonce);
     const deletePost = () => {
         let isMounted = true;
         if (annonce) {

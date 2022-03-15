@@ -22,7 +22,7 @@ export default function NavBar() {
 
     return (
         <nav className="navbar">
-            <ul>
+            <ul style={{display : 'grid', gridTemplateColumns: user ? '1fr 1fr 1fr 1fr' : '1fr 1fr 1fr', textAlign: 'center'}}>
                 <li><Link to={"/"}>Accueil</Link></li>
                 <li><Link to={"#"} >Catégories</Link>
                     <ul className="deroulant">
@@ -34,7 +34,10 @@ export default function NavBar() {
                         }
                     </ul>
                 </li>
-                <li><Link to={"/annonces/nouveau"}>Publier une annonce</Link></li>
+                {
+                    user &&
+                        <li><Link to={"/annonces/nouveau"}>Publier une annonce</Link></li>
+                }
                 <li><Link to={"#"}>Mon compte</Link>
                     {
                         user ?

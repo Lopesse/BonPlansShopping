@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import { delete_annonce } from "../dataBase/apiCalls";
 import { URLS } from '../dataBase/apiURLS';
@@ -10,7 +10,7 @@ export default function Annonce(props) {
     const todayTime = Date.now();
     const expTime = new Date(annonce.date_expiration);
     const tempsRestant = new Date(expTime - todayTime).getTime();
-
+    
     useEffect(() => {
         setTimeout(async () => {
             let deleted;
@@ -20,10 +20,10 @@ export default function Annonce(props) {
             catch (err) {
                 throw err;
             }
-        }, tempsRestant);
+        }, tempsRestant); 
     })
-
-
+// console.log(tempsRestant); 
+// //3600000
     return (
         <>
             <div className='annonce'>
@@ -35,12 +35,12 @@ export default function Annonce(props) {
                     <div>Expire le : {annonce.date_expiration}</div>
                     {
                         tempsRestant / 1000 / 60 / 60 < 24 &&
-                        <div style={{ color: 'red' }}>Expire dans {tempsRestant / 1000 / 60 / 60} heures !</div>
+                        <div style={{ color: 'red' }}>Expire dans {Math.floor(tempsRestant / 1000 / 60 / 60)} heures !</div>
                     }
                     <div>Créé par : {annonce.utilisateur}</div>
                     <div>Categorie : {annonce.categorie.nom}</div>
                     <div>Description : {annonce.description}</div>
-                    <Link to={`/annonces/${annonce.id}`}>Savoir plus</Link>
+                    <Link to={`/annonces/{annonce.id}`}>Savoir plus</Link>
                 </div>
             </div>
         </>
