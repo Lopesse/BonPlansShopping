@@ -87,7 +87,6 @@ export default function Profil() {
             }
         })
             .then(res => {
-                console.log(res);
                 if (!res.ok) {
                     //setMessage("Une erreur s'est produite lors de la mise à jour !")
                     setLoading(false)
@@ -97,8 +96,6 @@ export default function Profil() {
             })
             .catch(e => console.log(e));
     }
-
-    console.log(annonces.length === 0);
 
     return (
         <>

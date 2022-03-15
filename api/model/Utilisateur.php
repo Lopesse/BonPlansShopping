@@ -141,24 +141,15 @@ class Utilisateur
 
     public function updateUser($data)
     {
-        $req = "UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id";
-        $requete = $this->db->prepare($req);
-        return $requete->execute(
-            array(
-                ":nom" => $data['nom'],
-                ":prenom" => $data['prenom'],
-                ":pseudo" => $data['pseudo'],
-                ":email" => $data['email'],
-                "id" => $data['id']
-            )
-        );
+        $requete = $this->db->prepare("UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id");
+        return $requete->execute(array(":nom" => $data['nom'], ":prenom" => $data['prenom'], ":pseudo" => $data['pseudo'], ":email" => $data['email'], "id" => $data['id']));
     }
 
     public function suivreCategorie($data)
     {
         $data->suivre ?
-            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);" :
-            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;";
+            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;" :
+            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);";
         $stmt = $this->bd->prepare($req);
 
         $queryData = array(
@@ -168,7 +159,6 @@ class Utilisateur
 
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
-
         return $resultat;
     }
 
