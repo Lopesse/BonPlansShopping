@@ -20,15 +20,15 @@ class Annonce
     public function read()
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
-                        sc.nom AS sousCategorie, sc.id AS sousCategorie_id, 
-                        nomMagasin, adresseMagasin,
-                        u.pseudo AS utilisateur, image,
-                        c.nom AS categorie, c.id AS categorie_id
-                FROM annonce a, categorie c, souscategories sc, utilisateur u 
-                WHERE a.categorie = c.id
-                AND a.souscategorie = sc.id
-                AND utilisateur = u.id
-                AND a.id = :identifiant";
+                    nomMagasin, adresseMagasin,
+                    sc.nom AS sousCategorie, sc.id AS sousCategorie_id,
+                    u.pseudo AS utilisateur, image,
+                    c.nom AS categorie, c.id AS categorie_id
+                FROM annonce a
+                JOIN categorie c ON a.categorie = c.id
+                JOIN souscategories sc ON a.sousCategorie = sc.id
+                JOIN utilisateur u ON a.utilisateur = u.id
+                WHERE a.id = :identifiant;";
 
         $stmt = $this->bd->prepare($req);
         $data = array(":identifiant" => $this->id);
@@ -58,16 +58,16 @@ class Annonce
     public function readAll($idUser)
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
-                        nomMagasin, adresseMagasin,
-                        sc.nom AS sousCategorie, sc.id AS sousCategorie_id,
-                        u.pseudo AS utilisateur, image,
-                        c.nom AS categorie, c.id AS categorie_id
-        FROM annonce a, categorie c, souscategories sc, utilisateur u 
-        WHERE a.categorie = c.id
-        AND a.souscategorie = sc.id
-        AND utilisateur = u.id";
+                    nomMagasin, adresseMagasin,
+                    sc.nom AS sousCategorie, sc.id AS sousCategorie_id,
+                    u.pseudo AS utilisateur, image,
+                    c.nom AS categorie, c.id AS categorie_id
+                FROM annonce a
+                JOIN categorie c ON a.categorie = c.id
+                JOIN souscategories sc ON a.sousCategorie = sc.id
+                JOIN utilisateur u ON a.utilisateur = u.id;";
         if ($idUser !== '') {
-            $req .= ' AND a.utilisateur = :idUser;';
+            $req .= ' WHERE a.utilisateur = :idUser;';
             $stmt = $this->bd->prepare($req);
             $stmt->execute(array(":idUser" => $idUser));
             $queryArray = $stmt->fetchAll();

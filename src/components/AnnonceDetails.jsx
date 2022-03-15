@@ -11,7 +11,7 @@ import { delete_annonce, get_annonce } from '../dataBase/apiCalls';
 export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     const [tempsRestant, setTempsRestant] = useState(0);
-    const [isLoaded, setIsLoaded] = useState();
+    const [isLoaded, setIsLoaded] = useState(false);
     const { user } = useContext(UserContext);
 
 
@@ -21,7 +21,6 @@ export default function AnnonceDetails() {
     useEffect(async () => {
         let fetched_annonce;
         try {
-            setIsLoaded(false);
             fetched_annonce = await get_annonce(params.id);
             setAnnonce(fetched_annonce);
             setTempsRestant(new Date(new Date(fetched_annonce.date_expiration) - Date.now()).getTime() / 3600000);
@@ -77,7 +76,7 @@ export default function AnnonceDetails() {
                                         <div>{annonce.description}</div>
                                         <div style={{ marginTop: 20 }}>
                                             <CategorieTag categorie={annonce.categorie} />
-                                            <div className='cat'>{annonce.sous_categorie['nom']}</div>
+                                            <div className='cat'>{annonce.sous_categorie.nom}</div>
                                         </div>
                                     </div>
                                 </div>
