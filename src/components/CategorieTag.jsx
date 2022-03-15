@@ -4,6 +4,7 @@ import { UserContext } from "./UserContext";
 
 export default function CategorieTag(props) {
     const { user, setUser } = useContext(UserContext);
+    console.log(user.categoriesFav)
 
     const setFavorie = (suivre) => {
 
@@ -21,17 +22,13 @@ export default function CategorieTag(props) {
             }
         })
             .then(res => res.json())
-            .then(json => console.log(json))
-
+            .then(json => {
                 fetch(`${URLS.get_utilisateur}?id=${user.id}`)
                     .then(res => res.json())
-                    .then(json => {
-                        if (json !== -1)
-                            setUser(json)
-                    })
+                    .then(json => json !== -1 && setUser(json))
                     .catch(e => console.log(e))
+            })
             .catch(err => console.log(err));
-
     }
 
     return (

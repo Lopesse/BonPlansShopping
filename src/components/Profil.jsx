@@ -98,7 +98,7 @@ export default function Profil() {
             .catch(e => console.log(e));
     }
 
-    console.log(annonces.length===0);
+    console.log(annonces.length === 0);
 
     return (
         <>
@@ -118,23 +118,23 @@ export default function Profil() {
                         </ul>
 
                         {
-                            option === 'annonces' && 
+                            option === 'annonces' &&
                             (
                                 <div className="corps">
                                     {
-                                        (annonces.length===0) ? 
+                                        (annonces.length === 0) ?
                                             <div>
                                                 <div>Vous n'avez publié aucune annonce pour l'instant ! <br />Cliquez sur le lien ci-dessous pour publier une annonce : </div>
                                                 <div><Link to={"/annonces/nouveau"}>Publier une annonce</Link></div>
                                             </div>
-                                        :
-                                        <div className="corps">
-                                        {
-                                            annonces.map(elementTab =>
-                                                <Annonce annonce={elementTab} key={elementTab.id} />
-                                            )
-                                        }
-                                        </div>
+                                            :
+                                            <div className="corps">
+                                                {
+                                                    annonces.map(elementTab =>
+                                                        <Annonce annonce={elementTab} key={elementTab.id} />
+                                                    )
+                                                }
+                                            </div>
                                     }
                                 </div>
                             )
@@ -146,7 +146,7 @@ export default function Profil() {
                                     {
 
                                         (user.categoriesFav.length === 0) ?
-                                            
+
                                             <div>
                                                 <div>
                                                     Désolé, vous n'avez pas de favorie pour le moment.
@@ -154,10 +154,10 @@ export default function Profil() {
                                                     Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
                                                 </div>
                                                 {
-                                                categories &&
-                                                categories.map(cat =>
-                                                    <CategorieTag categorie={cat} />
-                                                )
+                                                    categories &&
+                                                    categories.map(cat =>
+                                                        <CategorieTag categorie={cat} />
+                                                    )
                                                 }
                                             </div>
                                             :
@@ -188,26 +188,26 @@ export default function Profil() {
                                 <h3>S'inscrire :</h3>
                                 <form encType="multipart/form-data" method="POST" onSubmit={(e) => handleSubmit(e)}>
                                     <label>Pseudo :
-                                        <input type='text' name='pseudo' defaultValue={updateUtilisateur.pseudo} onChange={handleChange}/>
+                                        <input type='text' name='pseudo' defaultValue={updateUtilisateur.pseudo} onChange={handleChange} />
                                     </label>
 
                                     <label>Email :
-                                        <input type="text" name="email" defaultValue={updateUtilisateur.email} onChange={handleChange}/>
+                                        <input type="text" name="email" defaultValue={updateUtilisateur.email} onChange={handleChange} />
                                     </label>
 
                                     <label>Nom :
-                                        <input type='text' name='nom' defaultValue={updateUtilisateur.nom} onChange={handleChange}/>
+                                        <input type='text' name='nom' defaultValue={updateUtilisateur.nom} onChange={handleChange} />
                                     </label>
 
                                     <label>Prenom :
-                                        <input type='text' name='prenom' defaultValue={updateUtilisateur.prenom} onChange={handleChange}/>
+                                        <input type='text' name='prenom' defaultValue={updateUtilisateur.prenom} onChange={handleChange} />
                                     </label>
 
                                     <label>
                                         <input
                                             type="submit"
                                             value="Modifier mon compte"
-                                            //disabled={!updateUtilisateur.pseudo || !updateUtilisateur.email || loading}
+                                        //disabled={!updateUtilisateur.pseudo || !updateUtilisateur.email || loading}
                                         />
                                     </label>
                                 </form>
