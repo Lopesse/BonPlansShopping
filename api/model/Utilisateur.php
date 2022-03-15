@@ -141,8 +141,8 @@ class Utilisateur
 
     public function updateUser($data)
     {
-        $requete = $this->db->prepare("UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id");
-        return $requete->execute(array(":nom" => $data['nom'], ":prenom" => $data['prenom'], ":pseudo" => $data['pseudo'], ":email" => $data['email'], "id" => $data['id']));
+        $requete = $this->bd->prepare("UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id");
+        return $requete->execute(array(":nom" => $data->nom, ":prenom" => $data->prenom, ":pseudo" => $data->pseudo, ":email" => $data->email, ":id" => $data->id));
     }
 
     public function suivreCategorie($data)
