@@ -168,7 +168,7 @@ export default function Profil() {
                                                         <CategorieTag categorie={cat} key={cat.id} />
                                                     )
                                                 }
-                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégories)</div>
+                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégorie)</div>
                                             </div>
                                     }
                                     {/* {
