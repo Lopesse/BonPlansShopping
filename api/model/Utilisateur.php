@@ -139,6 +139,21 @@ class Utilisateur
         return $resultat;
     }
 
+    public function updateUser($data)
+    {
+        $req = "UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id";
+        $requete = $this->db->prepare($req);
+        return $requete->execute(
+            array(
+                ":nom" => $data['nom'],
+                ":prenom" => $data['prenom'],
+                ":pseudo" => $data['pseudo'],
+                ":email" => $data['email'],
+                "id" => $data['id']
+            )
+        );
+    }
+
     public function suivreCategorie($data)
     {
         $data->suivre ?
@@ -159,7 +174,7 @@ class Utilisateur
 
     public function getCategoriesFavories($id)
     {
-        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c, utilisateur u WHERE u.id = :uid AND c.id = cf.categorie;";
+        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c WHERE cf.utilisateur = :uid AND c.id = cf.categorie;";
         $stmt = $this->bd->prepare($req);
         $queryData = array(":uid" => $id);
         $stmt->execute($queryData);

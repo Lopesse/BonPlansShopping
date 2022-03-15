@@ -1,7 +1,6 @@
 import './App.css';
 
 import Annonce from './components/Annonce';
-
 import { useEffect, useState } from 'react';
 import { URLS } from './dataBase/apiURLS';
 import { useParams } from 'react-router-dom';
@@ -13,7 +12,7 @@ export default function App() {
   let cat = urlData.categorie;
 
   const [annonces, setAnnonces] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [recherche, setRecherche] = useState('');
   const [categorie, setCategorie] = useState(cat);
 
@@ -25,7 +24,7 @@ export default function App() {
         for (let i in res) {
           if (isMounted) setAnnonces(a => [...a, res[i]])
         }
-        if (isMounted) setIsLoaded(true);
+        if (isMounted) setIsLoaded(false);
       })
   }, []);
 
@@ -59,18 +58,20 @@ export default function App() {
         </div>
         <div className='liste_annonces'>
           {
+            isLoaded ?
+            <div>Chargement en cours…</div>
+            :
             cat ?
-              categorieAnnonce ?
+            (categorieAnnonce.length === 0) ?
+                <div>
+                  Nous n'avons aucune dans la catégorie selectionné !
+                </div>
+                :
                 categorieAnnonce
                   .filter(annonce => filtrer(annonce))
                   .map(elementTab =>
                     <Annonce annonce={elementTab} key={elementTab.id} />
                   )
-                :
-                <div>
-                  Aucune annonce ne correspond à cette catégorie
-                </div>
-
               :
               annonces
                 .filter(annonce => filtrer(annonce))

@@ -31,11 +31,14 @@ export default function CategorieTag(props) {
             .catch(err => console.log(err));
     }
 
+    user.categoriesFav.map(elementTab =>
+        console.log(elementTab['nom'])
+    );
 
     return (
         <div className='cat'>
             {props.categorie.nom}
-            <button onClick={() => setFavorie((user.categoriesFav && !user.categoriesFav.find(cat => cat.nom === props.categorie.nom)))}>
+            <button onClick={() => setFavorie(user.categoriesFav && !user.categoriesFav.find(cat => cat.nom === props.categorie.nom))}>
                 {user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? '-' : '+'}
             </button>
         </div >

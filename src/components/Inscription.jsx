@@ -18,7 +18,6 @@ export default function Inscription() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     let navigate = useNavigate();
-
     const { user, setUser } = useContext(UserContext);
 
 
