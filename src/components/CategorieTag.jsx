@@ -4,10 +4,8 @@ import { UserContext } from "./UserContext";
 
 export default function CategorieTag(props) {
     const { user, setUser } = useContext(UserContext);
-    console.log(user.categoriesFav)
-
+    
     const setFavorie = (suivre) => {
-
         const data = {
             user_id: user.id,
             categorie_id: props.categorie.id,

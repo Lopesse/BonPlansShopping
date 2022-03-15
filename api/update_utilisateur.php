@@ -15,7 +15,6 @@ $utilisateurStorage = new Utilisateur($db);
 $data = json_decode(file_get_contents('php://input'));
 if ($data) {
     $updateUser = $utilisateurStorage->updateUser($data);
-    var_dump($data);
     //$updateUser instanceof PDOException ? header('HTTP/1.1 501 Internal Server Error') : header('HTTP/1.1 201 Created');
 }
 echo json_encode($updateUser);

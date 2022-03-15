@@ -48,8 +48,8 @@ export default function Publier() {
             dateExpiration: annonce.date_expiration,
             nomMagasin: annonce.nom_magasin,
             adresseMagasin: annonce.adresse_magasin,
-            categorie: annonce.categorie,
-            sousCategorie: annonce.sous_categorie,
+            categorie: annonce.categorie.id,
+            sousCategorie: annonce.sous_categorie.id,
             image: annonce.image,
             utilisateur: user ? user.id : 1,
             description: annonce.description,
@@ -138,9 +138,6 @@ export default function Publier() {
         setImages([...event.target.files]);
         console.log(event.target.files[0].name);
     }
-
-    console.log(images);
-    console.log(imagesURLs);
 
     return (
         <div className="app">

@@ -18,11 +18,13 @@ export default function Profil() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
+
     const [updateUtilisateur, setUpdateUtilisateur] = useState({
         pseudo: user.pseudo,
         email: user.email,
         nom: user.nom,
         prenom: user.prenom,
+        id: user.id,
     });
 
     useEffect(() => {
@@ -79,6 +81,8 @@ export default function Profil() {
     const handleSubmit = (event) => {
         event.preventDefault();
         setLoading(true);
+        setOption('annonces');
+        setUser(updateUtilisateur);
         fetch(URLS.update_utilisateur, {
             method: "POST",
             body: JSON.stringify(updateUtilisateur),
