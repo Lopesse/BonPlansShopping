@@ -17,15 +17,17 @@ export default function AnnonceDetails() {
 
     let navigate = useNavigate();
 
-    useEffect(() => {
-        fetch(`${URLS.annonce}?id=${params.id}`)
-            .then(res => res.json())
-            .then(res => {
-                setAnnonce(res);
-                let now = Date.now();
-                let dateExp = new Date(res.date_expiration).getTime();
-                setTempsRestant(new Date(dateExp - now).getHours());
-            });
+    useEffect(async () => {
+        let fetched_annonce;
+        try {
+            fetched_annonce = await get_annonce(params.id);
+            setAnnonce(fetched_annonce);
+            setTempsRestant(new Date(new Date(fetched_annonce.date_expiration) - Date.now()).getTime() / 3600000);
+            setIsLoaded(true);
+        }
+        catch (err) {
+            console.log(err);
+        }
 
 
     }, []);
@@ -68,9 +70,7 @@ console.log(annonce);
                                         <div>{annonce.description}</div>
                                         <div style={{ marginTop: 20 }}>
                                             <CategorieTag categorie={annonce.categorie} />
-                                            <div className='cat'>{annonce.sous_categorie['nom']}</div>
-                                            {/* On ne peut pas s'abonner à une sous catégorie pour l'instant donc on va plutôt le mettre sans le + - */}
-                                            {/* <CategorieTag categorie={annonce.sous_categorie} /> */}
+                                            <div className='cat'>{annonce.sous_categorie.nom}</div>
                                         </div>
                                     </div>
                                 </div>
