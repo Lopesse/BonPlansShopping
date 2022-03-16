@@ -97,7 +97,7 @@ class Annonce
     }
 
 
-    public function create($data)
+    public function create($data, $img)
     {
 
         $req = "INSERT INTO annonce 
@@ -125,16 +125,16 @@ class Annonce
         $stmt = $this->bd->prepare($req);
 
         $post_data = array(
-            ":titre" => $data->titre,
-            ":dateCreation" => $data->dateCreation,
-            ":dateExpiration" => $data->dateExpiration,
-            ":categorie" => $data->categorie,
-            ":sousCategorie" => $data->sousCategorie,
-            ":nomMagasin" => $data->nomMagasin,
-            ":adresseMagasin" => $data->adresseMagasin,
-            ":utilisateur" => $data->utilisateur,
-            ":image" => $data->image,
-            ":description" => $data->description,
+            ":titre" => $data['titre'],
+            ":dateCreation" => $data['dateCreation'],
+            ":dateExpiration" => $data['dateExpiration'],
+            ":categorie" => $data['categorie'],
+            ":sousCategorie" => $data['sousCategorie'],
+            ":nomMagasin" => $data['nomMagasin'],
+            ":adresseMagasin" => $data['adresseMagasin'],
+            ":utilisateur" => $data['utilisateur'],
+            ":image" => $img,
+            ":description" => $data['description'],
         );
 
         $stmt->execute($post_data);

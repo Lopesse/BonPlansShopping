@@ -38,12 +38,15 @@ export function delete_annonce(idAnnonce) {
 
 
 export function create_annonce(data) {
+    const fd = new FormData();
+    for (let d in data) {
+        fd.append(d, data[d]);
+    }
+    console.log(fd);
+
     return fetch(URLS.creer_annonce, {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
-        }
+        body: fd,
     })
         .then(res => {
             if (!res.ok) {

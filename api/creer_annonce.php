@@ -11,10 +11,10 @@ include_once('model/Categorie.php');
 $db = new Database();
 $db = $db->connect();
 $postStorage = new Annonce($db);
-$data = json_decode(file_get_contents('php://input'));
 $newId = -1;
-if ($data) {
-    $newId = $postStorage->create($data);
+if ($_POST) {
+    if ($_FILES) $img_nom = $_FILES["image"]["name"];
+    $newId = $postStorage->create($_POST, $img_nom);
     $newId !== -1 ? header('HTTP/1.1 201 Created') : header('HTTP/1.1 501 Internal Server Error');
 }
 echo json_encode($newId);
