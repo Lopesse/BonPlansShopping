@@ -33,6 +33,7 @@ class Utilisateur
                 'email' => $utilisateurArray['email'],
                 'photo' => $utilisateurArray['photo'],
                 'categoriesFav' => $this->getCategoriesFavories($utilisateurArray['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($utilisateurArray['id']),
                 'mdp' => $utilisateurArray['mdp'],
             );
         }
@@ -56,7 +57,8 @@ class Utilisateur
                 'photo' => $value['photo'],
                 'nom' => $value['nom'],
                 'prenom' => $value['prenom'],
-                'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
             );
             $utilisateurArray[$value[$key]] = $utilisateur;
         }
@@ -121,7 +123,8 @@ class Utilisateur
                     'photo' => $value['photo'],
                     'nom' => $value['nom'],
                     'prenom' => $value['prenom'],
-                    'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                    'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                    'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
                 );
                 return $utilisateur;
             }
@@ -191,5 +194,26 @@ class Utilisateur
             $categorieArray[$key] = $categorie;
         }
         return $categorieArray;
+    }
+
+    public function getAnnoncesEnregistres($id)
+    {
+        $req = "SELECT a.id
+                FROM annonce_enregistre ae
+                JOIN annonce a ON a.id = ae.annonce
+                WHERE ae.utilisateur = :uid;";
+
+        $stmt = $this->bd->prepare($req);
+        $queryData = array(":uid" => $id);
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetchAll();
+        $annonceArray = array();
+        foreach ($resultat as $key => $value) {
+            $categorie = array(
+                'id' => $value['id'],
+            );
+            $annonceArray[$key] = $categorie;
+        }
+        return $annonceArray;
     }
 }

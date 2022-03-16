@@ -59,6 +59,7 @@ export default function AnnonceDetails() {
                         annonce ?
                             <div>
                                 <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}</h1>
+                                <img src={user && user.annoncesEnregistres && user.annoncesEnregistres.find(a => a.id === annonce.id) ? '../images/red-heart.png' : './images/black-heart.png'} />
                                 <div className='annonce'>
                                     {
                                         annonce.image &&
