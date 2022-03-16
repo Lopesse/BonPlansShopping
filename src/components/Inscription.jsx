@@ -4,6 +4,7 @@ import { URLS } from "../dataBase/apiURLS";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
+import { create_utilisateur } from "../dataBase/apiCalls";
 
 export default function Inscription() {
     const [newUtilisateur, setNewUtilisateur] = useState({
@@ -18,7 +19,6 @@ export default function Inscription() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     let navigate = useNavigate();
-
     const { user, setUser } = useContext(UserContext);
 
 
@@ -38,28 +38,21 @@ export default function Inscription() {
         setNewUtilisateur({ ...newUtilisateur, [event.target.name]: event.target.value });
     }
 
-    const handleSubmit = (event) => {
+    const inscription = async (event) => {
         event.preventDefault();
 
         setLoading(true);
 
-        fetch(URLS.inscription, {
-            method: "POST",
-            body: JSON.stringify(newUtilisateur),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    setMessage('Un utilisateur avec cet adresse mail existe déjà')
-                    setLoading(false)
-                    throw Error('Un utilisateur avec cet adresse mail existe déjà');
-                }
-                else return res.json();
-            })
-            .then(json => login(json))
-            .catch(e => console.log(e));
+        let user;
+
+        try {
+            user = await create_utilisateur(newUtilisateur);
+            if (user) login(user);
+        } catch (err) {
+            setMessage('Un utilisateur avec cet adresse mail existe déjà')
+            setLoading(false)
+            throw Error('Un utilisateur avec cet adresse mail existe déjà');
+        }
 
     }
 
@@ -69,7 +62,7 @@ export default function Inscription() {
             <div className="formulaire">
                 <h3>S'inscrire :</h3>
                 {message && <div className="erreur">{message}</div>}
-                <form encType="multipart/form-data" method="POST" onSubmit={(e) => handleSubmit(e)}>
+                <form encType="multipart/form-data" method="POST" onSubmit={(e) => inscription(e)}>
                     <label>Pseudo :
                         <input type='text' name='pseudo' placeholder='Votre pseudo' onChange={handleChange} />
                     </label>

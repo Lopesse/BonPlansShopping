@@ -10,13 +10,11 @@ include_once('model/Utilisateur.php');
 $db = new Database();
 $db = $db->connect();
 
-
 $utilisateurStorage = new Utilisateur($db);
 
 $data = json_decode(file_get_contents('php://input'));
-// echo json_encode($data);
-// exit(0);
 if ($data) {
-    $res = $utilisateurStorage->suivreCategorie($data);
-    echo json_encode($res);
+    $updateUser = $utilisateurStorage->updateUser($data);
+    $updateUser === -1 ? header('HTTP/1.1 501 Internal Server Error') : header('HTTP/1.1 201 Created');
 }
+echo json_encode($updateUser);

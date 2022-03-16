@@ -1,15 +1,14 @@
 import UserProvider, { UserContext } from "./UserContext";
-import { Link, Navigate, Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, Outlet, useNavigate, useParams, useResolvedPath } from 'react-router-dom';
 import { useContext, useEffect, useState } from "react";
 import { URLS } from "../dataBase/apiURLS";
 import Annonce from './Annonce';
 import "./css/Profil.css";
 import profil from "./images/profil.jpg";
-import { log } from "util";
 import CategorieTag from "./CategorieTag";
+import { delete_utilisateur, get_annonces, get_categories, get_utilisateur, update_utilisateur } from "../dataBase/apiCalls";
 
 export default function Profil() {
-    let action = URLS.delete_utilisateur;
     let navigate = useNavigate();
     const { user, setUser } = useContext(UserContext);
     const params = useParams();
@@ -17,50 +16,80 @@ export default function Profil() {
     const [annonces, setAnnonces] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        let isMounted = true;
-        fetch(URLS.annonces, { cache: 'reload' })
-            .then(res => res.json())
-            .then(res => {
-                for (let i in res) {
-                    if (isMounted) setAnnonces(a => [...a, res[i]])
-                }
-                if (isMounted) setIsLoaded(true);
-            })
-        fetch(URLS.categories, { cache: "force-cache" })
-            .then(res => res.json())
-            .then(res => {
-                let cats = [];
-                for (let cat in res) {
-                    cats.push(res[cat])
-                }
-                if (isMounted) setCategories(cats);
-            })
+    const [updateUtilisateur, setUpdateUtilisateur] = useState({
+        pseudo: user.pseudo,
+        email: user.email,
+        nom: user.nom,
+        prenom: user.prenom,
+        id: user.id
+    });
+
+    useEffect(async () => {
+        let mesAnnonces;
+        try {
+            mesAnnonces = await get_annonces(user.id);
+            setAnnonces(mesAnnonces);
+        } catch (err) {
+            throw err;
+        }
+
+        let cats;
+        try {
+            cats = await get_categories();
+            setCategories(cats);
+        } catch (err) {
+            throw err;
+        }
+
     }, []);
 
+    const deleteCompte = async () => {
 
-    const deleteCompte = () => {
-        fetch(action, {
-            method: "POST",
-            body: JSON.stringify(user),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw Error('Erreur de suppression');
-                }
-                else return res.json();
-            })
-            .then(json => {
+        let deleted;
+
+        try {
+            deleted = await delete_utilisateur(user.id);
+            if (deleted) {
+                navigate(`/`);
                 setUser(null);
                 localStorage.removeItem('user');
-                navigate(`/`);
-            })
-            .catch(e => console.log(e));
+            }
+        } catch (err) {
+            throw err;
+        }
     }
+
+
+    const handleChange = (event) => {
+        setUpdateUtilisateur({ ...updateUtilisateur, [event.target.name]: event.target.value });
+    }
+
+    const updateUser = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+
+
+        let newUser;
+        let updatedUser;
+        try {
+            updatedUser = await update_utilisateur(updateUtilisateur);
+            if (updatedUser) {
+                try {
+                    newUser = await get_utilisateur(user.id);
+                    setUser(newUser);
+                } catch (err) {
+                    throw err;
+                }
+            }
+            setLoading(false);
+        } catch (err) {
+            throw err;
+        }
+
+    }
+
 
     return (
         <>
@@ -81,110 +110,109 @@ export default function Profil() {
 
                         {
                             option === 'annonces' &&
-                            <div className="corps">
-                                {
-                                    annonces &&
-                                    annonces.map(elementTab =>
-                                        <Annonce annonce={elementTab} key={elementTab.id} />
-                                    )
-                                }
-
-                            </div>
+                            (
+                                <div className="corps">
+                                    {
+                                        (annonces.length === 0) ?
+                                            <div>
+                                                <div>Vous n'avez publié aucune annonce pour l'instant ! <br />Cliquez sur le lien ci-dessous pour publier une annonce : </div>
+                                                <div><Link to={"/annonces/nouveau"}>Publier une annonce</Link></div>
+                                            </div>
+                                            :
+                                            <div className="corps">
+                                                {
+                                                    annonces.map(elementTab =>
+                                                        <Annonce annonce={elementTab} key={elementTab.id} />
+                                                    )
+                                                }
+                                            </div>
+                                    }
+                                </div>
+                            )
                         }
                         {
                             option === 'listeFav' &&
                             (
-                                user.categoriesFav ?
-                                    <div>
-                                        Voici la liste de vos favories :
-                                        {
+                                <div className="corps">
+                                    {
 
-                                            user.categoriesFav.map(cat =>
-                                                <div key={cat.id + 32 * 15}>
-                                                    <CategorieTag categorie={cat} key={cat.id} />
-                                                    <select
-                                                        name="categorie"
-                                                        id="categorie"
-                                                    // onChange={handleChange}
-                                                    // defaultValue={annonce.categorie}
-                                                    >
-                                                        {
-                                                            categories &&
-                                                            categories.map(cat =>
-                                                                <option value={cat.id} key={cat.id}>{cat.categorie}</option>
-                                                            )
-                                                        }
-                                                    </select>
-                                                    <div className="bouton">
-                                                        <button>
-                                                            S'abonner
-                                                        </button>
-                                                        <button>
-                                                            Se désabonner
-                                                        </button>
-                                                    </div>
+                                        (user.categoriesFav.length === 0) ?
+
+                                            <div>
+                                                <div>
+                                                    Désolé, vous n'avez pas de favorie pour le moment.
+                                                    Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
+                                                    Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
                                                 </div>
-                                            )
-                                        }
-                                    </div>
-                                    :
-                                    <div>
-                                        <div className="corps">
-                                            Désolé, vous n'avez pas de favorie pour le moment.
-                                            Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
-                                            Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
-                                        </div>
-                                        <div className="catFav">
-                                            {
-                                                categories &&
-                                                categories.map((item, index) =>
-                                                    <CategorieTag categorie={item} key={index} />
-                                                )
-                                            }
-                                        </div>
-                                    </div>
+                                                {
+                                                    categories &&
+                                                    categories.map(cat =>
+                                                        <CategorieTag categorie={cat} />
+                                                    )
+                                                }
+                                            </div>
+                                            :
+                                            <div>
+                                                Voici la liste de vos favories :
+                                                {
+                                                    categories.map(cat =>
+                                                        <CategorieTag categorie={cat} key={cat.id} />
+                                                    )
+                                                }
+                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et cliquez sur le "-" pour supprimer un catégories)</div>
+                                            </div>
+                                    }
+                                    {/* {
+                                        categories &&
+                                        categories.map(cat =>
+                                            <CategorieTag categorie={cat} />
+                                        )
+                                    } */}
+                                </div>
                             )
                         }
+
                         {
+                            //Ne fonctionne toujours pas :/
                             option === 'modifCompte' &&
                             <div className="corps">
                                 <h3>S'inscrire :</h3>
-                                <form encType="multipart/form-data" method="POST">
+                                <form encType="multipart/form-data" method="POST" onSubmit={(e) => updateUser(e)}>
                                     <label>Pseudo :
-                                        <input type='text' name='pseudo' defaultValue={user.pseudo} />
+                                        <input type='text' name='pseudo' defaultValue={updateUtilisateur.pseudo} onChange={handleChange} />
                                     </label>
 
                                     <label>Email :
-                                        <input type="text" name="email" defaultValue={user.email} />
+                                        <input type="text" name="email" defaultValue={updateUtilisateur.email} onChange={handleChange} />
                                     </label>
 
                                     <label>Nom :
-                                        <input type='text' name='nom' defaultValue={user.nom} />
+                                        <input type='text' name='nom' defaultValue={updateUtilisateur.nom} onChange={handleChange} />
                                     </label>
 
                                     <label>Prenom :
-                                        <input type='text' name='prenom' defaultValue={user.prenom} />
+                                        <input type='text' name='prenom' defaultValue={updateUtilisateur.prenom} onChange={handleChange} />
                                     </label>
 
                                     <label>
                                         <input
                                             type="submit"
                                             value="Modifier mon compte"
+                                        //disabled={!updateUtilisateur.pseudo || !updateUtilisateur.email || loading}
                                         />
                                     </label>
                                 </form>
                                 <div>Changer mon mot de passe </div>
 
                                 <div>Cliquez sur ce bouton pour supprimer votre compte. La suppression du compte sera définitive. </div>
-                                <button onClick={deleteCompte}>
+                                <button onClick={() => deleteCompte()}>
                                     Supprimer mon compte
                                 </button>
                             </div>
                         }
-                    </div>
-                </div>
+                    </div >
+                </div >
             }
         </>
     );
 }
-

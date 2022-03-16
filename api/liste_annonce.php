@@ -9,7 +9,7 @@ $db = new Database();
 $db = $db->connect();
 
 $postStorage = new Annonce($db);
-$idUser = isset($_GET['id']) ? $_GET['id'] : '';
+$idUser = isset($_GET['idUser']) ? $_GET['idUser'] : '';
 $res = $postStorage->readAll($idUser);
 
 echo json_encode($res);

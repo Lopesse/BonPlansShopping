@@ -136,26 +136,48 @@ class Utilisateur
         $queryData = array(":id" => $data['id']);
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
-        return $resultat;
+
+        return $resultat ? true : false;
+    }
+
+    public function updateUser($data)
+    {
+        $req = "UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id";
+        $requete = $this->bd->prepare($req);
+        $requete->execute(
+            array(
+                ":nom" => $data->nom,
+                ":prenom" => $data->prenom,
+                ":pseudo" => $data->pseudo,
+                ":email" => $data->email,
+                "id" => $data->id
+            )
+        );
+
+        return !$requete->fetch();
     }
 
     public function suivreCategorie($data)
     {
-        $req = "INSERT INTO categories_favories VALUES (utilisateur: :uid, categorie: :cid)";
+        $data->suivre ?
+            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);" :
+            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;";
         $stmt = $this->bd->prepare($req);
+
         $queryData = array(
-            ":uid" => $data['uid'],
-            ":cid" => $data['cid']
+            ":uid" => $data->user_id,
+            ":cid" => $data->categorie_id
         );
+
         $stmt->execute($queryData);
         $resultat = $stmt->fetch();
 
-        return $resultat;
+        return !$resultat;
     }
 
     public function getCategoriesFavories($id)
     {
-        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c, utilisateur u WHERE u.id = :uid AND c.id = cf.categorie;";
+        $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c WHERE cf.utilisateur = :uid AND c.id = cf.categorie;";
         $stmt = $this->bd->prepare($req);
         $queryData = array(":uid" => $id);
         $stmt->execute($queryData);

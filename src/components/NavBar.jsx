@@ -3,26 +3,21 @@ import { Link } from "react-router-dom"
 // import { categories } from "./Categories"
 import "./css/NavBar.css"
 import { UserContext } from "./UserContext"
-import { URLS } from "../dataBase/apiURLS"
+import { get_categories } from "../dataBase/apiCalls"
 
 export default function NavBar() {
 
     const [categories, setCategories] = useState([]);
     const { user, setUser } = useContext(UserContext);
 
-    useEffect(() => {
-        let isMounted = true;
-        //Recupération des données du fichier read_categorie.php
-        fetch(URLS.categories, { cache: "force-cache" })
-            //lecture de ce que le fetch a trouvé
-            .then(res => res.json())
-            .then(res => {
-                let cats = [];
-                for (let cat in res) {
-                    cats.push(res[cat])
-                }
-                if (isMounted) setCategories(cats);
-            })
+    useEffect(async () => {
+        let cats;
+        try {
+            cats = await get_categories();
+            setCategories(cats)
+        } catch (err) {
+            throw err;
+        }
     }, [])
 
     return (
@@ -34,7 +29,7 @@ export default function NavBar() {
                         {
                             categories &&
                             categories.map((item, index) =>
-                                <li key={item.id}><Link to={`categorie=${item.categorie}`}>{item.categorie}</Link></li>
+                                <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
                             )
                         }
                     </ul>
