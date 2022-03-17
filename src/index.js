@@ -11,6 +11,7 @@ import UserProvider from './components/UserContext';
 import Profil from './components/Profil';
 import Publier from './components/Publier';
 import Footer from './components/Footer';
+import APropos from './components/APropos';
 // import Categorie from './components/Categorie';
 
 
@@ -32,6 +33,7 @@ ReactDOM.render(
         <Route path="inscription" element={<Inscription />} />
         <Route path="connexion" element={<Connexion />} />
         <Route path="categorie=:categorie" element={<App />} />
+        <Route path="aPropos" element={<APropos />} />
       </Routes>
       <Footer />
     </UserProvider>

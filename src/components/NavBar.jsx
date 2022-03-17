@@ -21,38 +21,37 @@ export default function NavBar() {
     }, [])
 
     return (
-        <nav className="navbar">
+        <> <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+        </style> 
+        <h1 className="logo">Bons plans shopping</h1>
+            <nav className="navbar">
             <ul>
-                <li><Link to={"/"}>Accueil</Link></li>
-                <li><Link to={"#"} >Catégories</Link>
+                <li className="catMenu"><Link to={"/"}>Accueil</Link></li>
+                <li className="catMenu"><Link to={"#"}>Catégories</Link>
                     <ul className="deroulant">
-                        {
-                            categories &&
-                            categories.map((item, index) =>
-                                <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
-                            )
-                        }
+                        {categories &&
+                            categories.map((item, index) => <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
+                            )}
                     </ul>
                 </li>
-                <li><Link to={"/annonces/nouveau"}>Publier une annonce</Link></li>
-                <li><Link to={"#"}>Mon compte</Link>
-                    {
-                        user ?
-                            <ul className="deroulant">
-                                <li><Link to={"/compte/profil"}>Profil</Link></li>
-                                <li><Link to={"/compte/favories"}>Favoris</Link></li>
-                                <li onClick={() => { setUser(null); localStorage.removeItem('user'); }}><Link to={"/"}>Se deconnecter</Link></li>
-                            </ul>
-                            :
-                            <ul className="deroulant">
-                                <li><Link to={"/inscription"}>S'inscrire</Link></li>
-                                <li><Link to={"/connexion"}>Se connecter</Link></li>
-                            </ul>
-                    }
+                <li className="catMenu"><Link to={"/annonces/nouveau"}>Publier un bon plan</Link></li>
+                <li className="catMenu"><Link to={"#"}>Mon compte</Link>
+                    {user ?
+                        <ul className="deroulant">
+                            <li><Link to={"/compte/profil"}>Profil</Link></li>
+                            <li><Link to={"/compte/favories"}>Favoris</Link></li>
+                            <li onClick={() => { setUser(null); localStorage.removeItem('user') } }><Link to={"/"}>Se deconnecter</Link></li>
+                        </ul>
+                        :
+                        <ul className="deroulant">
+                            <li><Link to={"/inscription"}>S'inscrire</Link></li>
+                            <li><Link to={"/connexion"}>Se connecter</Link></li>
+                        </ul>}
 
                 </li>
             </ul>
-        </nav>
+        </nav></>
     )
 }
 

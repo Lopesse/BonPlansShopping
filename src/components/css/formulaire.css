@@ -1,13 +1,17 @@
-.formulaire {
-  margin-left: 15%;
-  margin-right: 15%;
-  padding: 10px;
-  max-width: 450px;
+.formulaire { 
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  justify-items: center;
-  margin-bottom: 50px;
+  display: inline-block;
+  padding: 50px;
+  
 }
-
+.blocFormulaire{
+  padding: 30px;
+  text-align: center;
+}
+h3{
+  text-align: center;
+  color: #324949;
+}
 form {
   margin-left: 10%;
 }
@@ -15,6 +19,8 @@ form {
 label {
   display: grid;
   margin-top: 10px;
+  text-align: left;
+  color :#324949;
 }
 
 .publication input[type="text"],
@@ -26,6 +32,7 @@ label {
   padding: 5px 8px 5px 8px;
   box-shadow: inset 1px 1px 4px #98c7a4;
   font-style: italic;
+
 }
 
 .publication input[type="submit"],

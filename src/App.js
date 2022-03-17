@@ -67,7 +67,7 @@ export default function App() {
               cat ?
                 (categorieAnnonce.length === 0) ?
                   <div>
-                    Nous n'avons aucune dans la catégorie selectionné !
+                    Aucune annonce trouvée dans la catégorie sélectionnée !
                   </div>
                   :
                   categorieAnnonce

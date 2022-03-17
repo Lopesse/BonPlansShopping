@@ -8,7 +8,7 @@ class Footer extends Component {
         return (
             <footer>
                     <div>Question ?</div>
-                    <div>À propos</div>
+                    <div className="footerMenu"><Link to={"/aPropos"}>A propos</Link></div>
                     <div>Mentions Légales</div>
             </footer>
         )

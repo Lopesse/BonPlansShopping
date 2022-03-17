@@ -1,0 +1,9 @@
+.aPropos h3{
+    text-align: center;
+    margin: 20px;
+    font-size: xx-large;
+}
+
+.aPropos li{
+    display:inline-table;
+}

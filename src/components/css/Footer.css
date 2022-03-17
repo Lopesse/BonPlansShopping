@@ -1,11 +1,17 @@
 footer {
-  background-color: #324949;
+  background-color: #e24329;
   color: white;
   bottom: 0;
   position: fixed;
   width: 100%;
   display: flex;
   padding: 10px;
+}
+footer a{
+  color : white;
+}
+footer a:hover{
+  font-size: larger;
 }
 
 footer > div {

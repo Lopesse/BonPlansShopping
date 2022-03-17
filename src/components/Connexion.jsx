@@ -59,7 +59,7 @@ export default function Connexion() {
     }
 
     return (
-        <div>
+        <div className="blocFormulaire">
             <div className="formulaire">
                 <h3>Se connecter :</h3>
                 {

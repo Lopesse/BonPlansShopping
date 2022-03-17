@@ -58,7 +58,7 @@ export default function Inscription() {
 
 
     return (
-        <div>
+        <div className="blocFormulaire">
             <div className="formulaire">
                 <h3>S'inscrire :</h3>
                 {message && <div className="erreur">{message}</div>}

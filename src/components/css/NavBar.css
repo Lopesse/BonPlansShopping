@@ -21,10 +21,20 @@
   padding: 10px;
 }
 
-.deroulant li:hover {
-  background-color: #324949;
+.deroulant li:hover{
+  background-color: #e24329;
+}
+.deroulant li:hover a{  
+  color: white;
 }
 
+.logo {
+  text-align: center;
+  font-family: 'Kaushan Script', cursive;
+  color: orange;
+  font-size:xx-large;
+  margin: 20px;
+}
 .navbar > ul li .deroulant {
   display: none;
   position: absolute;
@@ -41,6 +51,6 @@ a {
   text-decoration: none;
 }
 
-li a:hover {
+.catMenu a:hover{
   color: orange;
 }
