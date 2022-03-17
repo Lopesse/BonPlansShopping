@@ -25,21 +25,7 @@ export default function CategorieTag(props) {
         } catch (err) {
             throw Error('Erreur');
         }
-        // fetch(URLS.suivre_categorie, {
-        //     method: "POST",
-        //     body: JSON.stringify(data),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(res => res.json())
-        //     .then(json => {
-        //         fetch(`${URLS.get_utilisateur}?id=${user.id}`)
-        //             .then(res => res.json())
-        //             .then(json => json !== -1 && setUser(json))
-        //             .catch(e => console.log(e))
-        //     })
-        //     .catch(err => console.log(err));
+
     }
 
     return (

@@ -4,7 +4,9 @@ import { URLS } from '../dataBase/apiURLS';
 import './css/annonces.css';
 import UserProvider, { UserContext } from './UserContext';
 import CategorieTag from './CategorieTag';
-import { delete_annonce, get_annonce } from '../dataBase/apiCalls';
+import { delete_annonce, enregistrer_annonce, get_annonce, get_utilisateur } from '../dataBase/apiCalls';
+import blackheart from './images/black-heart.png';
+import redheart from './images/red-heart.png';
 
 
 
@@ -12,7 +14,7 @@ export default function AnnonceDetails() {
     const [annonce, setAnnonce] = useState();
     const [tempsRestant, setTempsRestant] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
 
     let navigate = useNavigate();
@@ -42,10 +44,38 @@ export default function AnnonceDetails() {
             if (deleted) {
                 setAnnonce(null);
                 navigate('/');
+                setIsLoaded(true);
             }
         }
         catch (err) {
             console.log(err);
+        }
+    }
+
+    const enregistrerAnnonce = async (enregistrer) => {
+        console.log(enregistrer)
+        let enregistre;
+        const data = {
+            user_id: user.id,
+            annonce_id: annonce.id,
+            enregistrer: enregistrer
+        }
+
+        try {
+            enregistre = await enregistrer_annonce(data)
+            if (enregistre) {
+                let updatedUser;
+                try {
+                    updatedUser = await get_utilisateur(user.id);
+                    if (updatedUser) setUser(updatedUser);
+                }
+                catch (err) {
+                    throw err;
+                }
+            }
+        }
+        catch (err) {
+            throw err;
         }
     }
 
@@ -58,8 +88,11 @@ export default function AnnonceDetails() {
                         :
                         annonce ?
                             <div>
-                                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}</h1>
-                                <img src={user && user.annoncesEnregistres && user.annoncesEnregistres.find(a => a.id === annonce.id) ? '../images/red-heart.png' : './images/black-heart.png'} />
+                                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}, {annonce.id}</h1>
+                                <img
+                                    src={user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id) ? blackheart : redheart}
+                                    onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
+                                />
                                 <div className='annonce'>
                                     {
                                         annonce.image &&

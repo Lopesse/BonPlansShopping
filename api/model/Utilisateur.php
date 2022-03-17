@@ -178,6 +178,24 @@ class Utilisateur
         return !$resultat;
     }
 
+    public function enregistrerAnnonce($data)
+    {
+        $data->enregistrer ?
+            $req = "INSERT INTO annonce_enregistre (utilisateur, annonce) VALUES (:uid, :aid);" :
+            $req = "DELETE FROM annonce_enregistre WHERE utilisateur=:uid AND annonce=:aid;";
+        $stmt = $this->bd->prepare($req);
+
+        $queryData = array(
+            ":uid" => $data->user_id,
+            ":aid" => $data->annonce_id
+        );
+
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetch();
+
+        return !$resultat;
+    }
+
     public function getCategoriesFavories($id)
     {
         $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c WHERE cf.utilisateur = :uid AND c.id = cf.categorie;";
