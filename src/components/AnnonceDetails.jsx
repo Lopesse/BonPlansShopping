@@ -88,7 +88,7 @@ export default function AnnonceDetails() {
                         :
                         annonce ?
                             <div>
-                                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}, {annonce.id}</h1>
+                                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}</h1>
                                 <img
                                     src={user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id) ? blackheart : redheart}
                                     onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
