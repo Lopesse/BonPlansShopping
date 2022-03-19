@@ -1,5 +1,5 @@
 footer {
-  background-color: #e24329;
+  background-color: #036e99;
   color: white;
   bottom: 0;
   position: fixed;
@@ -7,13 +7,13 @@ footer {
   display: flex;
   padding: 10px;
 }
-footer a{
-  color : white;
+footer a {
+  color: white;
 }
-footer a:hover{
-  font-size: larger;
+footer a:hover {
+  color: orange;
 }
 
-footer > div {
+footer > a {
   margin: auto;
 }

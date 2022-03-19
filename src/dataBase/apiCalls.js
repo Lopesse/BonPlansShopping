@@ -38,12 +38,15 @@ export function delete_annonce(idAnnonce) {
 
 
 export function create_annonce(data) {
+    const fd = new FormData();
+    for (let d in data) {
+        fd.append(d, data[d]);
+    }
+    console.log(fd);
+
     return fetch(URLS.creer_annonce, {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json"
-        }
+        body: fd,
     })
         .then(res => {
             if (!res.ok) {
@@ -181,6 +184,47 @@ export function connexion(identifiants) {
 
 export function suivre_categorie(data) {
     return fetch(URLS.suivre_categorie, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+
+export function enregistrer_annonce(data) {
+    return fetch(URLS.enregistrer_annonce, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+export function get_annonces_enregistres(data) {
+    return fetch(URLS.get_annonces_enregistres, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

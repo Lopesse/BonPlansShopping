@@ -48,7 +48,7 @@ export default function Publier() {
         try {
             cats = await get_categories();
             setCategories(cats)
-            if (!params.id) setAnnonce(a => ({ ...a, categorie: cats[0] }))
+            if (!params.id) setAnnonce(a => ({ ...a, categorie: cats[0].id }))
         } catch (err) {
             throw err;
         }
@@ -59,14 +59,14 @@ export default function Publier() {
             setSousCategories(sous_cats);
 
             if (!params.id) {
-                const souscat = sous_cats.find(cat => cat.categorieParent === annonce.categorie.id);
+                const souscat = sous_cats.find(cat => cat.categorieParent === cats[0].id);
                 if (souscat) {
                     console.log(souscat)
-                    setAnnonce(a => ({ ...a, sous_categorie: souscat }))
+                    setAnnonce(a => ({ ...a, sous_categorie: souscat.id }))
                 }
                 else {
                     console.log('no')
-                    setAnnonce(a => ({ ...a, sous_categorie: sous_cats[0] }))
+                    setAnnonce(a => ({ ...a, sous_categorie: sous_cats[0].id }))
                 }
             }
 
@@ -96,8 +96,12 @@ export default function Publier() {
 
     const createOrUpdate = async (event) => {
         event.preventDefault();
-        let date = new Date();
-        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	
+        var today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' +today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        date = date+' '+ time;
+
         const data = {
             titre: annonce.titre,
             dateCreation: date,
@@ -112,9 +116,17 @@ export default function Publier() {
             id: params.id
         };
 
+
+        console.log('annonce', annonce)
+
+
         let newAnnonceId;
         try {
             newAnnonceId = params.id ? await update_annonce(data) : await create_annonce(data);
+            if (!newAnnonceId) {
+                setMessage('Annonce non crée!');
+                return;
+            }
             navigate(`/annonces/${newAnnonceId}`)
         }
         catch (err) {
@@ -122,15 +134,10 @@ export default function Publier() {
         }
     }
 
-
-
-
-
     function onImageChange(event) {
-        setAnnonce(a => ({ ...a, image: event.target.files[0].name }));
-        setImages([...event.target.files]);
+        setAnnonce(a => ({ ...a, image: event.target.files[0] }));
+        setImages(i => [...i, event.target.files]);
     }
-
 
     return (
         <div className="app">
@@ -197,18 +204,28 @@ export default function Publier() {
                             <label>Date d'expiration :
                                 <input type='date' name='date_expiration' onChange={handleChange} value={annonce.date_expiration} />
                             </label>
-
-                            <label>Choisissez le fichier image (JPEG ou PNG) :
-                                {/* <input type="file" name="image" multiple accept="image/*" onChange={handleChange} /> */}
-                                <input type="file" name="image" multiple accept="image/*" onChange={onImageChange} />
-                                {/* A enlever */}
-                                {imagesURLs.map(imageSrc => <img key={imageSrc} src={imageSrc} />)}
-                                <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
-                            </label>
+                            {
+                                !params.id &&
+                                <label>Choisissez le fichier image (JPEG ou PNG) :
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        multiple accept="image/*"
+                                        onChange={onImageChange}
+                                    />
+                                    {imagesURLs.map(imageSrc => <img key={imageSrc} />)}
+                                    <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
+                                </label>
+                            }
 
                             <label>
-                                <input id="submit" type="submit" value={params.id ? "Enregistrer" : "Créer"} disabled={loading} />
                             </label>
+                            <input
+                                id="submit"
+                                type="submit"
+                                value={params.id ? "Enregistrer" : "Créer"}
+                                disabled={loading || !annonce.titre || !annonce.categorie || !annonce.sous_categorie || !annonce.date_expiration}
+                            />
 
                         </form>
                     </div >

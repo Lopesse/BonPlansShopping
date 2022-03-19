@@ -18,19 +18,29 @@ export default function Profil() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
+
     const [updateUtilisateur, setUpdateUtilisateur] = useState({
-        pseudo: user.pseudo,
-        email: user.email,
-        nom: user.nom,
-        prenom: user.prenom,
-        id: user.id
+        pseudo: "",
+        email: "",
+        nom:"",
+        prenom: "",
+        id: "",
     });
 
     useEffect(async () => {
         let mesAnnonces;
         try {
-            mesAnnonces = await get_annonces(user.id);
-            setAnnonces(mesAnnonces);
+            if(user){
+                mesAnnonces = await get_annonces(user.id);
+                setAnnonces(mesAnnonces);
+                setUpdateUtilisateur({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    nom: user.nom,
+                    prenom: user.prenom,
+                    id: user.id
+                })
+            }
         } catch (err) {
             throw err;
         }
@@ -63,7 +73,10 @@ export default function Profil() {
 
 
     const handleChange = (event) => {
-        setUpdateUtilisateur({ ...updateUtilisateur, [event.target.name]: event.target.value });
+        setUpdateUtilisateur({ 
+            ...updateUtilisateur, 
+            [event.target.name]: event.target.value 
+        });
     }
 
     const updateUser = async (event) => {
@@ -90,7 +103,6 @@ export default function Profil() {
 
     }
 
-
     return (
         <>
             {
@@ -103,9 +115,9 @@ export default function Profil() {
                     </div>
                     <div className="options">
                         <ul>
-                            <li className="option" onClick={() => setOption('annonces')} style={{ backgroundColor: option === 'annonces' ? 'green' : 'orange' }}>Mes annonces</li>
-                            <li className="option" onClick={() => setOption('listeFav')} style={{ backgroundColor: option === 'listeFav' ? 'green' : 'orange' }}>Ma liste de favorie</li>
-                            <li className="option" onClick={() => setOption('modifCompte')} style={{ backgroundColor: option === 'modifCompte' ? 'green' : 'orange' }}>Modifier mon compte</li>
+                            <li className="option" onClick={() => setOption('annonces')} style={{ backgroundColor: option === 'annonces' ? '#036e99' : '#a5a5a5' }}>Mes annonces</li>
+                            <li className="option" onClick={() => setOption('listeFav')} style={{ backgroundColor: option === 'listeFav' ? '#036e99' : '#a5a5a5' }}>Ma liste de favoris</li>
+                            <li className="option" onClick={() => setOption('modifCompte')} style={{ backgroundColor: option === 'modifCompte' ? '#036e99' : '#a5a5a5' }}>Modifier mon compte</li>
                         </ul>
 
                         {
@@ -159,7 +171,7 @@ export default function Profil() {
                                                         <CategorieTag categorie={cat} key={cat.id} />
                                                     )
                                                 }
-                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et cliquez sur le "-" pour supprimer un catégories)</div>
+                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégorie)</div>
                                             </div>
                                     }
                                     {/* {

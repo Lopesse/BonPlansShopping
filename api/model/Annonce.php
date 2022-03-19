@@ -66,6 +66,7 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id;";
+
         if ($idUser !== '') {
             $req .= ' WHERE a.utilisateur = :idUser;';
             $stmt = $this->bd->prepare($req);
@@ -97,9 +98,8 @@ class Annonce
     }
 
 
-    public function create($data)
+    public function create($data, $img)
     {
-
         $req = "INSERT INTO annonce 
                 (titre,
                 dateCreation,
@@ -123,19 +123,24 @@ class Annonce
                 :description);";
 
         $stmt = $this->bd->prepare($req);
-
+        $nomImg = uniqid() . $img;
+        $imgUp = null;
+        if (move_uploaded_file($_FILES['image']['tmp_name'], "./upload/" . $nomImg)) {
+            $imgUp = $nomImg;
+        }
         $post_data = array(
-            ":titre" => $data->titre,
-            ":dateCreation" => $data->dateCreation,
-            ":dateExpiration" => $data->dateExpiration,
-            ":categorie" => $data->categorie,
-            ":sousCategorie" => $data->sousCategorie,
-            ":nomMagasin" => $data->nomMagasin,
-            ":adresseMagasin" => $data->adresseMagasin,
-            ":utilisateur" => $data->utilisateur,
-            ":image" => $data->image,
-            ":description" => $data->description,
+            ":titre" => $data['titre'],
+            ":dateCreation" => $data['dateCreation'],
+            ":dateExpiration" => $data['dateExpiration'],
+            ":categorie" => $data['categorie'],
+            ":sousCategorie" => $data['sousCategorie'],
+            ":nomMagasin" => $data['nomMagasin'],
+            ":adresseMagasin" => $data['adresseMagasin'],
+            ":utilisateur" => $data['utilisateur'],
+            ":image" => $imgUp,
+            ":description" => $data['description'],
         );
+
 
         $stmt->execute($post_data);
         $this->id = $this->bd->lastInsertId();
@@ -181,26 +186,47 @@ class Annonce
         return $data->id;
     }
 
-    public function getAnnonceUser($data)
+    public function get_annonces_enregistres(array $ids)
     {
-        $req = "SELECT * FROM annonce WHERE 
-                WHERE id = :id;";
+        $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
+                    nomMagasin, adresseMagasin,
+                    sc.nom AS sousCategorie, sc.id AS sousCategorie_id,
+                    u.pseudo AS utilisateur, image,
+                    c.nom AS categorie, c.id AS categorie_id
+                FROM annonce a
+                JOIN categorie c ON a.categorie = c.id
+                JOIN souscategories sc ON a.sousCategorie = sc.id
+                JOIN utilisateur u ON a.utilisateur = u.id
+                ";
 
+        $dataArray = array();
+        foreach ($ids as $key => $id) {
+            $aid = ':aid' . $key;
+            $dataArray[$aid] = $id;
+            $req .= $key === 0 ? 'WHERE a.id = ' . $aid : ' OR a.id = ' . $aid;
+        }
         $stmt = $this->bd->prepare($req);
+        $stmt->execute($dataArray);
+        $queryArray = $stmt->fetchAll();
 
-        $post_data = array(
-            ":titre" => $data->titre,
-            ":dateExpiration" => $data->dateExpiration,
-            ":categorie" => $data->categorie,
-            ":sousCategorie" => $data->sousCategorie,
-            ":nomMagasin" => $data->nomMagasin,
-            ":adresseMagasin" => $data->adresseMagasin,
-            ":image" => $data->image,
-            ":description" => $data->description,
-            ":id" => $data->id
-        );
+        $postArray = array();
 
-        $stmt->execute($post_data);
-        return $data->id;
+        foreach ($queryArray as $key => $value) {
+            $post = array(
+                'id' => $value['id'],
+                'titre' => $value['titre'],
+                'description' => $value['description'],
+                'categorie' => array('nom' => $value['categorie'], 'id' => $value['categorie_id']),
+                'sous_categorie' => array('nom' => $value['sousCategorie'], 'id' => $value['sousCategorie_id']),
+                'date_expiration' => $value['dateExpiration'],
+                'date_creation' => $value['dateCreation'],
+                'nom_magasin' => $value['nomMagasin'],
+                'adresse_magasin' => $value['adresseMagasin'],
+                'utilisateur' => $value['utilisateur'],
+                'image' => $value['image'],
+            );
+            $postArray[$key] = $post;
+        }
+        return $postArray;
     }
 }

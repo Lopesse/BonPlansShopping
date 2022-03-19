@@ -33,6 +33,7 @@ class Utilisateur
                 'email' => $utilisateurArray['email'],
                 'photo' => $utilisateurArray['photo'],
                 'categoriesFav' => $this->getCategoriesFavories($utilisateurArray['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($utilisateurArray['id']),
                 'mdp' => $utilisateurArray['mdp'],
             );
         }
@@ -56,7 +57,8 @@ class Utilisateur
                 'photo' => $value['photo'],
                 'nom' => $value['nom'],
                 'prenom' => $value['prenom'],
-                'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
             );
             $utilisateurArray[$value[$key]] = $utilisateur;
         }
@@ -121,7 +123,8 @@ class Utilisateur
                     'photo' => $value['photo'],
                     'nom' => $value['nom'],
                     'prenom' => $value['prenom'],
-                    'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                    'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                    'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
                 );
                 return $utilisateur;
             }
@@ -142,31 +145,37 @@ class Utilisateur
 
     public function updateUser($data)
     {
-        $req = "UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id";
-        $requete = $this->bd->prepare($req);
-        $requete->execute(
-            array(
-                ":nom" => $data->nom,
-                ":prenom" => $data->prenom,
-                ":pseudo" => $data->pseudo,
-                ":email" => $data->email,
-                "id" => $data->id
-            )
-        );
-
-        return !$requete->fetch();
+        $requete = $this->bd->prepare("UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id");
+        return $requete->execute(array(":nom" => $data->nom, ":prenom" => $data->prenom, ":pseudo" => $data->pseudo, ":email" => $data->email, ":id" => $data->id));
     }
 
     public function suivreCategorie($data)
     {
-        $data->suivre ?
-            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);" :
-            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;";
+        $data->suivie ?
+            $req = "DELETE FROM categories_favories WHERE utilisateur=:uid AND categorie=:cid;" :
+            $req = "INSERT INTO categories_favories (utilisateur, categorie) VALUES (:uid, :cid);";
         $stmt = $this->bd->prepare($req);
 
         $queryData = array(
             ":uid" => $data->user_id,
             ":cid" => $data->categorie_id
+        );
+
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetch();
+        return !$resultat;
+    }
+
+    public function enregistrerAnnonce($data)
+    {
+        $data->enregistrer ?
+            $req = "INSERT INTO annonce_enregistre (utilisateur, annonce) VALUES (:uid, :aid);" :
+            $req = "DELETE FROM annonce_enregistre WHERE utilisateur=:uid AND annonce=:aid;";
+        $stmt = $this->bd->prepare($req);
+
+        $queryData = array(
+            ":uid" => $data->user_id,
+            ":aid" => $data->annonce_id
         );
 
         $stmt->execute($queryData);
@@ -191,5 +200,26 @@ class Utilisateur
             $categorieArray[$key] = $categorie;
         }
         return $categorieArray;
+    }
+
+    public function getAnnoncesEnregistres($id)
+    {
+        $req = "SELECT a.id
+                FROM annonce_enregistre ae
+                JOIN annonce a ON a.id = ae.annonce
+                WHERE ae.utilisateur = :uid;";
+
+        $stmt = $this->bd->prepare($req);
+        $queryData = array(":uid" => $id);
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetchAll();
+        $annonceArray = array();
+        foreach ($resultat as $key => $value) {
+            $categorie = array(
+                'id' => $value['id'],
+            );
+            $annonceArray[$key] = $categorie;
+        }
+        return $annonceArray;
     }
 }
