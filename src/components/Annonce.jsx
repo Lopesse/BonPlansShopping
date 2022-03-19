@@ -40,7 +40,8 @@ export default function Annonce(props) {
                     <div>Créé par : {annonce.utilisateur}</div>
                     <div>Categorie : {annonce.categorie.nom}</div>
                     <div>Description : {annonce.description}</div>
-                    <Link to={`/annonces/{annonce.id}`}>Savoir plus</Link>
+                    <img src=''></img>
+                    <Link to={`/annonces/${annonce.id}`}>Savoir plus</Link>
                 </div>
             </div>
         </>

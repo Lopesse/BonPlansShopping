@@ -28,6 +28,7 @@ export default function Profil() {
     });
 
     useEffect(async () => {
+        console.log(user);
         let mesAnnonces;
         try {
             mesAnnonces = await get_annonces(user.id);

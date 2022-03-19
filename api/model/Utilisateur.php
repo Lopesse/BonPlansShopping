@@ -33,6 +33,7 @@ class Utilisateur
                 'email' => $utilisateurArray['email'],
                 'photo' => $utilisateurArray['photo'],
                 'categoriesFav' => $this->getCategoriesFavories($utilisateurArray['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($utilisateurArray['id']),
                 'mdp' => $utilisateurArray['mdp'],
             );
         }
@@ -56,7 +57,8 @@ class Utilisateur
                 'photo' => $value['photo'],
                 'nom' => $value['nom'],
                 'prenom' => $value['prenom'],
-                'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
             );
             $utilisateurArray[$value[$key]] = $utilisateur;
         }
@@ -121,7 +123,8 @@ class Utilisateur
                     'photo' => $value['photo'],
                     'nom' => $value['nom'],
                     'prenom' => $value['prenom'],
-                    'categoriesFav' => $this->getCategoriesFavories($value['id'])
+                    'categoriesFav' => $this->getCategoriesFavories($value['id']),
+                    'annoncesEnregistres' => $this->getAnnoncesEnregistres($value['id'])
                 );
                 return $utilisateur;
             }
@@ -163,6 +166,24 @@ class Utilisateur
         return !$resultat;
     }
 
+    public function enregistrerAnnonce($data)
+    {
+        $data->enregistrer ?
+            $req = "INSERT INTO annonce_enregistre (utilisateur, annonce) VALUES (:uid, :aid);" :
+            $req = "DELETE FROM annonce_enregistre WHERE utilisateur=:uid AND annonce=:aid;";
+        $stmt = $this->bd->prepare($req);
+
+        $queryData = array(
+            ":uid" => $data->user_id,
+            ":aid" => $data->annonce_id
+        );
+
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetch();
+
+        return !$resultat;
+    }
+
     public function getCategoriesFavories($id)
     {
         $req = "SELECT c.id, c.nom FROM categories_favories cf, categorie c WHERE cf.utilisateur = :uid AND c.id = cf.categorie;";
@@ -179,5 +200,26 @@ class Utilisateur
             $categorieArray[$key] = $categorie;
         }
         return $categorieArray;
+    }
+
+    public function getAnnoncesEnregistres($id)
+    {
+        $req = "SELECT a.id
+                FROM annonce_enregistre ae
+                JOIN annonce a ON a.id = ae.annonce
+                WHERE ae.utilisateur = :uid;";
+
+        $stmt = $this->bd->prepare($req);
+        $queryData = array(":uid" => $id);
+        $stmt->execute($queryData);
+        $resultat = $stmt->fetchAll();
+        $annonceArray = array();
+        foreach ($resultat as $key => $value) {
+            $categorie = array(
+                'id' => $value['id'],
+            );
+            $annonceArray[$key] = $categorie;
+        }
+        return $annonceArray;
     }
 }

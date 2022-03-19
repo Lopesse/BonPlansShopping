@@ -201,3 +201,44 @@ export function suivre_categorie(data) {
             throw err
         });
 }
+
+
+export function enregistrer_annonce(data) {
+    return fetch(URLS.enregistrer_annonce, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}
+
+export function get_annonces_enregistres(data) {
+    return fetch(URLS.get_annonces_enregistres, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Erreur');
+            }
+            return res.json();
+        })
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}

@@ -18,4 +18,6 @@ export const URLS = {
     suivre_categorie: `${API_ADRESS}:${PORT}/suivre_categorie.php`,
     suivre_categorie: `${API_ADRESS}:${PORT}/suivre_categorie.php`,
     update_utilisateur: `${API_ADRESS}:${PORT}/update_utilisateur.php`,
+    enregistrer_annonce: `${API_ADRESS}:${PORT}/enregistrer_annonce.php`,
+    get_annonces_enregistres: `${API_ADRESS}:${PORT}/get_annonces_enregistres.php`,
 }

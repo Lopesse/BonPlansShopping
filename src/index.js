@@ -11,7 +11,7 @@ import UserProvider from './components/UserContext';
 import Profil from './components/Profil';
 import Publier from './components/Publier';
 import Footer from './components/Footer';
-// import Categorie from './components/Categorie';
+import AnnoncesEnregistres from './components/AnnoncesEnregistres';
 
 
 ReactDOM.render(
@@ -28,6 +28,7 @@ ReactDOM.render(
         <Route path="compte">
           <Route path="profil" element={<Profil />} />
           <Route path="favories" element={<App />} />
+          <Route path="annonces-enregistres" element={<AnnoncesEnregistres />} />
         </Route>
         <Route path="inscription" element={<Inscription />} />
         <Route path="connexion" element={<Connexion />} />
