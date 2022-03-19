@@ -27,12 +27,12 @@ li {
 }
 
 .option {
-  background-color: orange;
   border-radius: 10% 30% 50% 70%;
   margin-left: 50px;
   margin-right: 50px;
   padding: 5px;
   cursor: pointer;
+  color:white;
 }
 
 .corps {

@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { get_utilisateur, suivre_categorie } from "../dataBase/apiCalls";
-import { URLS } from "../dataBase/apiURLS";
 import { UserContext } from "./UserContext";
 import plus from './images/plus.png';
 import minus from './images/minus.png';
@@ -31,12 +30,12 @@ export default function CategorieTag(props) {
     }
 
     return (
-        <div className='cat' > 
+        <div className='cat'>
             <div>{props.categorie.nom}</div>
             {
                 user &&
-                <button onClick={()=>{setFavorie(user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom))}}>
-                    <img style={{ width: 10 }} src={user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? minus : plus}/>
+                <button onClick={() => { setFavorie(user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom)) }}>
+                    <img style={{ width: 10 }} src={user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? minus : plus} />
                 </button>
             }
         </div >
