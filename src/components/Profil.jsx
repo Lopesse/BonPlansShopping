@@ -104,9 +104,9 @@ export default function Profil() {
                     </div>
                     <div className="options">
                         <ul>
-                            <li className="option" onClick={() => setOption('annonces')} style={{ backgroundColor: option === 'annonces' ? 'green' : 'orange' }}>Mes annonces</li>
-                            <li className="option" onClick={() => setOption('listeFav')} style={{ backgroundColor: option === 'listeFav' ? 'green' : 'orange' }}>Ma liste de favorie</li>
-                            <li className="option" onClick={() => setOption('modifCompte')} style={{ backgroundColor: option === 'modifCompte' ? 'green' : 'orange' }}>Modifier mon compte</li>
+                            <li className="option" onClick={() => setOption('annonces')} style={{ backgroundColor: option === 'annonces' ? '#036e99' : '#a5a5a5' }}>Mes annonces</li>
+                            <li className="option" onClick={() => setOption('listeFav')} style={{ backgroundColor: option === 'listeFav' ? '#036e99' : '#a5a5a5' }}>Ma liste de favoris</li>
+                            <li className="option" onClick={() => setOption('modifCompte')} style={{ backgroundColor: option === 'modifCompte' ? '#036e99' : '#a5a5a5' }}>Modifier mon compte</li>
                         </ul>
 
                         {

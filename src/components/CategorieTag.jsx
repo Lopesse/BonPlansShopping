@@ -7,12 +7,12 @@ import minus from './images/minus.png';
 export default function CategorieTag(props) {
     const { user, setUser } = useContext(UserContext);
 
-    const setFavorie = async (suivre) => {
+    const setFavorie = async (suivie) => {
 
         const data = {
             user_id: user.id,
             categorie_id: props.categorie.id,
-            suivre: suivre
+            suivie: suivie
         }
 
         let abonnementReussi;
@@ -31,10 +31,13 @@ export default function CategorieTag(props) {
 
     return (
         <div className='cat'>
-            {props.categorie.nom}
-            <button onClick={() => setFavorie(user.categoriesFav && !user.categoriesFav.find(cat => cat.nom === props.categorie.nom))}>
-                <img style={{ width: 10 }} src={user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? minus : plus} />
-            </button>
+            <div>{props.categorie.nom}</div>
+            {
+                user &&
+                <button onClick={() => { setFavorie(user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom)) }}>
+                    <img style={{ width: 10 }} src={user.categoriesFav && !!user.categoriesFav.find(cat => cat.nom === props.categorie.nom) ? minus : plus} />
+                </button>
+            }
         </div >
     );
 

@@ -22,8 +22,8 @@ export default function NavBar() {
 
     return (
         <nav className="navbar">
+            <Link to={"/"}><img src={require("./images/logobps.png")} style={{ maxWidth: 250 }} onMouseOver={e => (e.currentTarget.src = require("./images/logobpsHover.png"))} onMouseOut={e => (e.currentTarget.src = require("./images/logobps.png"))} /></Link>
             <ul>
-                <li><Link to={"/"}>Accueil</Link></li>
                 <li><Link to={"#"} >Catégories</Link>
                     <ul className="deroulant">
                         {
@@ -53,7 +53,7 @@ export default function NavBar() {
 
                 </li>
             </ul>
-        </nav>
+        </nav >
     )
 }
 
