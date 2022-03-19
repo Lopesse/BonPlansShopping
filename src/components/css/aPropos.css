@@ -7,3 +7,9 @@
 .aPropos li{
     display:inline-table;
 }
+.aPropos div{
+    margin: 20px;
+}
+.sujet{
+    font-style: italic;
+}
