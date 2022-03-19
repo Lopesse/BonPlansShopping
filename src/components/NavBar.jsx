@@ -22,7 +22,11 @@ export default function NavBar() {
 
     return (
         <nav className="navbar">
-            <ul style={{display : 'grid', gridTemplateColumns: user ? '1fr 1fr 1fr 1fr' : '1fr 1fr 1fr', textAlign: 'center'}}>
+            <ul style={{
+                display : 'grid', 
+                gridTemplateColumns: user ? '1fr 1fr 1fr 1fr' : '1fr 1fr 1fr', 
+                textAlign: 'center'
+            }}>
                 <li><Link to={"/"}>Accueil</Link></li>
                 <li><Link to={"#"} >Catégories</Link>
                     <ul className="deroulant">

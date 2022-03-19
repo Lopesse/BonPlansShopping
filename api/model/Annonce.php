@@ -100,7 +100,6 @@ class Annonce
 
     public function create($data, $img)
     {
-
         $req = "INSERT INTO annonce 
                 (titre,
                 dateCreation,
@@ -124,7 +123,11 @@ class Annonce
                 :description);";
 
         $stmt = $this->bd->prepare($req);
-
+        $nomImg = uniqid() . $img;
+        $imgUp = null;
+        if (move_uploaded_file($_FILES['image']['tmp_name'], "./upload/" . $nomImg)) {
+            $imgUp = $nomImg;
+        }
         $post_data = array(
             ":titre" => $data['titre'],
             ":dateCreation" => $data['dateCreation'],
@@ -134,9 +137,10 @@ class Annonce
             ":nomMagasin" => $data['nomMagasin'],
             ":adresseMagasin" => $data['adresseMagasin'],
             ":utilisateur" => $data['utilisateur'],
-            ":image" => $img,
+            ":image" => $imgUp,
             ":description" => $data['description'],
         );
+
 
         $stmt->execute($post_data);
         $this->id = $this->bd->lastInsertId();

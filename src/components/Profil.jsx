@@ -20,19 +20,27 @@ export default function Profil() {
 
 
     const [updateUtilisateur, setUpdateUtilisateur] = useState({
-        pseudo: user.pseudo,
-        email: user.email,
-        nom: user.nom,
-        prenom: user.prenom,
-        id: user.id,
+        pseudo: "",
+        email: "",
+        nom:"",
+        prenom: "",
+        id: "",
     });
 
     useEffect(async () => {
-        console.log(user);
         let mesAnnonces;
         try {
-            mesAnnonces = await get_annonces(user.id);
-            setAnnonces(mesAnnonces);
+            if(user){
+                mesAnnonces = await get_annonces(user.id);
+                setAnnonces(mesAnnonces);
+                setUpdateUtilisateur({
+                    pseudo: user.pseudo,
+                    email: user.email,
+                    nom: user.nom,
+                    prenom: user.prenom,
+                    id: user.id
+                })
+            }
         } catch (err) {
             throw err;
         }
@@ -65,7 +73,10 @@ export default function Profil() {
 
 
     const handleChange = (event) => {
-        setUpdateUtilisateur({ ...updateUtilisateur, [event.target.name]: event.target.value });
+        setUpdateUtilisateur({ 
+            ...updateUtilisateur, 
+            [event.target.name]: event.target.value 
+        });
     }
 
     const updateUser = async (event) => {

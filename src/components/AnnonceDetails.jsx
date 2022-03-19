@@ -6,7 +6,7 @@ import CategorieTag from './CategorieTag';
 import { delete_annonce, enregistrer_annonce, get_annonce, get_utilisateur } from '../dataBase/apiCalls';
 import blackheart from './images/black-heart.png';
 import redheart from './images/red-heart.png';
-
+// import upload from '../upload/6235add9b121ftalaref.png';
 
 
 export default function AnnonceDetails() {
@@ -81,7 +81,7 @@ export default function AnnonceDetails() {
         <>
             <div className='publierAnnonce'>
                 {
-                    isLoaded ?
+                    !isLoaded ?
                         <div>Chargement en cours…</div>
                         :
                         annonce ?
@@ -92,10 +92,12 @@ export default function AnnonceDetails() {
                                     onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
                                 />
                                 <div className='annonce'>
-                                    {
-                                        annonce.image &&
-                                        <img src={`./api/upload/${annonce.image}`}></img>
-                                    }
+                                {   
+                                    annonce.image ?
+                                        <img className="img" src={require('../../api/upload/' + annonce.image)} alt="img" />
+                                    :
+                                    <img className="img" src={require('./images/noImage.png')} alt="img" />
+                                }
                                     <div className='InfosAnnonce'>
                                         <div style={{ fontSize: 'smaller' }}>Créé par : {annonce.utilisateur}</div>
                                         <div>Disponible à {annonce.nom_magasin}</div>
@@ -114,11 +116,12 @@ export default function AnnonceDetails() {
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
-                    <Link to={`/annonces/edit/${annonce?.id}`}>Update</Link>
+                    <Link to={`/annonces/edit/${annonce?.id}`} style={{marginRight: 10}}>Modifier l'annonce</Link>
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
-                    < button onClick={deletePost}>supprimer anonce</button>
+                    <Link to={`#`} onClick={deletePost} style={{marginLeft: 10}}>Supprimer l'annonce</Link>
+                    // < button onClick={deletePost}>supprimer anonce</button>
                 }
             </div>
         </>

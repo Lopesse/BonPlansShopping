@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, createContext } from 'react';
 import { get_utilisateur } from '../dataBase/apiCalls';
-import { URLS } from '../dataBase/apiURLS';
 
 
 export const UserContext = createContext();
@@ -8,8 +7,9 @@ export const UserContext = createContext();
 export default function UserProvider({ children }) {
 
 
-
     const [user, setUser] = useState(null);
+
+    const [userCached, setUserCached] = useState(false);
 
 
     useEffect(async () => {
@@ -20,6 +20,7 @@ export default function UserProvider({ children }) {
                 userID = JSON.parse(utilisateur).value;
             }
             if (userID) {
+                setUserCached(true)
                 let fetched_user;
                 try {
                     fetched_user = await get_utilisateur(userID);
@@ -32,8 +33,16 @@ export default function UserProvider({ children }) {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
-            {children}
-        </UserContext.Provider>
+        
+            userCached ?
+            (user && 
+            <UserContext.Provider value={{ user, setUser }}>
+                {children}
+            </UserContext.Provider>) :
+
+            <UserContext.Provider value={{ user, setUser }}>
+                {children}
+            </UserContext.Provider>
+
     );
 }

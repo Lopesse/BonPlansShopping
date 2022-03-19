@@ -96,8 +96,12 @@ export default function Publier() {
 
     const createOrUpdate = async (event) => {
         event.preventDefault();
-        let date = new Date();
-        date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	
+        var today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' +today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        date = date+' '+ time;
+
         const data = {
             titre: annonce.titre,
             dateCreation: date,
@@ -209,7 +213,7 @@ export default function Publier() {
                                         multiple accept="image/*"
                                         onChange={onImageChange}
                                     />
-                                    {imagesURLs.map(imageSrc => <img key={imageSrc} src={imageSrc} />)}
+                                    {imagesURLs.map(imageSrc => <img key={imageSrc} />)}
                                     <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                                 </label>
                             }
