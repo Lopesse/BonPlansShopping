@@ -29,6 +29,13 @@
   background-color: #036e99;
 }
 
+.logo {
+  text-align: center;
+  font-family: 'Kaushan Script', cursive;
+  color: orange;
+  font-size:xx-large;
+  margin: 20px;
+}
 .navbar > ul li .deroulant {
   display: none;
   position: absolute;
@@ -45,6 +52,6 @@ a {
   text-decoration: none;
 }
 
-li a:hover {
+a:hover{
   color: orange;
 }

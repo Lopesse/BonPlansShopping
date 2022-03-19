@@ -26,12 +26,9 @@ export default function NavBar() {
             <ul>
                 <li><Link to={"#"} >Catégories</Link>
                     <ul className="deroulant">
-                        {
-                            categories &&
-                            categories.map((item, index) =>
-                                <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
-                            )
-                        }
+                        {categories &&
+                            categories.map((item, index) => <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
+                            )}
                     </ul>
                 </li>
                 <li><Link to={"/annonces/nouveau"}>Publier une annonce</Link></li>

@@ -58,7 +58,7 @@ export default function Inscription() {
 
 
     return (
-        <div>
+        <div className="blocFormulaire">
             <div className="formulaire">
                 <h3>S'inscrire :</h3>
                 {message && <div className="erreur">{message}</div>}
@@ -75,8 +75,8 @@ export default function Inscription() {
                         <input type='text' name='nom' placeholder='Votre nom' onChange={handleChange} />
                     </label>
 
-                    <label>Prenom :
-                        <input type='text' name='prenom' placeholder='Votre prenom' onChange={handleChange} />
+                    <label>Prénom :
+                        <input type='text' name='prenom' placeholder='Votre prénom' onChange={handleChange} />
                     </label>
 
                     <label>Mot de passe :
