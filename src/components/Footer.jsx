@@ -7,9 +7,9 @@ class Footer extends Component {
     render() {
         return (
             <footer>
-                    <div>Question ?</div>
-                    <div className="footerMenu"><Link to={"/aPropos"}>A propos</Link></div>
-                    <div>Mentions Légales</div>
+                    <Link to={"#"} >Question ?</Link>
+                    <Link to={"/aPropos"} className="footerMenu">A propos</Link>
+                    <Link to={"#"}>Mentions Légales</Link>
             </footer>
         )
     }
