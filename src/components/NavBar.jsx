@@ -19,19 +19,17 @@ export default function NavBar() {
             throw err;
         }
     }, [])
-
+  // width: 290px;
+  // 33%  
     return (
         <nav className="navbar">
             <Link to={"/"}><img src={require("./images/logobps.png")} style={{ maxWidth: 250 }} onMouseOver={e => (e.currentTarget.src = require("./images/logobpsHover.png"))} onMouseOut={e => (e.currentTarget.src = require("./images/logobps.png"))} /></Link>
-            <ul>
+            <ul style={{gridTemplateColumns: user ? '1fr 1fr 1fr' :'1fr 1fr'}}>
                 <li><Link to={"#"} >Catégories</Link>
-                    <ul className="deroulant">
-                        {
-                            categories &&
-                            categories.map((item, index) =>
-                                <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
-                            )
-                        }
+                    <ul className="deroulant" style={{width: user ? 290 : '33%' }}>
+                        {categories &&
+                            categories.map((item, index) => <li key={item.id}><Link to={`categorie=${item.nom}`}>{item.nom}</Link></li>
+                            )}
                     </ul>
                 </li>
                 {
@@ -41,14 +39,14 @@ export default function NavBar() {
                 <li><Link to={"#"}>Mon compte</Link>
                     {
                         user ?
-                            <ul className="deroulant">
+                            <ul className="deroulant" style={{width: user ? 290 : '33%' }}>
                                 <li><Link to={"/compte/profil"}>Profil</Link></li>
                                 <li><Link to={"/compte/favories"}>Favoris</Link></li>
                                 <li><Link to={"/compte/annonces-enregistres"}>Annonces enregistrés</Link></li>
                                 <li onClick={() => { setUser(null); localStorage.removeItem('user'); }}><Link to={"/"}>Se deconnecter</Link></li>
                             </ul>
                             :
-                            <ul className="deroulant">
+                            <ul className="deroulant" style={{width: user ? 290 : '33%' }}>
                                 <li><Link to={"/inscription"}>S'inscrire</Link></li>
                                 <li><Link to={"/connexion"}>Se connecter</Link></li>
                             </ul>
