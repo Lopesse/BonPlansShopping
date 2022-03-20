@@ -22,9 +22,9 @@ export default function Publier() {
 
     const [categories, setCategories] = useState([]);
     const [sousCategories, setSousCategories] = useState([]);
+    const [messageErr, setMessageErr] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-
     const [images, setImages] = useState([]);
     const [imagesURLs, setImagesURLs] = useState([]);
 
@@ -33,54 +33,52 @@ export default function Publier() {
 
 
     useEffect(async () => {
-        if (params.id) {
-            let fetched_annonce;
-            try {
-                fetched_annonce = await get_annonce(params.id);
-                if (fetched_annonce) setAnnonce(fetched_annonce);
-            }
-            catch (err) {
-                throw err;
-            }
-        }
-
-        let cats;
-        try {
-            cats = await get_categories();
-            setCategories(cats)
-            if (!params.id) setAnnonce(a => ({ ...a, categorie: cats[0].id }))
-        } catch (err) {
-            throw err;
-        }
-
-        let sous_cats;
-        try {
-            sous_cats = await get_sous_categories();
-            setSousCategories(sous_cats);
-
-            if (!params.id) {
-                const souscat = sous_cats.find(cat => cat.categorieParent === cats[0].id);
-                if (souscat) {
-                    console.log(souscat)
-                    setAnnonce(a => ({ ...a, sous_categorie: souscat.id }))
+        let isMounted = true;
+        async function fetchData() {
+            setLoading(true)
+            if (params.id && isMounted) {
+                let fetched_annonce;
+                try {
+                    fetched_annonce = await get_annonce(params.id);
+                    if (fetched_annonce) setAnnonce(fetched_annonce);
                 }
-                else {
-                    console.log('no')
-                    setAnnonce(a => ({ ...a, sous_categorie: sous_cats[0].id }))
+                catch (err) {
+                    throw err;
                 }
             }
 
-        } catch (err) {
-            throw err;
+            let cats;
+            if (isMounted) {
+                try {
+                    cats = await get_categories();
+                    setCategories(cats)
+                    if (!params.id) setAnnonce(a => ({ ...a, categorie: cats[0].id }))
+                } catch (err) {
+                    throw err;
+                }
+
+                let sous_cats;
+                try {
+                    sous_cats = await get_sous_categories();
+                    setSousCategories(sous_cats);
+
+                    if (!params.id) {
+                        const souscat = sous_cats.find(cat => cat.categorieParent === cats[0].id);
+                        if (souscat) {
+                            setAnnonce(a => ({ ...a, sous_categorie: souscat.id }))
+                        }
+                        else {
+                            setAnnonce(a => ({ ...a, sous_categorie: sous_cats[0].id }))
+                        }
+                    }
+                } catch (err) {
+                    throw err;
+                }
+            }
         }
-
-
-        if (images.length < 1) return;
-        const newImageUrls = [];
-        images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
-        setImagesURLs(newImageUrls);
-
-    }, [params.id, images]);
+        fetchData();
+        setLoading(false);
+    }, [params.id]);
 
 
     const handleChange = (event) => {
@@ -96,11 +94,11 @@ export default function Publier() {
 
     const createOrUpdate = async (event) => {
         event.preventDefault();
-	
+        setLoading(true)
         var today = new Date();
-        let date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' +today.getDate();
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        date = date+' '+ time;
+        date = date + ' ' + time;
 
         const data = {
             titre: annonce.titre,
@@ -117,21 +115,26 @@ export default function Publier() {
         };
 
 
-        console.log('annonce', annonce)
+        console.log('annonce', data)
 
 
         let newAnnonceId;
         try {
             newAnnonceId = params.id ? await update_annonce(data) : await create_annonce(data);
             if (!newAnnonceId) {
-                setMessage('Annonce non crée!');
+                setMessageErr('Annonce non crée!');
                 return;
             }
-            navigate(`/annonces/${newAnnonceId}`)
+            setMessage('Votre annonce a bien été crée. Veuillez patienter quelques instants.')
+            setTimeout(() => {
+                navigate(`/annonces/${newAnnonceId}`)
+            }, 3000)
+
         }
         catch (err) {
             setMessage(err);
         }
+        setLoading(false);
     }
 
     function onImageChange(event) {
@@ -145,7 +148,8 @@ export default function Publier() {
                 user ?
                     <div className="formulaire">
                         <h3>Publier une nouvelle annonce :</h3>
-                        {message && <div className="erreur">{message}</div>}
+                        {messageErr && <div style={{ color: 'red' }}>{messageErr}</div>}
+                        {message && <div style={{ color: 'green' }} className="success">{message}</div>}
                         <form encType="multipart/form-data" method="POST" onSubmit={createOrUpdate}>
 
                             <label>Titre de l'annonce :
@@ -213,7 +217,6 @@ export default function Publier() {
                                         multiple accept="image/*"
                                         onChange={onImageChange}
                                     />
-                                    {imagesURLs.map(imageSrc => <img key={imageSrc} />)}
                                     <span className='error'> Attention, l'image ne pourra pas être modifiée par la suite ! </span>
                                 </label>
                             }

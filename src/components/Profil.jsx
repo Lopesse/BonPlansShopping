@@ -22,37 +22,42 @@ export default function Profil() {
     const [updateUtilisateur, setUpdateUtilisateur] = useState({
         pseudo: "",
         email: "",
-        nom:"",
+        nom: "",
         prenom: "",
         id: "",
     });
 
     useEffect(async () => {
         let mesAnnonces;
-        try {
-            if(user){
-                mesAnnonces = await get_annonces(user.id);
-                setAnnonces(mesAnnonces);
-                setUpdateUtilisateur({
-                    pseudo: user.pseudo,
-                    email: user.email,
-                    nom: user.nom,
-                    prenom: user.prenom,
-                    id: user.id
-                })
+        let isMounted = true;
+        async function fetchData() {
+            if (isMounted) {
+                try {
+                    if (user) {
+                        mesAnnonces = await get_annonces(user.id);
+                        setAnnonces(mesAnnonces);
+                        setUpdateUtilisateur({
+                            pseudo: user.pseudo,
+                            email: user.email,
+                            nom: user.nom,
+                            prenom: user.prenom,
+                            id: user.id
+                        })
+                    }
+                } catch (err) {
+                    throw err;
+                }
+
+                let cats;
+                try {
+                    cats = await get_categories();
+                    setCategories(cats);
+                } catch (err) {
+                    throw err;
+                }
             }
-        } catch (err) {
-            throw err;
         }
-
-        let cats;
-        try {
-            cats = await get_categories();
-            setCategories(cats);
-        } catch (err) {
-            throw err;
-        }
-
+        fetchData();
     }, []);
 
     const deleteCompte = async () => {
@@ -73,9 +78,9 @@ export default function Profil() {
 
 
     const handleChange = (event) => {
-        setUpdateUtilisateur({ 
-            ...updateUtilisateur, 
-            [event.target.name]: event.target.value 
+        setUpdateUtilisateur({
+            ...updateUtilisateur,
+            [event.target.name]: event.target.value
         });
     }
 
@@ -115,9 +120,25 @@ export default function Profil() {
                     </div>
                     <div className="options">
                         <ul>
-                            <li className="option" onClick={() => setOption('annonces')} style={{ backgroundColor: option === 'annonces' ? '#036e99' : '#a5a5a5' }}>Mes annonces</li>
-                            <li className="option" onClick={() => setOption('listeFav')} style={{ backgroundColor: option === 'listeFav' ? '#036e99' : '#a5a5a5' }}>Ma liste de favoris</li>
-                            <li className="option" onClick={() => setOption('modifCompte')} style={{ backgroundColor: option === 'modifCompte' ? '#036e99' : '#a5a5a5' }}>Modifier mon compte</li>
+                            <li
+                                className="option"
+                                onClick={() => setOption('annonces')}
+                                style={{ backgroundColor: option === 'annonces' ? '#036e99' : '#a5a5a5' }}
+                            >
+                                Mes annonces
+                            </li>
+                            <li className="option"
+                                onClick={() => setOption('listeFav')}
+                                style={{ backgroundColor: option === 'listeFav' ? '#036e99' : '#a5a5a5' }}
+                            >
+                                Ma liste de favoris
+                            </li>
+                            <li className="option"
+                                onClick={() => setOption('modifCompte')}
+                                style={{ backgroundColor: option === 'modifCompte' ? '#036e99' : '#a5a5a5' }}
+                            >
+                                Modifier mon compte
+                            </li>
                         </ul>
 
                         {
@@ -127,7 +148,11 @@ export default function Profil() {
                                     {
                                         (annonces.length === 0) ?
                                             <div>
-                                                <div>Vous n'avez publié aucune annonce pour l'instant ! <br />Cliquez sur le lien ci-dessous pour publier une annonce : </div>
+                                                <div>
+                                                    Vous n'avez publié aucune annonce pour l'instant !
+                                                    <br />
+                                                    Cliquez sur le lien ci-dessous pour publier une annonce :
+                                                </div>
                                                 <div><Link to={"/annonces/nouveau"}>Publier une annonce</Link></div>
                                             </div>
                                             :
@@ -179,7 +204,6 @@ export default function Profil() {
                         }
 
                         {
-                            //Ne fonctionne toujours pas :/
                             option === 'modifCompte' &&
                             <div className="corps">
                                 <h3>S'inscrire :</h3>
@@ -204,7 +228,7 @@ export default function Profil() {
                                         <input
                                             type="submit"
                                             value="Modifier mon compte"
-                                        //disabled={!updateUtilisateur.pseudo || !updateUtilisateur.email || loading}
+                                            disabled={!updateUtilisateur.pseudo || !updateUtilisateur.email || loading}
                                         />
                                     </label>
                                 </form>

@@ -164,9 +164,11 @@ class Annonce
         $stmt = $this->bd->prepare($req);
         $nomImg = uniqid() . $img;
         $imgUp = null;
+
         if (move_uploaded_file($_FILES['image']['tmp_name'], "./upload/" . $nomImg)) {
             $imgUp = $nomImg;
         }
+
         $post_data = array(
             ":titre" => $data['titre'],
             ":dateCreation" => $data['dateCreation'],
@@ -225,7 +227,7 @@ class Annonce
         return $data->id;
     }
 
-    public function get_annonces_enregistres(array $id)
+    public function get_annonces_enregistres($id)
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                     nomMagasin, adresseMagasin,
@@ -238,6 +240,8 @@ class Annonce
                 JOIN utilisateur u ON a.utilisateur = u.id
                 JOIN annonces_enregistres ae ON ae.annonce = a.id
                 WHERE ae.utilisateur = :uid;";
+
+        $dataArray = array(":uid" => $id);
 
         $stmt = $this->bd->prepare($req);
         $stmt->execute(array(":uid" => $id));

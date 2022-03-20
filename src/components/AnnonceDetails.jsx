@@ -17,17 +17,23 @@ export default function AnnonceDetails() {
 
     let navigate = useNavigate();
     let params = useParams()
-    useEffect(async () => {
+    useEffect(() => {
+        let isMounted = true;
         let fetched_annonce;
-        try {
-            fetched_annonce = await get_annonce(params.id);
-            setAnnonce(fetched_annonce);
-            setTempsRestant(new Date(new Date(fetched_annonce.date_expiration) - Date.now()).getTime() / 3600000);
-            setIsLoaded(true);
+        setIsLoaded(false);
+        async function fetchData() {
+            if (isMounted)
+                try {
+                    fetched_annonce = await get_annonce(params.id);
+                    setAnnonce(fetched_annonce);
+                    setTempsRestant(new Date(new Date(fetched_annonce.date_expiration) - Date.now()).getTime() / 3600000);
+                    setIsLoaded(true);
+                }
+                catch (err) {
+                    console.log(err);
+                }
         }
-        catch (err) {
-            console.log(err);
-        }
+        fetchData();
 
 
     }, []);
@@ -50,7 +56,6 @@ export default function AnnonceDetails() {
     }
 
     const enregistrerAnnonce = async (enregistrer) => {
-        console.log(enregistrer)
         let enregistre;
         const data = {
             user_id: user.id,
@@ -91,16 +96,19 @@ export default function AnnonceDetails() {
                                     onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
                                 />
                                 <div className='annonce'>
-                                {   
-                                    annonce.image ?
-                                        <img className="img" src={require('../../api/upload/' + annonce.image)} alt="img" />
-                                    :
-                                    <img className="img" src={require('./images/noImage.png')} alt="img" />
-                                }
+                                    {
+                                        annonce.image ?
+                                            <img className="img"
+                                                src={require('../../api/upload/' + annonce.image)}
+                                                alt="img"
+                                            />
+                                            :
+                                            <img className="img" src={require('./images/noImage.png')} alt="img" />
+                                    }
                                     <div className='InfosAnnonce'>
                                         <div style={{ fontSize: 'smaller' }}>Créé par : {annonce.utilisateur}</div>
                                         <div>Disponible à {annonce.nom_magasin}</div>
-                                        <div>Adrdesse ou Lien du magasin : {annonce.adresse_magasin}</div>
+                                        <div>Adresse ou Lien du magasin : {annonce.adresse_magasin}</div>
                                         <div>Expire le : {annonce.date_expiration}</div>
                                         <div>{annonce.description}</div>
                                         <div style={{ marginTop: 20 }}>
@@ -115,11 +123,11 @@ export default function AnnonceDetails() {
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
-                    <Link to={`/annonces/edit/${annonce?.id}`} style={{marginRight: 10}}>Modifier l'annonce</Link>
+                    <Link to={`/annonces/edit/${annonce?.id}`} style={{ marginRight: 10 }}>Modifier l'annonce</Link>
                 }
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
-                    <Link to={`#`} onClick={deletePost} style={{marginLeft: 10}}>Supprimer l'annonce</Link>
+                    <Link to={`#`} onClick={deletePost} style={{ marginLeft: 10 }}>Supprimer l'annonce</Link>
                     // < button onClick={deletePost}>supprimer anonce</button>
                 }
             </div>

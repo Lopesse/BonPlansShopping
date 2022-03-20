@@ -42,7 +42,6 @@ export function create_annonce(data) {
     for (let d in data) {
         fd.append(d, data[d]);
     }
-    console.log(fd);
 
     return fetch(URLS.creer_annonce, {
         method: "POST",
