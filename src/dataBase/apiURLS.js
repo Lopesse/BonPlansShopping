@@ -20,4 +20,5 @@ export const URLS = {
     update_utilisateur: `${API_ADRESS}:${PORT}/update_utilisateur.php`,
     enregistrer_annonce: `${API_ADRESS}:${PORT}/enregistrer_annonce.php`,
     get_annonces_enregistres: `${API_ADRESS}:${PORT}/get_annonces_enregistres.php`,
+    get_abonnements: `${API_ADRESS}:${PORT}/get_abonnements.php`,
 }

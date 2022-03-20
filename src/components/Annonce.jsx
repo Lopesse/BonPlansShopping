@@ -8,10 +8,10 @@ export default function Annonce(props) {
     const annonce = props.annonce;
     const todayTime = new Date();
     const expTime = new Date(annonce.date_expiration).getTime();
-    const tempsRestant = new Date(expTime - todayTime.getTime()).getTime();   
+    const tempsRestant = (new Date(expTime - todayTime.getTime()).getTime()) + 86400000;   
     const publieLe = new Date(annonce.date_creation).getHours();
     const ilya = todayTime.getHours() - publieLe;
-    console.log(ilya)
+
     useEffect(() => {
         setTimeout(async () => {
             let deleted;
@@ -34,7 +34,7 @@ export default function Annonce(props) {
                     <img className="img" src={require('./images/noImage.png')} alt="img" />
                 }
                 <div>
-                    <h3>{annonce.titre}</h3>
+                    <h2>{annonce.titre}</h2>
                     <div>Disponible à {annonce.nom_magasin}</div>
                     {
                         ilya <= 1 &&
@@ -57,8 +57,6 @@ export default function Annonce(props) {
                     <div>Créé par : {annonce.utilisateur}</div>
                     <div>Categorie : {annonce.categorie.nom}</div>
                     <div>Description : {annonce.description}</div>
-                    <img src=''></img>
-                    <img src={process.env.PUBLIC_URL + '/logo.png'} alt="logo" />
                     <Link to={`/annonces/${annonce.id}`}>Savoir plus</Link>
                 </div>
             </div>

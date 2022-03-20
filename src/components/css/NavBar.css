@@ -28,6 +28,10 @@
   background-color: #036e99;
 }
 
+.deroulant li:hover > a {
+  color: white;
+}
+
 .logo {
   text-align: center;
   font-family: "Kaushan Script", cursive;
@@ -38,7 +42,6 @@
 .navbar > ul li .deroulant {
   display: none;
   position: absolute;
-  /* width: 290px; */
 }
 
 ul {

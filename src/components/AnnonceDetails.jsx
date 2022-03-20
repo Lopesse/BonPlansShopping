@@ -6,7 +6,6 @@ import CategorieTag from './CategorieTag';
 import { delete_annonce, enregistrer_annonce, get_annonce, get_utilisateur } from '../dataBase/apiCalls';
 import blackheart from './images/black-heart.png';
 import redheart from './images/red-heart.png';
-// import upload from '../upload/6235add9b121ftalaref.png';
 
 
 export default function AnnonceDetails() {

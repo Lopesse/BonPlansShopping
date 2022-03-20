@@ -27,12 +27,12 @@ li {
 }
 
 .option {
-  border-radius: 10% 30% 50% 70%;
+  border-radius: 4% 45% 30% 37%;
   margin-left: 50px;
   margin-right: 50px;
-  padding: 5px;
+  padding: 7px;
   cursor: pointer;
-  color:white;
+  color: white;
 }
 
 .corps {

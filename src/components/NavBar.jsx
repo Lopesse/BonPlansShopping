@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-// import { categories } from "./Categories"
 import "./css/NavBar.css"
 import { UserContext } from "./UserContext"
 import { get_categories } from "../dataBase/apiCalls"
@@ -19,8 +18,7 @@ export default function NavBar() {
             throw err;
         }
     }, [])
-  // width: 290px;
-  // 33%  
+
     return (
         <nav className="navbar">
             <Link to={"/"}><img src={require("./images/logobps.png")} style={{ maxWidth: 250 }} onMouseOver={e => (e.currentTarget.src = require("./images/logobpsHover.png"))} onMouseOut={e => (e.currentTarget.src = require("./images/logobps.png"))} /></Link>
@@ -41,7 +39,7 @@ export default function NavBar() {
                         user ?
                             <ul className="deroulant" style={{width: user ? 290 : '33%' }}>
                                 <li><Link to={"/compte/profil"}>Profil</Link></li>
-                                <li><Link to={"/compte/favories"}>Favoris</Link></li>
+                                <li><Link to={"/compte/favories"}>Abonnement(s)</Link></li>
                                 <li><Link to={"/compte/annonces-enregistres"}>Annonces enregistrés</Link></li>
                                 <li onClick={() => { setUser(null); localStorage.removeItem('user'); }}><Link to={"/"}>Se deconnecter</Link></li>
                             </ul>
@@ -51,7 +49,6 @@ export default function NavBar() {
                                 <li><Link to={"/connexion"}>Se connecter</Link></li>
                             </ul>
                     }
-
                 </li>
             </ul>
         </nav >

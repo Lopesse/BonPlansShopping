@@ -49,41 +49,39 @@ export default function App() {
 
   return (
     <div className='app'>
-      <div className='page_principale'>
-        <div className='recherche'>
-          <input
-            type='text'
-            value={recherche}
-            name='searchBar'
-            placeholder='Recherchez ici'
-            onChange={e => setRecherche(e.target.value)}
-          />
-        </div>
-        <div className='liste_annonces'>
-          {
-            !isLoaded ?
-              <div>Chargement en cours…</div>
-              :
-              cat ?
-                (categorieAnnonce.length === 0) ?
-                  <div>
-                    Aucune annonce trouvée dans la catégorie sélectionnée !
-                  </div>
-                  :
-                  categorieAnnonce
-                    .filter(annonce => filtrer(annonce))
-                    .map(elementTab =>
-                      <Annonce annonce={elementTab} key={elementTab.id} />
-                    )
+      <div className='recherche'>
+        <input
+          type='text'
+          value={recherche}
+          name='searchBar'
+          placeholder='Recherchez ici'
+          onChange={e => setRecherche(e.target.value)}
+        />
+      </div>
+      <div className='liste_annonces'>
+        {
+          !isLoaded ?
+            <div>Chargement en cours…</div>
+            :
+            cat ?
+              (categorieAnnonce.length === 0) ?
+                <div>
+                  Aucune annonce trouvée dans la catégorie sélectionnée !
+                </div>
                 :
-                annonces &&
-                annonces
+                categorieAnnonce
                   .filter(annonce => filtrer(annonce))
                   .map(elementTab =>
                     <Annonce annonce={elementTab} key={elementTab.id} />
                   )
-          }
-        </div>
+              :
+              annonces &&
+              annonces
+                .filter(annonce => filtrer(annonce))
+                .map(elementTab =>
+                  <Annonce annonce={elementTab} key={elementTab.id} />
+                )
+        }
       </div>
     </div>
   );

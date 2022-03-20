@@ -11,8 +11,7 @@ export default function AnnoncesEnregistres() {
         let enregistres;
         if (user && user.annoncesEnregistres) {
             try {
-                console.log(user.annoncesEnregistres.map(a => a.id))
-                enregistres = await get_annonces_enregistres(user.annoncesEnregistres.map(a => a.id));
+                enregistres = await get_annonces_enregistres(user.id);
                 setAnnonces(enregistres);
             } catch (err) {
                 throw err;

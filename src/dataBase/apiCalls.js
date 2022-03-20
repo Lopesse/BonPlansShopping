@@ -242,3 +242,12 @@ export function get_annonces_enregistres(data) {
             throw err
         });
 }
+
+export function get_abonnements(id) {
+    return fetch(`${URLS.get_abonnements}?id=${id}`)
+        .then(res => res.json())
+        .then(json => json)
+        .catch(err => {
+            throw err
+        });
+}

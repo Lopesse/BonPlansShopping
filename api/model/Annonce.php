@@ -98,6 +98,45 @@ class Annonce
     }
 
 
+    public function readAbonnements($idUser)
+    {
+        $req = 'SELECT a.id, titre, dateCreation, dateExpiration, description,
+                nomMagasin, adresseMagasin, sc.nom AS sousCategorie, u.pseudo AS utilisateur,
+                sc.id AS sousCategorie_id, image,
+                c.nom AS categorie, c.id AS categorie_id 
+                FROM annonce a 
+                JOIN categories_favories cf ON a.categorie=cf.categorie 
+				JOIN categorie c ON a.categorie = c.id
+				JOIN souscategories sc ON a.sousCategorie = sc.id
+                JOIN utilisateur u ON a.utilisateur = u.id
+                WHERE cf.utilisateur = :idUser;';
+
+        $stmt = $this->bd->prepare($req);
+        $stmt->execute(array(":idUser" => $idUser));
+        $queryArray = $stmt->fetchAll();
+
+        $postArray = array();
+
+        foreach ($queryArray as $key => $value) {
+            $post = array(
+                'id' => $value['id'],
+                'titre' => $value['titre'],
+                'description' => $value['description'],
+                'categorie' => array('nom' => $value['categorie'], 'id' => $value['categorie_id']),
+                'sous_categorie' => array('nom' => $value['sousCategorie'], 'id' => $value['sousCategorie_id']),
+                'date_expiration' => $value['dateExpiration'],
+                'date_creation' => $value['dateCreation'],
+                'nom_magasin' => $value['nomMagasin'],
+                'adresse_magasin' => $value['adresseMagasin'],
+                'utilisateur' => $value['utilisateur'],
+                'image' => $value['image'],
+            );
+            $postArray[$key] = $post;
+        }
+        return $postArray;
+    }
+
+
     public function create($data, $img)
     {
         $req = "INSERT INTO annonce 
@@ -186,7 +225,7 @@ class Annonce
         return $data->id;
     }
 
-    public function get_annonces_enregistres(array $ids)
+    public function get_annonces_enregistres(array $id)
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                     nomMagasin, adresseMagasin,
@@ -197,16 +236,11 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                ";
+                JOIN annonces_enregistres ae ON ae.annonce = a.id
+                WHERE ae.utilisateur = :uid;";
 
-        $dataArray = array();
-        foreach ($ids as $key => $id) {
-            $aid = ':aid' . $key;
-            $dataArray[$aid] = $id;
-            $req .= $key === 0 ? 'WHERE a.id = ' . $aid : ' OR a.id = ' . $aid;
-        }
         $stmt = $this->bd->prepare($req);
-        $stmt->execute($dataArray);
+        $stmt->execute(array(":uid" => $id));
         $queryArray = $stmt->fetchAll();
 
         $postArray = array();

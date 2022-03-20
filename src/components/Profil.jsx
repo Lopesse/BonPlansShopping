@@ -174,12 +174,6 @@ export default function Profil() {
                                                 <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégorie)</div>
                                             </div>
                                     }
-                                    {/* {
-                                        categories &&
-                                        categories.map(cat =>
-                                            <CategorieTag categorie={cat} />
-                                        )
-                                    } */}
                                 </div>
                             )
                         }

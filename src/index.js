@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import NavBar from './components/NavBar';
+import Abonnements from './components/Abonnements';
 import Inscription from './components/Inscription';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AnnonceDetails from './components/AnnonceDetails';
@@ -27,7 +28,7 @@ ReactDOM.render(
         </Route>
         <Route path="compte">
           <Route path="profil" element={<Profil />} />
-          <Route path="favories" element={<App />} />
+          <Route path="favories" element={<Abonnements />} />
           <Route path="annonces-enregistres" element={<AnnoncesEnregistres />} />
         </Route>
         <Route path="inscription" element={<Inscription />} />

@@ -10,11 +10,11 @@ include_once('model/Annonce.php');
 $db = new Database();
 $db = $db->connect();
 
-
 $annonceStorage = new Annonce($db);
-$data = json_decode(file_get_contents('php://input'));
+
+$id = isset($_GET['id']) ? $_GET['id'] : die();
 $annoncesEnregistres = 0;
-if ($data) {
-    $annoncesEnregistres = $annonceStorage->get_annonces_enregistres($data);
+if ($id) {
+    $annoncesEnregistres = $annonceStorage->readAbonnements($id);
 }
 echo json_encode($annoncesEnregistres);

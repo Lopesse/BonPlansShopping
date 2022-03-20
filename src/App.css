@@ -2,12 +2,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-} 
+}
 
-body{
+body {
   background-color: white;
 }
-.page_principale {
+.app {
   height: 100%;
 }
 
@@ -36,7 +36,6 @@ body{
   color: red;
 }
 
-.app div{
+.app div {
   color: #324949;
 }
-
