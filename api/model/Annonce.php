@@ -225,7 +225,7 @@ class Annonce
         return $data->id;
     }
 
-    public function get_annonces_enregistres(array $id)
+    public function get_annonces_enregistres($id)
     {
         $req = "SELECT a.id, titre, dateCreation, dateExpiration, description,
                     nomMagasin, adresseMagasin,
@@ -236,7 +236,7 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                JOIN annonces_enregistres ae ON ae.annonce = a.id
+                JOIN annonce_enregistre ae ON ae.annonce = a.id
                 WHERE ae.utilisateur = :uid;";
 
         $stmt = $this->bd->prepare($req);

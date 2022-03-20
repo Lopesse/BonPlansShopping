@@ -22,17 +22,19 @@ export default function AnnoncesEnregistres() {
     return (
         <div>
             {
-                annonces ?
+                (annonces.length > 0) ?
+                <div style={{margin: 50}}>
+                    <div>Vos annonces enregistrés</div><hr style={{marginBottom: 15}}/>
                     <div>
-                        Vos annonces enregistrés
                         {
-                            annonces.map(a =>
-                                <Annonce annonce={a} key={a.id} />
-                            )
+                        annonces.map(a =>
+                            <Annonce annonce={a} key={a.id} />
+                        )
                         }
                     </div>
-                    :
-                    <div>Vous n'avez pas d'annonces enregistrés</div>
+                </div>
+                :
+                <div style={{margin: 50}}>Vous n'avez pas d'annonce(s) enregistrée(s) pour le moment... </div>
             }
         </div>
     )

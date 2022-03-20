@@ -9,7 +9,6 @@ export default function AnnoncesAbonnements() {
 
   useEffect(async () => {
     let annoncesAbo;
-    // if (user && user.annoncesEnregistres) {
     if (user) {
 
       try {
@@ -23,22 +22,24 @@ export default function AnnoncesAbonnements() {
       }
     }
   }, [])
-  
+
   return (
     <div>
       {
-        annonces ?
-          <div>
-            Vos abonnements :
-            {
-              annonces.map(a =>
-                <Annonce annonce={a} key={a.id} />
-              )
-            }
-          </div>
-          :
-          <div>Désolé, nous n'avons pas d'annonce(s) correspondante(s) à vos abonnnement pour le moment... </div>
-      }
+        (annonces.length > 0) ?
+        <div style={{margin: 50}}>
+            <div>Vos abonnements :</div><hr style={{marginBottom: 15}} />
+            <div>
+                {
+                annonces.map(a =>
+                    <Annonce annonce={a} key={a.id} />
+                )
+                }
+            </div>
+        </div>
+        :
+        <div style={{margin: 50}}>Désolé, nous n'avons pas d'annonce(s) correspondante(s) à vos abonnnement pour le moment... </div>
+    }
     </div>
   )
 }
