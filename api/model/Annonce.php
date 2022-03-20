@@ -28,7 +28,8 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                WHERE a.id = :identifiant;";
+                WHERE a.id = :identifiant
+                ORDER BY dateCreation DESC;";
 
         $stmt = $this->bd->prepare($req);
         $data = array(":identifiant" => $this->id);
@@ -65,7 +66,8 @@ class Annonce
                 FROM annonce a
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
-                JOIN utilisateur u ON a.utilisateur = u.id;";
+                JOIN utilisateur u ON a.utilisateur = u.id
+                ORDER BY dateCreation DESC;";
 
         if ($idUser !== '') {
             $req .= ' WHERE a.utilisateur = :idUser;';
@@ -109,7 +111,8 @@ class Annonce
 				JOIN categorie c ON a.categorie = c.id
 				JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                WHERE cf.utilisateur = :idUser;';
+                WHERE cf.utilisateur = :idUser
+                ORDER BY dateCreation DESC;';
 
         $stmt = $this->bd->prepare($req);
         $stmt->execute(array(":idUser" => $idUser));
@@ -239,7 +242,8 @@ class Annonce
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
                 JOIN annonces_enregistres ae ON ae.annonce = a.id
-                WHERE ae.utilisateur = :uid;";
+                WHERE ae.utilisateur = :uid
+                ORDER BY dateCreation DESC;";
 
         $dataArray = array(":uid" => $id);
 
