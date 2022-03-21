@@ -83,7 +83,7 @@ class Utilisateur
     public function create($data)
     {
 
-        $req = "INSERT INTO utilisateur (pseudo, email, nom, prenom,  mdp) 
+        $req = "INSERT INTO utilisateur (pseudo, email, nom, prenom,  mdp)
                             VALUES (:pseudo, :email, :nom, :prenom, :MDP);";
 
         $stmt = $this->bd->prepare($req);
@@ -145,8 +145,21 @@ class Utilisateur
 
     public function updateUser($data)
     {
-        $requete = $this->bd->prepare("UPDATE utilisateur SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email WHERE id= :id");
-        return $requete->execute(array(":nom" => $data->nom, ":prenom" => $data->prenom, ":pseudo" => $data->pseudo, ":email" => $data->email, ":id" => $data->id));
+        $req = "UPDATE utilisateur
+                SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email
+                WHERE id= :id";
+
+        $requete = $this->db->prepare($req);
+
+        return $requete->execute(
+            array(
+                ":nom" => $data['nom'],
+                ":prenom" => $data['prenom'],
+                ":pseudo" => $data['pseudo'],
+                ":email" => $data['email'],
+                "id" => $data['id']
+            )
+        );
     }
 
     public function suivreCategorie($data)
