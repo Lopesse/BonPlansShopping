@@ -8,16 +8,15 @@ include_once('model/Database.php');
 include_once('model/Utilisateur.php');
 
 $db = new Database();
-
 $db = $db->connect();
 
-$userStorage = new Utilisateur($db);
+
+$utilisateurStorage = new Utilisateur($db);
 
 $data = json_decode(file_get_contents('php://input'));
-
-$res = $userStorage->deleteUser($data);
-
-if ($res)
+// echo json_encode($data);
+// exit(0);
+if ($data) {
+    $res = $utilisateurStorage->suivreCategorie($data);
     echo json_encode($res);
-else
-    echo json_encode(-1);
+}

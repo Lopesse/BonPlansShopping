@@ -1,0 +1,61 @@
+.formulaire { 
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  display: inline-block;
+  padding: 50px;
+  
+}
+.blocFormulaire{
+  padding: 30px;
+  text-align: center;
+}
+h3{
+  text-align: center;
+  color: #324949;
+}
+form {
+  margin-left: 10%;
+}
+
+label {
+  display: grid;
+  margin-top: 10px;
+  text-align: left;
+  color :#324949;
+}
+
+.publication input[type="text"],
+.publication input[type="date"],
+.publication select,
+.publication textarea {
+  border: 1px solid;
+  outline: none;
+  padding: 5px 8px 5px 8px;
+  box-shadow: inset 1px 1px 4px #98c7a4;
+  font-style: italic;
+
+}
+
+.publication input[type="submit"],
+.publication input[type="button"] {
+  background: #67aab6;
+  border: 1px solid #a0cfcf;
+  padding: 5px 15px 5px 15px;
+  color: #53825f;
+  box-shadow: inset -1px -1px 3px #53825f;
+  -moz-box-shadow: inset -1px -1px 3px #53825f;
+  -webkit-box-shadow: inset -1px -1px 3px #53825f;
+  border-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  font-weight: bold;
+}
+
+input {
+  width: fit-content;
+}
+
+#submit {
+  width: 100px;
+}
+

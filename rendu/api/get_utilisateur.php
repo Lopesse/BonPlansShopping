@@ -1,8 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
 include_once('model/Database.php');
 include_once('model/Utilisateur.php');
@@ -13,11 +11,11 @@ $db = $db->connect();
 
 $userStorage = new Utilisateur($db);
 
-$data = json_decode(file_get_contents('php://input'));
+$id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$res = $userStorage->deleteUser($data);
+$utilisateur = $userStorage->read($id);
 
-if ($res)
-    echo json_encode($res);
+if ($utilisateur)
+    echo json_encode($utilisateur);
 else
     echo json_encode(-1);

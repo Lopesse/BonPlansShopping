@@ -8,16 +8,13 @@ include_once('model/Database.php');
 include_once('model/Utilisateur.php');
 
 $db = new Database();
-
 $db = $db->connect();
 
-$userStorage = new Utilisateur($db);
+$utilisateurStorage = new Utilisateur($db);
 
 $data = json_decode(file_get_contents('php://input'));
-
-$res = $userStorage->deleteUser($data);
-
-if ($res)
-    echo json_encode($res);
-else
-    echo json_encode(-1);
+if ($data) {
+    $updateUser = $utilisateurStorage->updateUser($data);
+    $updateUser === -1 ? header('HTTP/1.1 501 Internal Server Error') : header('HTTP/1.1 201 Created');
+}
+echo json_encode($updateUser);

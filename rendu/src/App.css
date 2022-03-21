@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: white;
+}
+.app {
+  height: 100%;
+}
+
+.liste_annonces {
+  margin-left: 10rem;
+}
+
+.recherche {
+  text-align: center;
+  padding: 2rem;
+}
+
+.recherche input {
+  text-align: center;
+  border-radius: 20px;
+  width: 35%;
+  padding: 10px;
+  font-size: medium;
+}
+
+.app {
+  margin-bottom: 50px;
+}
+
+.erreur {
+  color: red;
+}
+
+.app div {
+  color: #324949;
+}

@@ -1,0 +1,19 @@
+footer {
+  background-color: #036e99;
+  color: white;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  display: flex;
+  padding: 10px;
+}
+footer a {
+  color: white;
+}
+footer a:hover {
+  color: orange;
+}
+
+footer > a {
+  margin: auto;
+}
