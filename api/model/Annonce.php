@@ -241,11 +241,10 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                JOIN annonces_enregistres ae ON ae.annonce = a.id
+                JOIN annonce_enregistre ae ON ae.annonce = a.id
                 WHERE ae.utilisateur = :uid
                 ORDER BY dateCreation DESC;";
 
-        $dataArray = array(":uid" => $id);
 
         $stmt = $this->bd->prepare($req);
         $stmt->execute(array(":uid" => $id));

@@ -131,7 +131,7 @@ export default function Profil() {
                                 onClick={() => setOption('listeFav')}
                                 style={{ backgroundColor: option === 'listeFav' ? '#036e99' : '#a5a5a5' }}
                             >
-                                Ma liste de favoris
+                                Ma liste d'abonnements
                             </li>
                             <li className="option"
                                 onClick={() => setOption('modifCompte')}
@@ -171,34 +171,15 @@ export default function Profil() {
                             option === 'listeFav' &&
                             (
                                 <div className="corps">
-                                    {
-
-                                        (user.categoriesFav.length === 0) ?
-
-                                            <div>
-                                                <div>
-                                                    Désolé, vous n'avez pas de favorie pour le moment.
-                                                    Mais vous pouvez vous abonner à une catégorie dès maintenant ! <br />
-                                                    Cliquez sur une catégorie ci-dessous et elle sera automatique ajoutée dans vos favories.
-                                                </div>
-                                                {
-                                                    categories &&
-                                                    categories.map(cat =>
-                                                        <CategorieTag categorie={cat} />
-                                                    )
-                                                }
-                                            </div>
-                                            :
-                                            <div>
-                                                Voici la liste de vos favories :
-                                                {
-                                                    categories.map(cat =>
-                                                        <CategorieTag categorie={cat} key={cat.id} />
-                                                    )
-                                                }
-                                                <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégorie)</div>
-                                            </div>
-                                    }
+                                    <div>
+                                        Voici la liste des categories :
+                                        {
+                                            categories.map(cat =>
+                                                <CategorieTag categorie={cat} key={cat.id} />
+                                            )
+                                        }
+                                        <div>(Cliquez sur le "+" pour ajouter une nouvelle catégorie et clqiuez sur le "-" pour supprimer un catégorie)</div>
+                                    </div>
                                 </div>
                             )
                         }
