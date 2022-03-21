@@ -120,7 +120,12 @@ export function delete_utilisateur(idUser) {
             "Content-Type": "application/json"
         }
     })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Utilisateur non crée');
+            }
+            return res.json();
+        })
         .then(json => json)
         .catch(err => {
             throw err
@@ -136,7 +141,12 @@ export function update_utilisateur(data) {
             "Content-Type": "application/json"
         }
     })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw Error('Utilisateur non crée');
+            }
+            return res.json();
+        })
         .then(json => json)
         .catch(err => {
             throw err

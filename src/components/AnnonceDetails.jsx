@@ -91,10 +91,13 @@ export default function AnnonceDetails() {
                         annonce ?
                             <div>
                                 <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{annonce.titre}</h1>
-                                <img
-                                    src={user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id) ? blackheart : redheart}
-                                    onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
-                                />
+                                {
+                                    user &&
+                                    <img
+                                        src={user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id) ? blackheart : redheart}
+                                        onClick={() => enregistrerAnnonce(user && user.annoncesEnregistres && !user.annoncesEnregistres.find(a => a.id === annonce.id))}
+                                    />
+                                }
                                 <div className='annonce'>
                                     {
                                         annonce.image ?
@@ -108,7 +111,15 @@ export default function AnnonceDetails() {
                                     <div className='InfosAnnonce'>
                                         <div style={{ fontSize: 'smaller' }}>Créé par : {annonce.utilisateur}</div>
                                         <div>Disponible à {annonce.nom_magasin}</div>
-                                        <div>Adresse ou Lien du magasin : {annonce.adresse_magasin}</div>
+                                        <div>
+                                            Adresse ou Lien du magasin :
+                                            <br />
+                                            {
+                                                annonce.adresse_magasin.includes('http') ?
+                                                    <a href={annonce.adresse_magasin}> Cliquez ici pour accéder au site du commerçant</a> :
+                                                    <div>{annonce.adresse_magasin}</div>
+                                            }
+                                        </div>
                                         <div>Expire le : {annonce.date_expiration}</div>
                                         <div>{annonce.description}</div>
                                         <div style={{ marginTop: 20 }}>
@@ -128,7 +139,6 @@ export default function AnnonceDetails() {
                 {
                     user && annonce && user.pseudo === annonce.utilisateur &&
                     <Link to={`#`} onClick={deletePost} style={{ marginLeft: 10 }}>Supprimer l'annonce</Link>
-                    // < button onClick={deletePost}>supprimer anonce</button>
                 }
             </div>
         </>

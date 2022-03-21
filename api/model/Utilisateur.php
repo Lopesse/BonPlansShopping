@@ -149,15 +149,15 @@ class Utilisateur
                 SET nom= :nom, prenom= :prenom, pseudo= :pseudo, email= :email
                 WHERE id= :id";
 
-        $requete = $this->db->prepare($req);
+        $requete = $this->bd->prepare($req);
 
         return $requete->execute(
             array(
-                ":nom" => $data['nom'],
-                ":prenom" => $data['prenom'],
-                ":pseudo" => $data['pseudo'],
-                ":email" => $data['email'],
-                "id" => $data['id']
+                ":nom" => $data->nom,
+                ":prenom" => $data->prenom,
+                ":pseudo" => $data->pseudo,
+                ":email" => $data->email,
+                "id" => $data->id
             )
         );
     }

@@ -17,6 +17,7 @@ export default function Profil() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
 
     const [updateUtilisateur, setUpdateUtilisateur] = useState({
@@ -97,6 +98,7 @@ export default function Profil() {
                 try {
                     newUser = await get_utilisateur(user.id);
                     setUser(newUser);
+                    setMessage('Votre compte a bien été mise à jour!');
                 } catch (err) {
                     throw err;
                 }
@@ -188,6 +190,7 @@ export default function Profil() {
                             option === 'modifCompte' &&
                             <div className="corps">
                                 <h3>S'inscrire :</h3>
+                                {message && <div style={{ color: 'green' }} className="success">{message}</div>}
                                 <form encType="multipart/form-data" method="POST" onSubmit={(e) => updateUser(e)}>
                                     <label>Pseudo :
                                         <input type='text' name='pseudo' defaultValue={updateUtilisateur.pseudo} onChange={handleChange} />

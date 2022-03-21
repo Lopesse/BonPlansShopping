@@ -36,8 +36,8 @@ export default function Publier() {
         let isMounted = true;
         async function fetchData() {
             setLoading(true)
+            let fetched_annonce;
             if (params.id && isMounted) {
-                let fetched_annonce;
                 try {
                     fetched_annonce = await get_annonce(params.id);
                     if (fetched_annonce) setAnnonce(fetched_annonce);
@@ -53,6 +53,7 @@ export default function Publier() {
                     cats = await get_categories();
                     setCategories(cats)
                     if (!params.id) setAnnonce(a => ({ ...a, categorie: cats[0].id }))
+                    else setAnnonce(a => ({ ...a, categorie: fetched_annonce.categorie.id }))
                 } catch (err) {
                     throw err;
                 }
@@ -67,10 +68,8 @@ export default function Publier() {
                         if (souscat) {
                             setAnnonce(a => ({ ...a, sous_categorie: souscat.id }))
                         }
-                        else {
-                            setAnnonce(a => ({ ...a, sous_categorie: sous_cats[0].id }))
-                        }
                     }
+                    else setAnnonce(a => ({ ...a, sous_categorie: fetched_annonce.sous_categorie.id }))
                 } catch (err) {
                     throw err;
                 }

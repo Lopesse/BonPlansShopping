@@ -66,15 +66,16 @@ class Annonce
                 FROM annonce a
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
-                JOIN utilisateur u ON a.utilisateur = u.id
-                ORDER BY dateCreation DESC;";
+                JOIN utilisateur u ON a.utilisateur = u.id";
 
         if ($idUser !== '') {
-            $req .= ' WHERE a.utilisateur = :idUser;';
+            $req .= " WHERE a.utilisateur = :idUser";
+            $req .= " ORDER BY dateCreation DESC;";
             $stmt = $this->bd->prepare($req);
             $stmt->execute(array(":idUser" => $idUser));
             $queryArray = $stmt->fetchAll();
         } else {
+            $req .= " ORDER BY dateCreation DESC;";
             $queryArray = $this->bd->query($req)->fetchAll();
         }
 
