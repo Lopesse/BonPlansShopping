@@ -45,17 +45,6 @@ export default function Connexion() {
             setMessage('Identifiants erronés');
             throw Error('Identifiants erronés');
         }
-
-
-        // fetch(`${URLS.connexion}?identifiant=${identifiants.login}&mdp=${identifiants.mdp}`)
-        //     .then(res => {
-        //         if (!res.ok) {
-
-        //         }
-        //         return res.json();
-        //     })
-        //     .then(json => login(json))
-        //     .catch(e => console.log(e));
     }
 
     return (

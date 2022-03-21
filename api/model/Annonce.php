@@ -28,7 +28,8 @@ class Annonce
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                WHERE a.id = :identifiant;";
+                WHERE a.id = :identifiant
+                ORDER BY dateCreation DESC;";
 
         $stmt = $this->bd->prepare($req);
         $data = array(":identifiant" => $this->id);
@@ -65,7 +66,8 @@ class Annonce
                 FROM annonce a
                 JOIN categorie c ON a.categorie = c.id
                 JOIN souscategories sc ON a.sousCategorie = sc.id
-                JOIN utilisateur u ON a.utilisateur = u.id;";
+                JOIN utilisateur u ON a.utilisateur = u.id
+                ORDER BY dateCreation DESC;";
 
         if ($idUser !== '') {
             $req .= ' WHERE a.utilisateur = :idUser;';
@@ -103,13 +105,14 @@ class Annonce
         $req = 'SELECT a.id, titre, dateCreation, dateExpiration, description,
                 nomMagasin, adresseMagasin, sc.nom AS sousCategorie, u.pseudo AS utilisateur,
                 sc.id AS sousCategorie_id, image,
-                c.nom AS categorie, c.id AS categorie_id 
-                FROM annonce a 
-                JOIN categories_favories cf ON a.categorie=cf.categorie 
+                c.nom AS categorie, c.id AS categorie_id
+                FROM annonce a
+                JOIN categories_favories cf ON a.categorie=cf.categorie
 				JOIN categorie c ON a.categorie = c.id
 				JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
-                WHERE cf.utilisateur = :idUser;';
+                WHERE cf.utilisateur = :idUser
+                ORDER BY dateCreation DESC;';
 
         $stmt = $this->bd->prepare($req);
         $stmt->execute(array(":idUser" => $idUser));
@@ -139,7 +142,7 @@ class Annonce
 
     public function create($data, $img)
     {
-        $req = "INSERT INTO annonce 
+        $req = "INSERT INTO annonce
                 (titre,
                 dateCreation,
                 dateExpiration,
@@ -164,9 +167,11 @@ class Annonce
         $stmt = $this->bd->prepare($req);
         $nomImg = uniqid() . $img;
         $imgUp = null;
+
         if (move_uploaded_file($_FILES['image']['tmp_name'], "./upload/" . $nomImg)) {
             $imgUp = $nomImg;
         }
+
         $post_data = array(
             ":titre" => $data['titre'],
             ":dateCreation" => $data['dateCreation'],
@@ -237,7 +242,9 @@ class Annonce
                 JOIN souscategories sc ON a.sousCategorie = sc.id
                 JOIN utilisateur u ON a.utilisateur = u.id
                 JOIN annonce_enregistre ae ON ae.annonce = a.id
-                WHERE ae.utilisateur = :uid;";
+                WHERE ae.utilisateur = :uid
+                ORDER BY dateCreation DESC;";
+
 
         $stmt = $this->bd->prepare($req);
         $stmt->execute(array(":uid" => $id));

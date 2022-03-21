@@ -7,16 +7,21 @@ export default function AnnoncesEnregistres() {
     const [annonces, setAnnonces] = useState([]);
     const { user, setUser } = useContext(UserContext);
 
-    useEffect(async () => {
+    useEffect(() => {
+        let isMounted = true;
         let enregistres;
-        if (user && user.annoncesEnregistres) {
-            try {
-                enregistres = await get_annonces_enregistres(user.id);
-                setAnnonces(enregistres);
-            } catch (err) {
-                throw err;
+        async function fetchData() {
+
+            if (user && user.annoncesEnregistres && isMounted) {
+                try {
+                    enregistres = await get_annonces_enregistres(user.id);
+                    setAnnonces(enregistres);
+                } catch (err) {
+                    throw err;
+                }
             }
         }
+        fetchData();
     }, [])
 
     return (

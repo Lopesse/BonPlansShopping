@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import { delete_annonce } from "../dataBase/apiCalls";
-import { URLS } from '../dataBase/apiURLS';
 import './css/annonces.css';
 
 export default function Annonce(props) {
     const annonce = props.annonce;
     const todayTime = new Date();
     const expTime = new Date(annonce.date_expiration).getTime();
-    const tempsRestant = (new Date(expTime - todayTime.getTime()).getTime()) + 86400000;   
+    const tempsRestant = new Date(expTime - todayTime.getTime()).getTime();
     const publieLe = new Date(annonce.date_creation).getHours();
     const ilya = todayTime.getHours() - publieLe;
 
@@ -21,17 +20,17 @@ export default function Annonce(props) {
             catch (err) {
                 throw err;
             }
-        }, tempsRestant); 
+        }, tempsRestant);
     })
 
     return (
         <>
             <div className='annonce'>
-                {   
+                {
                     annonce.image ?
                         <img className="img" src={require('../../api/upload/' + annonce.image)} alt="img" />
-                    :
-                    <img className="img" src={require('./images/noImage.png')} alt="img" />
+                        :
+                        <img className="img" src={require('./images/noImage.png')} alt="img" />
                 }
                 <div>
                     <h2>{annonce.titre}</h2>
@@ -47,7 +46,7 @@ export default function Annonce(props) {
                     }
                     {
                         ilya > 24 &&
-                        <div>Publiée il y a {Math.floor(ilya/24)} jours</div>
+                        <div>Publiée il y a {Math.floor(ilya / 24)} jours</div>
                     }
                     <div>Expire le : {annonce.date_expiration}</div>
                     {
