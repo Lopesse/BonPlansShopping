@@ -43,6 +43,7 @@ export default function Connexion() {
             setLoading(false);
         } catch (err) {
             setMessage('Identifiants erronés');
+            setLoading(false);
             throw Error('Identifiants erronés');
         }
     }

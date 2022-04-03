@@ -48,6 +48,7 @@ export default function Inscription() {
         try {
             user = await create_utilisateur(newUtilisateur);
             if (user) login(user);
+            setLoading(false);
         } catch (err) {
             setMessage('Un utilisateur avec cet adresse mail existe déjà')
             setLoading(false)

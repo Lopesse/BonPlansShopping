@@ -6,11 +6,10 @@ import './css/annonces.css';
 export default function Annonce(props) {
     const annonce = props.annonce;
     const todayTime = new Date();
-
     const expTime = new Date(annonce.date_expiration).getTime();
     const tempsRestant = new Date(expTime - todayTime.getTime()).getTime();
-    const publieLe = new Date(annonce.date_creation).getTime();
-    const ilya = (todayTime.getTime() - publieLe)/3600000;
+    const publieLe = new Date(annonce.date_creation).getHours();
+    const ilya = todayTime.getHours() - publieLe;
 
     useEffect(() => {
         setTimeout(async () => {
@@ -37,7 +36,7 @@ export default function Annonce(props) {
                     <h2>{annonce.titre}</h2>
                     <div>Disponible à {annonce.nom_magasin}</div>
                     {
-                        ilya < 1 && 
+                        ilya <= 1 &&
                         <div>Publiée il y a moins d'une heure</div>
                     }
                     {
